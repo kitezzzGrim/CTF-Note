@@ -1,11 +1,14 @@
-# CTF-内存取证
+# CTF-Misc
 
-- [CTF-内存取证](#CTF-内存取证)
-    - [内存取证工具](#内存取证工具)
+- [CTF-Misc](#CTF-Misc)
+    - [内存取证](#内存取证)
         - [Volatility](#Volatility)
+    - [文件取证](文件取证)
+        - [binwalk](#binwalk)
+        - [爆破压缩包](#爆破压缩包)
+        - [7z](#7z)
 
-
-## 内存取证工具
+## 内存取证
 
 ### Volatility
 
@@ -41,3 +44,28 @@ python2 -m pip install construct
 cp mimikatz.py /volatility/plugins/
 python2 vol.py  -f tmp.vmem --profile=Win7SP1x64 mimikatz
 ```
+
+## 文件取证
+
+### binwalk
+
+```py
+python binwalk.py mianju.jpg
+
+# 从图片中分离 -e
+python binwalk.py -e mianju.jpg
+
+```
+
+### 爆破压缩包
+
+archpr2 可爆破rar
+
+### 7z
+
+linux下7z解压vmdk更完整，windows下7z有问题
+
+```bash
+7z x flag.vmdk
+```
+
