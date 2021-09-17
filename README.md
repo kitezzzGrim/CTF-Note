@@ -8,3 +8,8 @@
 - 项目地址：[kitezzzGrim/CTF-Note](#)
 
 ![](./img/ctf.jpg)
+
+- CTF平台刷题记录：[CTF-Note-平台刷题记录](https://github.com/kitezzzGrim/CTF-Note/tree/master/%E5%B9%B3%E5%8F%B0%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95)
+- CTF-Web总结: [CTF-Note-Web](https://github.com/kitezzzGrim/CTF-Note/tree/master/Web)
+- CTF-Misc总结：[CTF-Note-Misc](https://github.com/kitezzzGrim/CTF-Note/tree/master/Misc)
+- CTF-Crypher总结: [CTF-Note-Crypher](https://github.com/kitezzzGrim/CTF-Note/tree/master/Crypher)

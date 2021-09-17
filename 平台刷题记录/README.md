@@ -8,3 +8,4 @@
 - [BMZCTF](#)
     - http://www.bmzclub.cn/
 - [南邮CTF](#)
+- [陇剑杯](#)
