@@ -9,3 +9,5 @@
     - http://www.bmzclub.cn/
 - [南邮CTF](#)
 - [陇剑杯](#)
+- [CTFSHOW](#https://ctf.show/)
+    - https://ctf.show/
