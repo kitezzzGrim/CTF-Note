@@ -17,6 +17,13 @@
     - [穿越时空的思念](#穿越时空的思念)
     - [纳尼](#纳尼)
     - [outguess](#outguess)
+    - [我有一只马里奥](#我有一只马里奥)
+    - [谁赢了比赛？](#谁赢了比赛？)
+    - [excel破解](#excel破解)
+    - [gakki](#gakki)
+    - [来题中等的吧](#来题中等的吧)
+    - [base64隐写](base64隐写)
+    - [find_me](#find_me)
 
 ## 二维码扫描
 
@@ -143,3 +150,81 @@ audacity需要先将两个声道分离，分离立体声到单声道，导出文
 添加GIF89
 
 ## outguess
+
+右键查看图片属性发现 公正民主公正文明公正和谐
+核心价值解码得到abc
+
+outguess -k "abc" -r mmm.jpg hidden.txt
+
+## 我有一只马里奥
+
+下载后点击exe出现1.txt，内容为ntfs flag.txt
+
+猜测是ntfs隐写，用NtfsStreamsEditor扫1.txt
+
+## 谁赢了比赛？
+
+binwalk得到压缩包，暴力破解即可
+
+得到gif图片，stegsolve-frame browser 要是对GIF之类的动图进行分解，把动图一帧帧的放，有时候会是二维码
+
+第310帧有一行文字，保存下来单独对其stegsolve red plane 0发现二维码，扫描得到flag
+
+## excel破解
+
+010打开搜索flag
+
+## gakki
+
+binwalk分离压缩包，爆破压缩包得到文本
+
+```
+# -*- coding:utf-8 -*-
+#Author: mochu7
+# 字频统计
+alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+- =\\{\\}[]"
+strings = open('./flag.txt').read()
+
+result = {}
+for i in alphabet:
+	counts = strings.count(i) # 计算出现的次数
+	i = '{0}'.format(i)
+	result[i] = counts
+
+res = sorted(result.items(),key=lambda item:item[1],reverse=True)  # 排序操作 True降序
+for data in res:
+	print(data)
+
+for i in res:
+	flag = str(i[0])
+	print(flag[0],end="")
+```
+
+## 来题中等的吧
+
+看图识别摩斯电码
+
+.- .-.. .--. .... .- .-.. .- -...
+
+## base64隐写
+
+```py
+# -*- coding: cp936 -*-
+
+b64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+
+with open('1.txt', 'rb') as f:
+    bin_str = ''
+    for line in f.readlines():
+        stegb64 = ''.join(line.split()) # 读取文本每一行
+        rowb64 =  ''.join(stegb64.decode('base64').encode('base64').split()) # 把内容编码成原生base64
+
+        offset = abs(b64chars.index(stegb64.replace('=','')[-1])-b64chars.index(rowb64.replace('=','')[-1])) # 文本的base64 - 原生base64
+        equalnum = stegb64.count('=') #no equalnum no offset
+        if equalnum:
+            bin_str += bin(offset)[2:].zfill(equalnum * 2)
+
+        print ''.join([chr(int(bin_str[i:i + 8], 2)) for i in xrange(0, len(bin_str), 8)]) #8 位一组
+```
+
+## find_me

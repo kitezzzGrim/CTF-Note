@@ -4,6 +4,7 @@
     - [内存取证](#内存取证)
         - [Volatility](#Volatility)
     - [文件取证](#文件取证)
+        - [stegsolve](#stegsolve)
         - [右键查看属性](#右键查看属性)
         - [常见文件头](#常见文件头)
         - [binwalk](#binwalk)
@@ -12,10 +13,14 @@
         - [7z](#7z)
         - [F5-steganography](#F5-steganography)
         - [outguess](#outguess)
+        - [base64隐写](#base64隐写)
+        - [ScreenToGif](#ScreenToGif)
     - [流量取证](#流量取证)
         - [wireshark](#wireshark)
     - [音频取证](#音频取证)
         - [Audacity](#Audacity)
+    - [磁盘取证](#磁盘取证)
+        - [Ntfs隐写](#Ntfs隐写)
 ## 内存取证
 
 ### Volatility
@@ -55,6 +60,9 @@ python2 vol.py  -f tmp.vmem --profile=Win7SP1x64 mimikatz
 
 ## 文件取证
 
+## stegsolve
+
+Frame Browser:帧浏览器   主要是对GIF之类的动图进行分解，把动图一帧帧的放，有时候会是二维码
 ### 右键查看属性
 
 右键查看属性-详情信息-备注
@@ -143,6 +151,16 @@ outguess -k "my secret key" -d hidden.txt demo.jpg out.jpg
  outguess -k "my secret key" -r out.jpg hidden.txt
 
 ```
+
+### base64隐写
+
+
+
+### ScreenToGif
+
+gif分帧工具
+
+打开编辑器拖进图片即可
 ## 流量取证
 
 ### Wireshark
@@ -171,3 +189,9 @@ morse2ascii good.wav
 ![image](./img/audacity.png)
 
 将`t`替换为`-`，e替换为`.`
+
+## 磁盘取证
+
+### Ntfs隐写
+
+工具：NtfsStreamsEditor
