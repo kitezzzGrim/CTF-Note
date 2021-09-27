@@ -4,6 +4,9 @@
     - [内存取证](#内存取证)
         - [Volatility](#Volatility)
     - [文件取证](#文件取证)
+        - [010editor](#010editor)
+            - [编码](#编码)
+            - [修改长宽](#修改长宽)
         - [stegsolve](#stegsolve)
         - [右键查看属性](#右键查看属性)
         - [常见文件头](#常见文件头)
@@ -15,8 +18,12 @@
         - [outguess](#outguess)
         - [base64隐写](#base64隐写)
         - [ScreenToGif](#ScreenToGif)
+        - [exiftool](#exiftool)
+        - [pyc反编译](#pyc反编译)
+        - [LSB隐写](#LSB隐写)
     - [流量取证](#流量取证)
         - [wireshark](#wireshark)
+            - [tshark](#tshark)
     - [音频取证](#音频取证)
         - [Audacity](#Audacity)
     - [磁盘取证](#磁盘取证)
@@ -60,6 +67,18 @@ python2 vol.py  -f tmp.vmem --profile=Win7SP1x64 mimikatz
 
 ## 文件取证
 
+### 010Editor
+
+**如何导入十六进制文件**
+
+文件->导入十六进制文件
+### 编码
+
+### 修改长宽
+
+一般在第二行 6 7列
+
+6是宽 7是高
 ## stegsolve
 
 Frame Browser:帧浏览器   主要是对GIF之类的动图进行分解，把动图一帧帧的放，有时候会是二维码
@@ -68,8 +87,10 @@ Frame Browser:帧浏览器   主要是对GIF之类的动图进行分解，把动
 右键查看属性-详情信息-备注
 ### 常见文件头
 
+https://vxhly.github.io/views/windows/file-header-and-tail.html#%E4%BB%8E-ultraedit-%E6%8F%90%E5%8F%96%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B4%E4%BF%A1%E6%81%AF
+
 ```
-JPEG (jpg)，                        　　文件头：FFD8FF　　　　　　　　　　　　　　　　　　　　　　　 文件尾：FF D9　　　　　　　　　　　　　　　
+JPEG (jpg)，                        　　文件头：FFD8FF E0　　　　　　　　　　　　　　　　　　　　 文件尾：FF D9　　　　　　　　　　　　　　　
 PNG (png)，                       　　 文件头：89504E47　　　　　　　　　　　　　　　　　　　　　　文件尾：AE 42 60 82
 GIF89 (gif)，                           　　文件头：4749463839　　　　　　　　　　　　　　　　　　　　　　文件尾：00 3B                                                                 ZIP Archive (zip)，                     文件头：504B0304　　　　　　　　　　　　　　　　　　　　　　文件尾：50 4B
 
@@ -161,6 +182,25 @@ outguess -k "my secret key" -d hidden.txt demo.jpg out.jpg
 gif分帧工具
 
 打开编辑器拖进图片即可
+
+### exiftool
+
+跟右键查看属性类似 一个升级版
+
+用于读写和处理图像
+
+"exiftool(-k).exe" attachment.jpg
+
+### pyc反编译
+
+https://tool.lu/pyc/
+
+### LSB隐写
+
+https://github.com/livz/cloacked-pixel
+
+python2 lsb.py extract 1.png 1.txt 123456
+
 ## 流量取证
 
 ### Wireshark
@@ -169,6 +209,18 @@ gif分帧工具
 
 http.request.method==POST
 
+#### tshark
+
+```
+tshark -r sqltest.pcapng -Y "http.request" -T fields -e http.request.full_uri > data.txt
+```
+
+-r 读取文件
+-Y 过滤语句
+-T pdml|ps|text|fields|psml,设置解码结果输出的格式
+-e 输出特定字段
+
+http.request.uri http请求的uri部分
 
 ## 音频取证
 
@@ -195,3 +247,5 @@ morse2ascii good.wav
 ### Ntfs隐写
 
 工具：NtfsStreamsEditor
+
+虚拟机 有些需要winrar解压才能提取到

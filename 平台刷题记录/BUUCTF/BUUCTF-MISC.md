@@ -24,7 +24,21 @@
     - [来题中等的吧](#来题中等的吧)
     - [base64隐写](base64隐写)
     - [find_me](#find_me)
-
+    - [sqltest](#sqltest)
+    - [伟大的侦探](#伟大的侦探)
+    - [黑客帝国](#黑客帝国)
+    - [你能看懂音符吗](#你能看懂音符吗)
+    - [KO](#KO)
+    - [你有没有好好看网课?](#你有没有好好看网课?)
+    - [ezmisc](#ezmisc)
+    - [喵喵喵](#喵喵喵)
+    - [caesar](#caesar)
+    - [低个头](#低个头)
+    - [弱口令](#弱口令)
+    - [john-in-the-middle](#john-in-the-middle)
+    - [NTFS数据流](#NTFS数据流)
+    - [我吃三明治](#我吃三明治)
+    - [single_dog](#single_dog)
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -228,3 +242,219 @@ with open('1.txt', 'rb') as f:
 ```
 
 ## find_me
+
+右键属性发现盲文 解密即可
+
+https://www.qqxiuzi.cn/bianma/wenbenjiami.php?s=mangwen
+
+## sqltest
+
+文件-导出对象-HTTP
+
+我们可以从中推断出正确的ascii值，在对一个字符进行bool判断时，被重复判断的ASCII值就是正确的字符，最后提取到：
+
+```bash
+tshark -r sqltest.pcapng -Y "http.request" -T fields -e http.request.full_uri > data.txt
+```
+
+https://www.cnblogs.com/yunqian2017/p/15124198.html
+
+
+102 108 97 103 123 52 55 101 100 98 56 51 48 48 101 100 53 102 57 98 50 56 102 99 53 52 98 48 100 48 57 101 99 100 101 102 55 125
+
+flag{47edb8300ed5f9b28fc54b0d09ecdef7}
+
+## 伟大的侦探
+
+压缩包密码:摂m墷m卪倕ⅲm仈Z
+呜呜呜,我忘记了压缩包密码的编码了,大家帮我解一哈。
+
+用010editor打开 EBCDIC编码得到压缩包密码
+
+里面是跳舞的小人
+
+福尔摩斯-跳舞的小人解密
+
+iloveholmesandwllm
+
+## 黑客帝国
+
+Jack很喜欢看黑客帝国电影，一天他正在上网时突然发现屏幕不受控制，出现了很多数据再滚屏，结束后留下了一份神秘的数据文件，难道这是另一个世界给Jack留下的信息？聪明的你能帮Jack破解这份数据的意义吗？ 注意：得到的 flag 请包上 flag{} 提交
+
+打开发现是十六进制文件 用010editor导入十六进制文件，发现rar开头文件，保存到本地为1.rar，暴力破解得到一张损坏的png图片，010查看发现是JFIF，这是jpg格式特征，修改文件头为jpg的得到图片
+
+## 你能看懂音符吗
+
+压缩包损坏，打开010editor 改成Rar文件头，里面有docx
+
+呀！一不小心把文档里的东西弄没了……
+
+010editor继续查看发现PK文件头，修改后缀为zip
+
+在word的document.xml发现
+
+♭♯♪‖¶♬♭♭♪♭‖‖♭♭♬‖♫♪‖♩♬‖♬♬♭♭♫‖♩♫‖♬♪♭♭♭‖¶∮‖‖‖‖♩♬‖♬♪‖♩♫♭♭♭♭♭§‖♩♩♭♭♫♭♭♭‖♬♭‖¶§♭♭♯‖♫∮‖♬¶‖¶∮‖♬♫‖♫♬‖♫♫§=
+
+音符解密即可
+
+## KO
+
+OoK解密
+
+## 你有没有好好看网课?
+
+flag3 6位数字暴力破解得到文档和mp4
+
+根据文档提示 用pr新建项目-导入mp4 在5.20和7.11发现信息
+
+..... ../... ./... ./... ../
+  5,2     3,1    3,1    3,2
+   W       L      L      M
+dXBfdXBfdXA=
+
+wllmup_up_up 输入压缩包得到图片，010editor在末尾发现flag
+
+## ezmisc
+
+修改宽高 在第二行第6 7列  7是高
+
+## 喵喵喵
+
+stegsolve发现在红绿蓝 0位上方有不一样的东西，可以猜测是LSB隐写
+
+![](./img/miao1.png)
+
+保存为二进制文件，修改多余的文件头 再修改宽高 二维码扫描
+
+https://pan.baidu.com/s/1pLT2J4f
+
+NtfsStreamsEditor软件去提取隐藏文件。（这一步我一直提取失败，没搞懂为什么，后来发现下载的压缩包用WinRAR解压才可以提取到隐藏的文件，据大佬说流隐写得用WinRAR解压
+
+最后得到pyc 反编译即可
+
+```bash
+#!/usr/bin/env python
+# visit https://tool.lu/pyc/ for more information
+import base64
+
+def encode():
+    flag = '*************'
+    ciphertext = []
+    for i in range(len(flag)):
+        s = chr(i ^ ord(flag[i])) # flag每个字符转为十进制再与i异或 然后转为字符
+        if i % 2 == 0:
+            s = ord(s) + 10
+        else:
+            s = ord(s) - 10
+        ciphertext.append(str(s))
+    return ciphertext[::-1]
+
+def decode():
+    flag = ''
+    ciphertext = [
+        '96',
+        '65',
+        '93',
+        '123',
+        '91',
+        '97',
+        '22',
+        '93',
+        '70',
+        '102',
+        '94',
+        '132',
+        '46',
+        '112',
+        '64',
+        '97',
+        '88',
+        '80',
+        '82',
+        '137',
+        '90',
+        '109',
+        '99',
+        '112']
+    ciphertext = ciphertext[::-1]
+    for i in range(len(ciphertext)):
+        if i % 2 == 0:
+            s = int(ciphertext[i]) - 10
+        else:
+            s = int(ciphertext[i]) + 10
+        s = chr(i ^ s)
+        flag +=  s
+        print(flag)
+
+if __name__ == '__main__':
+    decode()
+```
+
+## caesar
+题目：caesar
+
+描述：gmbhjtdbftbs
+
+flag格式：XXX 明文
+
+提交：直接提交明文 （小写）
+
+中文翻译是凯撒，解密皆可
+
+## 低个头
+
+题目：低个头
+
+描述：EWAZX RTY TGB IJN IO KL 请破解该密文 f
+
+lag格式：XXX 明文
+
+提交：直接提交明文（大写）
+
+键盘密码
+
+
+flag{CTF}
+
+## 弱口令
+
+老菜鸡，伤了神，别灰心，莫放弃，试试弱口令 注意：得到的 flag 请包上 flag{} 提交
+
+打开压缩包，有密码，右边可以发现看不见的密码，复制到新文本sublime 全选可看见摩斯密码
+
+![](./img/ruokol.png)
+
+
+.... . .-.. .-.. ----- ..-. --- .-. ..- --
+
+摩斯电码解密得到压缩包密码，解压后是一张女神图片
+
+LSB隐写
+
+python2 lsb.py extract 女神.png 1.txt 123456
+
+## john-in-the-middle
+
+导出http对象文件
+也可也foremost
+ 对logo.png进行stegsolve观察
+
+## NTFS数据流
+
+直接用ntfstreameditor2工具读取
+
+## 我吃三明治
+
+foremost分离两张图片
+
+010打开原图对比 在拼接处发现base32 ，解密得到flag
+
+## single_dog
+
+颜文字解密
+
+http://www.atoolbox.net/Tool.php?Id=703
+
+## SXMgdGhpcyBiYXNlPw==
+
+base64隐写
