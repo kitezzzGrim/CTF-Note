@@ -39,6 +39,16 @@
     - [NTFS数据流](#NTFS数据流)
     - [我吃三明治](#我吃三明治)
     - [single_dog](#single_dog)
+    - [SXMgdGhpcyBiYXNlPw==](#SXMgdGhpcyBiYXNlPw==)
+    - [黄金6年](#黄金6年)
+    - [zip](#zip)
+    - [间谍启示录](#间谍启示录)
+    - [swp](#swp)
+    - [吹着贝斯扫二维码](#吹着贝斯扫二维码)
+    - [小易的U盘](#小易的U盘)
+    - [从娃娃抓起](#从娃娃抓起)
+    - [alison_likes_jojo](#alison_likes_jojo)
+    - [zips](#zips)
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -458,3 +468,139 @@ http://www.atoolbox.net/Tool.php?Id=703
 ## SXMgdGhpcyBiYXNlPw==
 
 base64隐写
+
+## 黄金6年
+
+下载后是mp4文件，用010打开在末尾发现base64，解码后是rar文件，转二进制文本脚本如下：
+
+```py
+import base64
+
+code = "UmFyIRoHAQAzkrXlCgEFBgAFAQGAgADh7ek5VQIDPLAABKEAIEvsUpGAAwAIZmxhZy50eHQwAQADDx43HyOdLMGWfCE9WEsBZprAJQoBSVlWkJNS9TP5du2kyJ275JzsNo29BnSZCgMC3h+UFV9p1QEfJkBPPR6MrYwXmsMCMz67DN/k5u1NYw9ga53a83/B/t2G9FkG/IITuR+9gIvr/LEdd1ZRAwUEAA=="
+
+with open ('1.rar','wb') as f:
+    f.write(base64.b64decode(code))
+```
+
+压缩包需要密码，在mp4里面二维码，需要分帧,一共4个二维码拼接压缩包密码。
+
+
+
+## zip
+
+拼在一起解下base64就有flag 注意：得到的 flag 请包上 flag{} 提交
+
+很多压缩包，但是里面的内容非常小，小于5字节，可以尝试使用CRC32爆破得到其内容
+
+```py
+#coding:utf-8
+import zipfile
+import string
+import binascii
+
+def CrackCrc(crc):
+    for i in dic:
+        for j in dic:
+            for p in dic:
+                for q in dic:
+                    s = i + j + p + q
+                    if crc == (binascii.crc32(s) & 0xffffffff):
+                        #print s
+                        f.write(s)
+                        return
+
+def CrackZip():
+    for I in range(68):
+        file = 'out' + str(I) + '.zip'
+        f = zipfile.ZipFile(file, 'r')
+        GetCrc = f.getinfo('data.txt')
+        crc = GetCrc.CRC
+        #以上3行为获取压缩包CRC32值的步骤
+        #print hex(crc)
+        CrackCrc(crc)
+
+dic = string.ascii_letters + string.digits + '+/='
+
+f = open('out.txt', 'w')
+CrackZip()
+f.close()
+```
+
+base64转字节文件
+
+z5BzAAANAAAAAAAAAKo+egCAIwBJAAAAVAAAAAKGNKv+a2MdSR0zAwABAAAAQ01UCRUUy91BT5UkSNPoj5hFEVFBRvefHSBCfG0ruGnKnygsMyj8SBaZHxsYHY84LEZ24cXtZ01y3k1K1YJ0vpK9HwqUzb6u9z8igEr3dCCQLQAdAAAAHQAAAAJi0efVT2MdSR0wCAAgAAAAZmxhZy50eHQAsDRpZmZpeCB0aGUgZmlsZSBhbmQgZ2V0IHRoZSBmbGFnxD17AEAHAA==
+
+可以看到文件尾为07 00 是rar的文件尾，修补文件头526172211A0700
+
+## 间谍启示录
+
+在城际公路的小道上，罪犯G正在被警方追赶。警官X眼看他正要逃脱，于是不得已开枪击中了罪犯G。罪犯G情急之下将一个物体抛到了前方湍急的河流中，便头一歪突然倒地。警官X接近一看，目标服毒身亡。数分钟后，警方找到了罪犯遗失物体，是一个U盘，可惜警方只来得及复制镜像，U盘便报废了。警方现在拜托你在这个镜像中找到罪犯似乎想隐藏的秘密。 注意：得到的 flag 请包上 flag{} 提交
+
+下载后是iso文件 用foremost分离
+
+运行flag.exe得到flag
+
+## swp
+
+foremost分离pcag，有压缩包，可修复也可直接导出
+
+## 吹着贝斯扫二维码
+
+```py
+#coding:utf-8
+import os
+
+path = "G:\\Github\\CTF-Note\\tools\\批量修改文件名后缀\\test"
+
+for i in os.listdir(path):
+    # print(i)
+    if i == 'flag.zip':
+        continue
+    else:
+        old_name = os.path.join(path,i)
+        new_name = os.path.join(path,i + '.jpg')
+        os.rename(old_name,new_name)
+```
+
+得到一堆二维码碎片。用ps拼接后扫描
+
+BASE Family Bucket ???
+85->64->85->13->16->32
+
+
+
+压缩包注释如下：GNATOMJVIQZUKNJXGRCTGNRTGI3EMNZTGNBTKRJWGI2UIMRRGNBDEQZWGI3DKMSFGNCDMRJTII3TMNBQGM4TERRTGEZTOMRXGQYDGOBWGI2DCNBY
+
+ThisIsSecret!233
+
+## 小易的U盘
+
+小易的U盘中了一个奇怪的病毒，电脑中莫名其妙会多出来东西。小易重装了系统，把U盘送到了攻防实验室，希望借各位的知识分析出里面有啥。请大家加油噢，不过他特别关照，千万别乱点他U盘中的资料，那是机密。 注意：得到的 flag 请包上 flag{} 提交
+
+foremost分离iso
+
+提示32exe有东西，打开寻找发现flag
+
+
+## 从娃娃抓起
+题目描述：伟人的一句话，标志着一个时代的开始。那句熟悉的话，改变了许多人的一生，为中国三十年来计算机产业发展铺垫了道路。两种不同的汉字编码分别代表了汉字信息化道路上的两座伟大里程碑。请将你得到的话转为md5提交，md5统一为32位小写。
+
+0086 1562 2535 5174
+bnhn s wwy vffg vffg rrhy fhnv
+
+请将你得到的这句话转为md5提交，md5统一为32位小写。
+提交格式：flag{md5}
+
+中文电码和五笔编码
+
+## alison_likes_jojo
+
+题目描述：As we known, Alison is a pretty girl.
+
+boki.jpg分离出一个zip，爆破出来密码是888866，得到一个文本多次base64解密后得到key：killerqueen
+
+jljy.jpg是outguess隐写
+
+outguess -k "killerqueen" -r jljy.jpg  hidden.txt
+
+## zips

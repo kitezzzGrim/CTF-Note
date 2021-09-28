@@ -2,6 +2,7 @@
 
 - [CTF-Misc](#CTF-Misc)
     - [内存取证](#内存取证)
+        - [iso](#iso)
         - [Volatility](#Volatility)
     - [文件取证](#文件取证)
         - [010editor](#010editor)
@@ -12,6 +13,11 @@
         - [常见文件头](#常见文件头)
         - [binwalk](#binwalk)
         - [foremost](#foremost)
+        - [加密的压缩包zip](#加密的压缩包zip)
+            - [伪加密](#伪加密)
+            - [弱密码](#弱密码)
+            - [zip-图片](#zip图片)
+            - [CRC32爆破](#CRC32爆破)
         - [爆破压缩包](#爆破压缩包)
         - [7z](#7z)
         - [F5-steganography](#F5-steganography)
@@ -29,6 +35,10 @@
     - [磁盘取证](#磁盘取证)
         - [Ntfs隐写](#Ntfs隐写)
 ## 内存取证
+
+### ISO
+
+用foremost分离
 
 ### Volatility
 
@@ -111,7 +121,7 @@ Adobe Acrobat (pdf)，               文件头：255044462D312E
 Quicken (qdf)，                         文件头：AC9EBD8F
 Windows Password (pwl)，         文件头：E3828596
 
-RAR Archive (rar)，                    文件头：52617221
+RAR Archive (rar)，                    文件头：526172211A0700 文件尾：0700
 Wave (wav)，                            文件头：57415645
 AVI (avi)，                                 文件头：41564920
 Real Audio (ram)，                     文件头：2E7261FD
@@ -135,6 +145,31 @@ python binwalk.py -e mianju.jpg
 ### foremost
 
 kali下用foremost
+
+### 加密的压缩包zip
+
+
+#### 伪加密
+
+用winhex查看全局加密标志和局部加密标志
+
+#### 弱密码
+
+题目中会有提示或者给出字典，直接爆破
+#### zip—图片
+
+一般是隐写题目，从图片中找出密码
+#### CRC32爆破
+
+一般用于压缩包里文件内容较短时
+
+CRC32校验爆破原理说明：
+
+CRC32:CRC本身是“冗余校验码”的意思，CRC32则表示会产生一个32bit（8位十六进制数）的校验值。
+
+
+在产生CRC32时，源数据块的每一位都参与了运算，因此即使数据块中只有一位发生改变也会得到不同的CRC32值，利用这个原理我们可以直接爆破出加密文件的内容。
+
 
 ### 爆破压缩包
 

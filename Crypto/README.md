@@ -12,7 +12,10 @@
     - [凯撒加密解密](#凯撒加密解密)
     - [base64](#base64)
     - [base32](#base32)
-    - [颜文字加密解密](颜文字加密解密)
+    - [颜文字加密解密](#颜文字加密解密)
+    - [rot13加密解密](#rot13加密解密)
+    - [中文电码表](#中文电码表)
+    - [五笔编码](#五笔编码)
 ## brainfuck
 
  +++++++++++++++++.>
@@ -90,3 +93,24 @@ https://www.qqxiuzi.cn/bianma/base.php 在线工具
 ```
 
 http://www.atoolbox.net/Tool.php?Id=703
+
+## rot13加密解密
+
+http://www.mxcz.net/tools/rot13.aspx
+
+http://www.ab126.com/goju/10818.html
+
+https://rot13.com/
+
+## 中文电码表
+
+例子：ren
+壬1103 仁0088 人0086 忍1804 韧7282 任0117 认6126 刃0432
+妊1175 纫4771
+https://gjy.bift.edu.cn/tzgg/22776.htm
+
+## 五笔编码
+
+例子：bnhn s wwy vffg vffg rrhy fhnv
+
+https://www.qqxiuzi.cn/bianma/wubi.php
