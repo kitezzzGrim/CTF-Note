@@ -49,6 +49,10 @@
     - [从娃娃抓起](#从娃娃抓起)
     - [alison_likes_jojo](#alison_likes_jojo)
     - [zips](#zips)
+    - [百里挑一](#百里挑一)
+    - [爬](#爬)
+    - [Attack](#Attack)
+    - [千层套路](#千层套路)
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -604,3 +608,84 @@ jljy.jpg是outguess隐写
 outguess -k "killerqueen" -r jljy.jpg  hidden.txt
 
 ## zips
+
+222.zip用ziperello爆破得到111.zip
+
+111.zip有flag.zip和加密的setup.sh,先把flag.zip移出去，伪加密，可以用工具ZipCenOp.jar
+
+打开setup.sh
+
+```bash
+#!/bin/bash
+#
+zip -e --password=`python -c "print(__import__('time').time())"` flag.zip flag
+
+```
+
+可以看到是时间戳
+https://tool.chinaz.com/tools/unixtime.aspx
+
+考虑到出题时间，前两位为15，15????????.?? 用archpr进行掩码爆破
+
+flag{fkjabPqnLawhvuikfhgzyffj}
+
+## (╯°□°）╯︵ ┻━┻
+
+(╯°□°）╯︵ ┻━┻
+50pt
+
+(╯°□°）╯︵ ┻━┻
+
+d4e8e1f4a0f7e1f3a0e6e1f3f4a1a0d4e8e5a0e6ece1e7a0e9f3baa0c4c4c3d4c6fbb9b2b2e1e2b9b9b7b4e1b4b7e3e4b3b2b2e3e6b4b3e2b5b0b6b1b0e6e1e5e1b5fd
+
+
+```py
+s = "d4e8e1f4a0f7e1f3a0e6e1f3f4a1a0d4e8e5a0e6ece1e7a0e9f3baa0c4c4c3d4c6fbb9b2b2e1e2b9b9b7b4e1b4b7e3e4b3b2b2e3e6b4b3e2b5b0b6b1b0e6e1e5e1b5fd"
+
+str_s = ''
+str_get = []
+
+for j in range(129): # 循环测试所有数减掉1-128得到的ASCII码
+    str_16 = ''
+    for i in range(len(s)):
+        if i % 2 ==0:
+            str_s = s[i-2] + s[i-1]
+            str_16 += chr(int(str_s,16)-j) # 十六进制转十进制
+    print(str_16)
+
+
+```
+
+## 百里挑一
+
+好多漂亮的壁纸，赶快挑一张吧！ 注意：得到的 flag 请包上 flag{} 提交
+
+首先导出http对象
+
+`exiftool * | grep flag` 发现一半flag
+
+追踪TCP流在114处发现另一半flag 可以右下角点击流一个个翻阅特征exif
+
+## 爬
+
+010发现是pdf文件，修改后缀后，移动图片发现十六进制 解码得到flag
+
+## Attack
+
+foremost分离发现zip需要密码
+wireshark导出http对象发现lsass.dmp
+
+lsass是windows系统的一个进程，用于本地安全和登陆策略。mimikatz可以从 lsass.exe 里获取windows处于active状态账号明文密码。本题的lsass.dmp就是内存运行的镜像，也可以提取到账户密码
+
+https://github.com/gentilkiwi/mimikatz/releases/
+
+以管理员身份运行
+```
+privilege::debug
+sekurlsa::minidump lsass.dmp
+sekurlsa::logonpasswords full
+```
+
+ W3lc0meToD0g3
+
+## 千层套路

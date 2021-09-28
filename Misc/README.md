@@ -19,6 +19,7 @@
             - [zip-图片](#zip图片)
             - [CRC32爆破](#CRC32爆破)
         - [爆破压缩包](#爆破压缩包)
+            - [掩码爆破](#掩码爆破)
         - [7z](#7z)
         - [F5-steganography](#F5-steganography)
         - [outguess](#outguess)
@@ -30,6 +31,7 @@
     - [流量取证](#流量取证)
         - [wireshark](#wireshark)
             - [tshark](#tshark)
+            - [lsass.dmp](#lsass.dmp)
     - [音频取证](#音频取证)
         - [Audacity](#Audacity)
     - [磁盘取证](#磁盘取证)
@@ -153,6 +155,10 @@ kali下用foremost
 
 用winhex查看全局加密标志和局部加密标志
 
+工具：ZipCenOp.jar
+
+`java -jar ZipCenOp.jar r 111.zip` 解密
+
 #### 弱密码
 
 题目中会有提示或者给出字典，直接爆破
@@ -174,6 +180,17 @@ CRC32:CRC本身是“冗余校验码”的意思，CRC32则表示会产生一个
 ### 爆破压缩包
 
 archpr2 可爆破rar
+
+#### 掩码爆破
+
+archpr工具可掩码爆破
+
+掩码:知道密码中的一部分,只需按规则构造其余部分
+
+15????????.??
+
+结合时间戳
+
 
 ### 7z
 
@@ -226,6 +243,10 @@ gif分帧工具
 
 "exiftool(-k).exe" attachment.jpg
 
+kali:
+
+`exiftool * | grep flag`
+
 ### pyc反编译
 
 https://tool.lu/pyc/
@@ -244,6 +265,14 @@ python2 lsb.py extract 1.png 1.txt 123456
 
 http.request.method==POST
 
+去掉404
+
+http.response.code !=404
+
+搜索有没有包含"flag"的包
+
+ip.contains "flag"
+
 #### tshark
 
 ```
@@ -256,6 +285,20 @@ tshark -r sqltest.pcapng -Y "http.request" -T fields -e http.request.full_uri > 
 -e 输出特定字段
 
 http.request.uri http请求的uri部分
+
+#### lsass.dmp
+
+lsass是windows系统的一个进程，用于本地安全和登陆策略。mimikatz可以从 lsass.exe 里获取windows处于active状态账号明文密码。本题的lsass.dmp就是内存运行的镜像，也可以提取到账户密码
+
+https://github.com/gentilkiwi/mimikatz/releases/
+
+以管理员身份运行
+```
+privilege::debug
+sekurlsa::minidump lsass.dmp
+sekurlsa::logonpasswords full
+
+```
 
 ## 音频取证
 
