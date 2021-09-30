@@ -59,6 +59,8 @@
     - [CyberPunk](#CyberPunk)
     - [followme](#followme)
     - [USB](#USB)
+    - [通行证](#通行证)
+    - [虚假的压缩包](#虚假的压缩包)
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -773,3 +775,72 @@ binwalk 分离得到flag
 导出http对象，观察可知是个爆破密码，`grep -r 'CTF' ./output `
 
 ## USB
+
+binwalk分离key.ftm,分离出usb流量包key.pcap
+
+用UsbKeyboardDataHacker工具提取出流量，key值为xinan
+
+010editor打开233.rar，根据分析rar文件头，具体可见misc/rar文件头，在第二行第六列发现7A应该是74，修改后多了一张图，stegolve在blue plane 0发现二维码，扫描后得到
+
+ci{v3erf_0tygidv2_fc0}
+
+维吉尼亚密码解密得到 fa{i3eei_0llgvgn2_sc0}
+
+栅栏解密2得到flag
+
+## 通行证
+
+a2FuYmJyZ2doamx7emJfX19ffXZ0bGFsbg==
+
+套娃题目
+
+base64解密-栅栏密码 密钥7 - 凯撒密码
+
+## 虚假的压缩包
+
+```
+数学题
+n = 33
+e = 3
+解26
+
+-------------------------
+答案是
+```
+
+明显的rsa题
+
+```py
+import gmpy2
+
+## 已知 p q e c 求 m
+p = 3
+q = 11
+e = 3
+c = 26
+n = 33
+s = (p- 1) * (q - 1)
+d = gmpy2.invert(e,s)
+m = pow(c,d,n)
+
+print(pow(c, d, n))
+```
+
+压缩包密码：答案是5
+
+得到图片和文件 图片改长宽发现要求异或5，写脚本
+
+```py
+original = open("亦真亦假",'r').read()
+flag = open("flag",'w')
+for i in original:
+    tmp = int(i,16)^5
+    flag.write(hex(tmp)[2:])
+```
+用notepad++右上角插件
+hex->Ascii
+
+后缀doc，全选换成蓝色发现flag
+
+
+flag{_th2_7ru8_2iP_}

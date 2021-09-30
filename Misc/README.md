@@ -5,6 +5,7 @@
         - [iso](#iso)
         - [Volatility](#Volatility)
     - [文件取证](#文件取证)
+        - [Notepad++](#Notepad++)
         - [010editor](#010editor)
             - [编码](#编码)
             - [修改长宽](#修改长宽)
@@ -15,6 +16,7 @@
         - [binwalk](#binwalk)
         - [foremost](#foremost)
         - [压缩包分析文件头](#压缩包分析文件头)
+            - [RAR](#RAR)
         - [加密的压缩包zip](#加密的压缩包zip)
             - [伪加密](#伪加密)
             - [弱密码](#弱密码)
@@ -35,11 +37,13 @@
         - [wireshark](#wireshark)
             - [tshark](#tshark)
             - [lsass.dmp](#lsass.dmp)
+            - [UsbKeyboardDataHacker](#UsbKeyboardDataHacker)
     - [音频取证](#音频取证)
         - [Audacity](#Audacity)
         - [dtmf2um](dtmf2um)
     - [磁盘取证](#磁盘取证)
         - [Ntfs隐写](#Ntfs隐写)
+    - [DOC取证](#DOC取证)
 ## 内存取证
 
 ### ISO
@@ -83,6 +87,9 @@ python2 vol.py  -f tmp.vmem --profile=Win7SP1x64 mimikatz
 
 ## 文件取证
 
+### Notepad++
+
+右上角插件可转换 hex->Ascii
 ### 010Editor
 
 **如何导入十六进制文件**
@@ -161,8 +168,32 @@ kali下用foremost
 
 ### 压缩包分析文件头
 
-- [CTF解题技能之压缩包分析基础篇](https://www.freebuf.com/column/199854.html)
+https://blog.csdn.net/Claming_D/article/details/105899397
 
+
+#### RAR
+
+![](./img/rar1.png)
+
+```
+D5 56 ：HEAD_CRC，2字节，也就是文件头部分的crc校验值
+74 ：HEAD_TYPE，1字节，块类型，74表示块类型是文件头
+20 90 ：HEAD_FLAGS，2字节，位标记，这块在资料上没找到对应的数值，不知道20 90代表什么意思。
+2D 00 ：HEAD_SIZE，2字节，文件头的全部大小（包含文件名和注释）
+10 00 00 00 ：PACK_SIZE，4字节，已压缩文件大小
+10 00 00 00 ：UNP_SIZE，4字节，未压缩文件大小
+02：HOST_OS，1字节，保存压缩文件使用的操作系统，02代表windows
+C7 88 67 36：FILE_CRC，4字节，文件的CRC值
+6D BB 4E 4B ：FTIME，4字节，MS DOS 标准格式的日期和时间
+1D：UNP_VER，1字节，解压文件所需要的最低RAR版本
+30：METHOD，1字节，压缩方式，这里是存储压缩
+08 00 ：NAME_SIZE，2字节，表示文件名大小，这里文件名大小是8字节（flag.txt）
+20 00 00 00 ：ATTR，4字节，表示文件属性这里是txt文件
+66 6C 61 67 2E 74 78 74：FILE_NAME（文件名） ，NAME_SIZE字节大小，这里NAME_SIZE大小为8
+再往后是txt文件内容，一直到第六行 65 结束，下面是另一个文件块的开始
+
+这个块中存在两个crc值，一个是文件头块中从块类型到文件名这38个字节的校验，后一个则是压缩包中所包含文件的crc校验，解压时，会计算解压后生成文件的crc值，如果等于这里的crc，则解压完成，如果不同，则报错中断。
+```
 ### 加密的压缩包zip
 
 
@@ -327,6 +358,16 @@ sekurlsa::logonpasswords full
 
 ```
 
+
+### UsbKeyboardDataHacker
+
+usb取证 wireshark里全是USB协议流量数据包可用UsbKeyboardDataHacker工具提取
+
+https://github.com/WangYihang/UsbKeyboardDataHacker
+
+`python UsbKeyboardHacker.py data.pcap`
+
+
 ## 音频取证
 
 ### Audacity
@@ -362,3 +403,7 @@ dtmf2num.exe girlfriend.wav
 工具：NtfsStreamsEditor
 
 虚拟机 有些需要winrar解压才能提取到
+
+## DOC取证
+
+flag有时候把颜色设置为白色 需要全选换成可见颜色

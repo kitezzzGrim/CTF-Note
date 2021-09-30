@@ -1,6 +1,7 @@
 # BUUCTF-Crypto
 
 - [BUUCTF-Crypto](#BUUCTF-Crypto)
+    - [MD5](#MD5)
     - [RSA](#RSA)
 
 ## RSA
