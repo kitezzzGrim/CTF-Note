@@ -17,6 +17,8 @@
     - [中文电码表](#中文电码表)
     - [五笔编码](#五笔编码)
     - [时间戳](#时间戳)
+    - [手机键盘密码](#手机键盘密码)
+    - [DES加密解密](#DES加密解密)
 ## brainfuck
 
  +++++++++++++++++.>
@@ -119,3 +121,17 @@ https://www.qqxiuzi.cn/bianma/wubi.php
 ## 时间戳
 
 https://tool.chinaz.com/tools/unixtime.aspx
+
+## 手机键盘密码
+
+999*666*88*2*777*33*6*999*4*4444*777*555*333*777*444*33*66*3*7777
+
+![](./img/shoujimima.png)
+
+## DES加密解密
+
+也可能是3DES
+
+https://www.sojson.com/encrypt_triple_des.html
+
+DES密文开头都是`U2FsdGVkX1`,解密需要密钥

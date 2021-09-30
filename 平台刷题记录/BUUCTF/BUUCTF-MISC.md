@@ -53,6 +53,12 @@
     - [爬](#爬)
     - [Attack](#Attack)
     - [千层套路](#千层套路)
+    - [girlfriend](#girlfriend)
+    - [Game](#Game)
+    - [docx](#docx)
+    - [CyberPunk](#CyberPunk)
+    - [followme](#followme)
+    - [USB](#USB)
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -689,3 +695,81 @@ sekurlsa::logonpasswords full
  W3lc0meToD0g3
 
 ## 千层套路
+
+打开文件，发现是个以数字命名的压缩包，解压密码恰好是那个数字，写个脚本跑一下
+
+```py
+import zipfile
+name = '0573'
+while True:
+    fz = zipfile.ZipFile(name + '.zip', 'r')
+    fz.extractall(pwd=bytes(name, 'utf-8'))
+    name = fz.filelist[0].filename[0:4]
+    fz.close()
+```
+
+```py
+from PIL import Image
+
+x = y = 200 # 需要手动将()去掉
+img = Image.new("RGB",(x,y))
+file = open('./qr.txt','r')
+
+for width in range(0,x):
+    for height in range(0,y):
+        line = file.readline()
+        rgb = line.split(',')
+        img.putpixel((width,height),(int(rgb[0]),int(rgb[1]),int(rgb[2])))
+img.save('flag.jpg')
+```
+
+需要手动将qr的()去掉
+
+## girlfriend
+
+听起来像是在打电话输入号码的声音，猜测DTMF拨号音识别，有个程序可以识别一下dtmf2num.exe
+
+> dtmf2num.exe girlfriend.wav
+
+999*666*88*2*777*33*6*999*4*4444*777*555*333*777*444*33*66*3*7777
+
+手机键盘密码
+
+999 ---> y666 ---> o88 ---> u2 ---> a777 ---> r33 ---> e6 ---> m999 ---> y4 ---> g4444 ---> i777 ---> r555 ---> l333 ---> f777 ---> r444 ---> i33 ---> e66 ---> n3 ---> d7777 ---> syouaremygirlfriends
+flag{youaremygirlfriends}
+
+## Game
+
+先看源代码的index.html发现
+
+ ON2WG5DGPNUECSDBNBQV6RTBNMZV6RRRMFTX2===
+
+
+base32编码 suctf{hAHaha_Fak3_F1ag}
+
+图片LSB分析得到加密的字符串
+
+
+U2FsdGVkX1+zHjSBeYPtWQVSwXzcVFZLu6Qm0To/KeuHg8vKAxFrVQ==
+
+因为U2FsdGVkX1开头可知道是DES加密
+
+因为DES加密之后开头都是这几位，不过解密需要秘钥，就是前面的fake密钥
+
+https://www.sojson.com/encrypt_triple_des.html
+
+得到flag
+
+## docx
+
+binwalk 分离得到flag
+
+## CyberPunk
+
+更改系统时间即可
+
+## followme
+
+导出http对象，观察可知是个爆破密码，`grep -r 'CTF' ./output `
+
+## USB
