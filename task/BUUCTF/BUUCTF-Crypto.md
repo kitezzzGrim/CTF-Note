@@ -11,6 +11,7 @@
     - [Quoted-printable](#Quoted-printable)
     - [Rabbit](#Rabbit)
     - [篱笆墙的影子](#篱笆墙的影子)
+    - [丢失的MD5](#丢失的MD5)
     - [RSA](#RSA)
 
 
@@ -101,6 +102,8 @@ https://www.sojson.com/encrypt_rabbit.html
 felhaagv{ewtehtehfilnakgw}
 
 栅栏加密 每组2个字符
+
+## 丢失的MD5
 ## RSA
 
 在一次RSA密钥对生成中，假设p=473398607161，q=4511491，e=17
