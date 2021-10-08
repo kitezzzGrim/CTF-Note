@@ -23,6 +23,8 @@
     - [时间戳](#时间戳)
     - [手机键盘密码](#手机键盘密码)
     - [DES加密解密](#DES加密解密)
+    - [Rabbit解密](Rabbit解密)
+    - [Quoted-printable编码](#Quoted-printable编码)
 
 
 ## md5
@@ -106,6 +108,20 @@ https://www.qqxiuzi.cn/bianma/kaisamima.php
 
 常规的凯撒密码是对每个字母做相同单位的移位。变异凯撒每个字母的移位可能各不相同。
 
+往往是ASCII的移位密码，将密码转为如flag{}等格式，寻找规律
+
+```py
+c = "afZ_r9VYfScOeO_UL^RWUc"
+move = 5
+
+flag = ""
+for i in c:
+    flag += chr(ord(i)+ move)
+    move = move +1
+
+print(flag)
+```
+
 
 ## 维吉尼亚密码
 
@@ -119,6 +135,21 @@ https://www.qqxiuzi.cn/bianma/weijiniyamima.php
 
 栅栏密码是一种简单的移动字符位置的加密方法，规则简单，容易破解。栅栏密码的加密方式：把文本按照一定的字数分成多个组，取每组第一个字连起来得到密文1，再取每组第二个字连起来得到密文2……最后把密文1、密文2……连成整段密文。
 
+明文：栅栏密码加密规则示例
+每组字数：5
+
+按照字数先把明文分成：
+栅栏密码加
+密规则示例
+
+先取每组第一个字：栅密
+再取每组第二个字：栏规
+……
+
+最后得到“栅密栏规密则码示加例”。
+
+
+在线网站：
 https://www.qqxiuzi.cn/bianma/zhalanmima.php
 
 http://www.metools.info/code/fence154.html
@@ -181,3 +212,15 @@ https://tool.chinaz.com/tools/unixtime.aspx
 https://www.sojson.com/encrypt_triple_des.html
 
 DES密文开头都是`U2FsdGVkX1`,解密需要密钥
+
+## Rabbit解密
+
+在线网站
+https://www.sojson.com/encrypt_rabbit.html
+## Quoted-printable编码
+
+Quoted-printable可译为“可打印字符引用编码”，Quoted-printable将任何8-bit字节值可编码为3个字符：一个等号"=“后跟随两个十六进制数字(0–9或A–F)表示该字节的数值。例如，ASCII码换页符（十进制值为12）可以表示为”=0C"，
+
+在线解密网站：
+http://www.mxcz.net/tools/QuotedPrintable.aspx
+

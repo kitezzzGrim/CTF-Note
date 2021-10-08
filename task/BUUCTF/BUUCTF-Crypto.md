@@ -8,6 +8,9 @@
     - [摩丝](#摩丝)
     - [password](#password)
     - [变异凯撒](#变异凯撒)
+    - [Quoted-printable](#Quoted-printable)
+    - [Rabbit](#Rabbit)
+    - [篱笆墙的影子](#篱笆墙的影子)
     - [RSA](#RSA)
 
 
@@ -53,8 +56,51 @@ flag{zs19900315}
 加密密文：afZ_r9VYfScOeO_UL^RWUc
 格式：flag{ }
 
+afZ_ => flag
+rc => {}
+
+a -> f 5
+f -> l 6
+Z -> a 7
+_ -> g 8
+
+```py
+c = "afZ_r9VYfScOeO_UL^RWUc"
+move = 5
+
+flag = ""
+for i in c:
+    flag += chr(ord(i)+ move)
+    move = move +1
+
+print(flag)
+```
+
+## Quoted-printable
+
+=E9=82=A3=E4=BD=A0=E4=B9=9F=E5=BE=88=E6=A3=92=E5=93=A6
+
+Quoted-printable编码
+
+在线解密网站：
+http://www.mxcz.net/tools/QuotedPrintable.aspx
+
+flag{那你也很棒哦}
+
+## Rabbit
+
+U2FsdGVkX1/+ydnDPowGbjjJXhZxm2MP2AgI
+
+Rabbit解密
+
+https://www.sojson.com/encrypt_rabbit.html
 
 
+## 篱笆墙的影子
+
+felhaagv{ewtehtehfilnakgw}
+
+栅栏加密 每组2个字符
 ## RSA
 
 在一次RSA密钥对生成中，假设p=473398607161，q=4511491，e=17
