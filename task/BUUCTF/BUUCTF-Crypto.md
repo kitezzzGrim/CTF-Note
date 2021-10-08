@@ -2,7 +2,58 @@
 
 - [BUUCTF-Crypto](#BUUCTF-Crypto)
     - [MD5](#MD5)
+    - [一眼就解密](#一眼就解密)
+    - [Url编码](#Url编码)
+    - [看我回旋踢](#看我回旋踢)
+    - [摩丝](#摩丝)
+    - [password](#password)
+    - [变异凯撒](#变异凯撒)
     - [RSA](#RSA)
+
+
+## MD5
+
+md5解密 admin1
+
+## 一眼就解密
+
+下面的字符串解密后便能获得flag：ZmxhZ3tUSEVfRkxBR19PRl9USElTX1NUUklOR30= 注意：得到的 flag 请包上 flag{} 提交
+
+base64解密
+
+## Url编码
+
+url解码
+
+## 看我回旋踢
+
+synt{5pq1004q-86n5-46q8-o720-oro5on0417r1}
+
+凯撒解密
+
+flag{5cd1004d-86a5-46d8-b720-beb5ba0417e1}
+
+## 摩丝
+
+.. .-.. --- ...- . -.-- --- ..-
+
+摩斯电码
+
+## password
+
+姓名：张三
+生日：19900315
+
+key格式为key{xxxxxxxxxx}
+
+flag{zs19900315}
+
+## 变异凯撒
+
+加密密文：afZ_r9VYfScOeO_UL^RWUc
+格式：flag{ }
+
+
 
 ## RSA
 

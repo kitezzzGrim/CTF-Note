@@ -1,6 +1,8 @@
 # CTF-Crypher
 
 - [CTF-Crypher](#CTF-Crypher)
+    - [MD5](#MD5)
+    - [摩斯电码](#摩斯电码)
     - [brainfuck](#brainfuck)
     - [Ook](#Ook)
     - [Serpent](#Serpent)
@@ -21,6 +23,22 @@
     - [时间戳](#时间戳)
     - [手机键盘密码](#手机键盘密码)
     - [DES加密解密](#DES加密解密)
+
+
+## md5
+
+https://www.somd5.com/
+
+https://www.cmd5.com/
+
+
+## 摩斯电码
+
+.. .-.. --- ...- . -.-- --- ..-
+
+https://www.ip138.com/mosi/
+
+![](./img/mosi.png)
 
 ## brainfuck
 
@@ -78,7 +96,16 @@ https://www.qqxiuzi.cn/bianma/wenbenjiami.php?s=yinyue
 
 ## 凯撒加密解密
 
+![](./img/kaisa.png)
+
+26个字母位移密码
+
 https://www.qqxiuzi.cn/bianma/kaisamima.php
+
+## 变异凯撒
+
+常规的凯撒密码是对每个字母做相同单位的移位。变异凯撒每个字母的移位可能各不相同。
+
 
 ## 维吉尼亚密码
 
