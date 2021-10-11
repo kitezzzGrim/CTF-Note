@@ -61,6 +61,11 @@
     - [USB](#USB)
     - [通行证](#通行证)
     - [虚假的压缩包](#虚假的压缩包)
+    - [Network](#Network)
+    - [draw](#draw)
+    - [明文攻击](#明文攻击)
+    - [蜘蛛侠呀](#蜘蛛侠呀)
+
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -844,3 +849,36 @@ hex->Ascii
 
 
 flag{_th2_7ru8_2iP_}
+
+## Network
+
+TTL隐写-得到压缩包-伪加密得到一堆base64字符，写脚本批量跑到底
+
+flag{189ff9e5b743ae95f940a6ccc6dbd9ab}
+
+## draw
+
+```
+cs pu lt 90 fd 500 rt 90 pd fd 100 rt 90 repeat 18[fd 5 rt 10] lt 135 fd 50 lt 135 pu bk 100 pd setcolor pick [ red orange yellow green blue violet ] repeat 18[fd 5 rt 10] rt 90 fd 60 rt 90 bk 30 rt 90 fd 60 pu lt 90 fd 100 pd rt 90 fd 50 bk 50 setcolor pick [ red orange yellow green blue violet ] lt 90 fd 50 rt 90 fd 50 pu fd 50 pd fd 25 bk 50 fd 25 rt 90 fd 50 pu setcolor pick [ red orange yellow green blue violet ] fd 100 rt 90 fd 30 rt 45 pd fd 50 bk 50 rt 90 fd 50 bk 100 fd 50 rt 45 pu fd 50 lt 90 pd fd 50 bk 50 rt 90 setcolor pick [ red orange yellow green blue violet ] fd 50 pu lt 90 fd 100 pd fd 50 rt 90 fd 25 bk 25 lt 90 bk 25 rt 90 fd 25 setcolor pick [ red orange yellow green blue violet ] pu fd 25 lt 90 bk 30 pd rt 90 fd 25 pu fd 25 lt 90 pd fd 50 bk 25 rt 90 fd 25 lt 90 fd 25 bk 50 pu bk 100 lt 90 setcolor pick [ red orange yellow green blue violet ] fd 100 pd rt 90 arc 360 20 pu rt 90 fd 50 pd arc 360 15 pu fd 15 setcolor pick [ red orange yellow green blue violet ] lt 90 pd bk 50 lt 90 fd 25 pu home bk 100 lt 90 fd 100 pd arc 360 20 pu home
+```
+
+logo语言
+
+https://www.calormen.com/jslogo/
+
+flag{RCTF_HeyLogo}
+
+## 明文攻击
+
+binwalk woojpg发现有zip，无法分离出来，需要手动添加zip文件头
+504B0304
+
+在0304前添加文件头504B
+
+打开后得到this is the flag.
+
+发现题给的压缩包里面有一个flag.txt，和刚解压出的txt大小相同，明文攻击
+
+点击确定保存为zip文件，解压出现flag
+
+## 蜘蛛侠呀
