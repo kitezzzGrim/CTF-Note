@@ -16,16 +16,18 @@
     - [TTL隐写](#TTL隐写)
     - [md5爆破](#md5爆破)
     - [RSA](RSA)
+        - [已知 e、p、q，求 d](#)
+        - [已知 e、n、密文 c，求明文 m](#)
+        - [已知 e、d、p+q、(p+1)(q+1)、以及密文C，求明文m](#)
         - [已知 p、q、dp、dq、c 求明文 m (dp、dq 泄露)](#)
         - [已知 e1、e2、n (共模攻击) (模不互质)](#)
         - [已知 n、e、dp、c，求m (dp 泄露)](#)
         - [已知 public key、密文 c，求明文 m (公钥提取)](#)
         - [已知 n、e、c、p、q 批量求 m (n 分解) (Roll 按行加密)](#)
         - [e=3 (小公钥指数攻击) (小明文攻击) (tereotyped messages攻击)](#)
+        - [已知 e、n，求 d (e极大) (Wiener’s Attack)](#)
 - [监听工具](#监听工具)
     - [Platypus](#Platypus)
-
-
 
 ## 常用搜索一句话
 

@@ -5,13 +5,18 @@
     - [RSA](#RSA)
       - [分解n](#分解n)
       - [在线公私钥分解](#在线公私钥分解)
+      - [已知 e、p、q，求 d](#)
+      - [已知 e、n、密文 c，求明文 m](#)
+      - [已知 e、d、p+q、(p+1)(q+1)、以及密文C，求明文m](#)
       - [已知 p、q、dp、dq、c 求明文 m (dp、dq 泄露)](#)
       - [已知 e1、e2、n (共模攻击) (模不互质)](#)
       - [已知 n、e、dp、c，求m (dp 泄露)](#)
       - [已知 public key、密文 c，求明文 m (公钥提取)](#)
       - [已知 n、e、c、p、q 批量求 m (n 分解) (Roll 按行加密)](#)
       - [e=3 (小公钥指数攻击) (小明文攻击) (tereotyped messages攻击)](#)
+      - [已知 e、n，求 d (e极大) (Wiener’s Attack)](#)
     - [UUencode](#UUencode)
+    - [ROT5/13/18/47](#ROT5/13/18/47)
     - [摩斯电码](#摩斯电码)
     - [brainfuck](#brainfuck)
     - [Ook](#Ook)
@@ -29,7 +34,6 @@
     - [base64](#base64)
     - [base32](#base32)
     - [颜文字加密解密](#颜文字加密解密)
-    - [rot13加密解密](#rot13加密解密)
     - [中文电码表](#中文电码表)
     - [五笔编码](#五笔编码)
     - [时间戳](#时间戳)
@@ -39,7 +43,7 @@
     - [Quoted-printable编码](#Quoted-printable编码)
     - [60甲子年表](#60甲子年表)
     - [猪圈密码](#猪圈密码)
-
+    - [playfair-普莱费尔密码](#playfair-普莱费尔密码)
 ## md5
 
 https://www.somd5.com/
@@ -63,6 +67,93 @@ yafu-x64.exe "factor(@)" -batchfile 1.txt
 #### 在线公私钥分解
 
 http://tool.chacuo.net/cryptrsakeyparse
+
+#### 已知 e、p、q，求 d
+
+```py
+import gmpy2
+p = 473398607161
+q = 4511491
+e = 17
+d = gmpy2.invert(e,(p-1)*(q-1))
+print(d)
+```
+
+#### 已知 e、n、密文 c，求明文 m
+
+脚本1
+```py
+import gmpy2
+import binascii
+
+e = 65537
+n = 1455925529734358105461406532259911790807347616464991065301847
+c = 69380371057914246192606760686152233225659503366319332065009
+#1.将n分解为p和q
+p = 1201147059438530786835365194567
+q = 1212112637077862917192191913841
+
+phi = (p-1)*(q-1)
+#2.求d
+d = gmpy2.invert(e,phi)
+#3.m=pow(c,d,n)
+m = gmpy2.powmod(c,d,n)
+print(binascii.unhexlify(hex(m)[2:]))
+#binascii.unhexlify(hexstr):从十六进制字符串hexstr返回二进制数据
+```
+
+脚本2
+```py
+import gmpy2
+from Crypto.Util.number import *
+from binascii import a2b_hex,b2a_hex
+import binascii
+
+e = 65533
+
+c = 27565231154623519221597938803435789010285480123476977081867877272451638645710
+#1.将n分解为p和q
+p = 262248800182277040650192055439906580479
+q = 262854994239322828547925595487519915551
+n = p*q
+
+phi = (p-1)*(q-1)
+#2.求d
+d = gmpy2.invert(e,phi)
+#3.m=pow(c,d,n)
+m = gmpy2.powmod(c,d,n)
+print(binascii.unhexlify(hex(m)[2:]))
+#binascii.unhexlify(hexstr):从十六进制字符串hexstr返回二进制数据
+```
+
+#### 已知 e、d、p+q、(p+1)(q+1)、以及密文C，求明文m
+
+n = (p+1)*(q+1) - (p+q) - 1
+
+```
+p+q : 0x1232fecb92adead91613e7d9ae5e36fe6bb765317d6ed38ad890b4073539a6231a6620584cea5730b5af83a3e80cf30141282c97be4400e33307573af6b25e2ea
+(p+1)(q+1) : 0x5248becef1d925d45705a7302700d6a0ffe5877fddf9451a9c1181c4d82365806085fd86fbaab08b6fc66a967b2566d743c626547203b34ea3fdb1bc06dd3bb765fd8b919e3bd2cb15bc175c9498f9d9a0e216c2dde64d81255fa4c05a1ee619fc1fc505285a239e7bc655ec6605d9693078b800ee80931a7a0c84f33c851740
+e : 0xe6b1bee47bd63f615c7d0a43c529d219
+d : 0x2dde7fbaed477f6d62838d55b0d0964868cf6efb2c282a5f13e6008ce7317a24cb57aec49ef0d738919f47cdcd9677cd52ac2293ec5938aa198f962678b5cd0da344453f521a69b2ac03647cdd8339f4e38cec452d54e60698833d67f9315c02ddaa4c79ebaa902c605d7bda32ce970541b2d9a17d62b52df813b2fb0c5ab1a5
+enc_flag : 0x50ae00623211ba6089ddfae21e204ab616f6c9d294e913550af3d66e85d0c0693ed53ed55c46d8cca1d7c2ad44839030df26b70f22a8567171a759b76fe5f07b3c5a6ec89117ed0a36c0950956b9cde880c575737f779143f921d745ac3bb0e379c05d9a3cc6bf0bea8aa91e4d5e752c7eb46b2e023edbc07d24a7c460a34a9a
+```
+
+
+
+```py
+import libnum
+a = 0x1232fecb92adead91613e7d9ae5e36fe6bb765317d6ed38ad890b4073539a6231a6620584cea5730b5af83a3e80cf30141282c97be4400e33307573af6b25e2ea
+b = 0x5248becef1d925d45705a7302700d6a0ffe5877fddf9451a9c1181c4d82365806085fd86fbaab08b6fc66a967b2566d743c626547203b34ea3fdb1bc06dd3bb765fd8b919e3bd2cb15bc175c9498f9d9a0e216c2dde64d81255fa4c05a1ee619fc1fc505285a239e7bc655ec6605d9693078b800ee80931a7a0c84f33c851740
+e = 0xe6b1bee47bd63f615c7d0a43c529d219
+d = 0x2dde7fbaed477f6d62838d55b0d0964868cf6efb2c282a5f13e6008ce7317a24cb57aec49ef0d738919f47cdcd9677cd52ac2293ec5938aa198f962678b5cd0da344453f521a69b2ac03647cdd8339f4e38cec452d54e60698833d67f9315c02ddaa4c79ebaa902c605d7bda32ce970541b2d9a17d62b52df813b2fb0c5ab1a5
+c= 0x50ae00623211ba6089ddfae21e204ab616f6c9d294e913550af3d66e85d0c0693ed53ed55c46d8cca1d7c2ad44839030df26b70f22a8567171a759b76fe5f07b3c5a6ec89117ed0a36c0950956b9cde880c575737f779143f921d745ac3bb0e379c05d9a3cc6bf0bea8aa91e4d5e752c7eb46b2e023edbc07d24a7c460a34a9a
+
+n = b-a-1
+
+m = pow(c,d,n)
+
+print(libnum.n2s(m))  #（n2s将数值转化为字符串）
+```
 
 #### 已知 p、q、dp、dq、c 求明文 m (dp、dq 泄露)
 
@@ -300,12 +391,61 @@ while 1:
     k=k+1
 ```
 
+
+## 已知 e、n，求 d (e极大) (Wiener’s Attack)
+
+https://github.com/pablocelayes/rsa-wiener-attack
+
+低解密指数攻击:e过大 n分解不出来
+
+
+python2 带工具，在rsa-wiener-attack-master目录下kali虚拟机执行，python2 hello.py即可
+```py
+
+import hashlib
+import RSAwienerHacker
+N = 101991809777553253470276751399264740131157682329252673501792154507006158434432009141995367241962525705950046253400188884658262496534706438791515071885860897552736656899566915731297225817250639873643376310103992170646906557242832893914902053581087502512787303322747780420210884852166586717636559058152544979471
+e = 46731919563265721307105180410302518676676135509737992912625092976849075262192092549323082367518264378630543338219025744820916471913696072050291990620486581719410354385121760761374229374847695148230596005409978383369740305816082770283909611956355972181848077519920922059268376958811713365106925235218265173085
+d =  RSAwienerHacker.hack_RSA(e,N)
+print(d)
+flag = "flag{" + hashlib.md5(hex(d)).hexdigest() + "}"
+print(flag)
+#8920758995414587152829426558580025657357328745839747693739591820283538307445
+#flag{47bf28da384590448e0b0d23909a25a4}
+
+```
+
+python3下MD5有问题
+```py
+import owiener
+e = 3047442173541658754667464233797118324917469250436575767227172319344577259865313428705759330024959317716760816959590728238918140105663188172228696589411452947738069773833351725455888549656717874059636289036277785342126992626060696063089487811946920569580454880169977542532087635095357205433679009382368108273
+
+n = 135568509670260054049994954417860747085442883428459182441559553532993752593294067458983143521109377661295622146963670193783017382697726454953197805014428888491744355387957923382241961401063461549210355871385000347645387907568135032087942016502668629010859519249039662555733548461551175133582871220209515648241
+
+d = owiener.attack(e, n)
+
+print(d)
+# flag = "flag{" + hashlib.md5(hex(d).encode("utf-8")).hexdigest() + "}"
+# print(flag)
+
+#8920758995414587152829426558580025657357328745839747693739591820283538307445
+#flag{47bf28da384590448e0b0d23909a25a4}
+```
 ## UUencode
 
 Uuencode是二进制信息和文字信息之间的转换编码，也就是机器和人眼识读的转换。
 
 http://www.hiencode.com/uu.html
 https://www.qqxiuzi.cn/bianma/uuencode.php
+
+## ROT5/13/18/47
+
+https://www.qqxiuzi.cn/bianma/ROT5-13-18-47.php
+
+ROT5：只对数字进行编码，用当前数字往前数的第5个数字替换当前数字，例如当前为0，编码后变成5，当前为1，编码后变成6，以此类推顺序循环。
+ROT13：只对字母进行编码，用当前字母往前数的第13个字母替换当前字母，例如当前为A，编码后变成N，当前为B，编码后变成O，以此类推顺序循环。
+ROT18：这是一个异类，本来没有，它是将ROT5和ROT13组合在一起，为了好称呼，将其命名为ROT18。
+ROT47：对数字、字母、常用符号进行编码，按照它们的ASCII值进行位置替换，用当前字符ASCII值往前数的第47位对应字符替换当前字符，例如当前为小写字母z，编码后变成大写字母K，当前为数字0，编码后变成符号_。用于ROT47编码的字符其ASCII值范围是33－126，
 ## 摩斯电码
 
 .. .-.. --- ...- . -.-- --- ..-
@@ -450,13 +590,6 @@ https://www.qqxiuzi.cn/bianma/base.php 在线工具
 
 http://www.atoolbox.net/Tool.php?Id=703
 
-## rot13加密解密
-
-http://www.mxcz.net/tools/rot13.aspx
-
-http://www.ab126.com/goju/10818.html
-
-https://rot13.com/
 
 ## 中文电码表
 
@@ -576,3 +709,7 @@ http://www.mxcz.net/tools/QuotedPrintable.aspx
 http://www.hiencode.com/pigpen.html
 
 ![image](./img/zhuquan.png)
+
+## playfair-普莱费尔密码
+
+http://rumkin.com/tools/cipher/playfair.php

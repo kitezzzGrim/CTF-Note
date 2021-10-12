@@ -1,0 +1,17 @@
+import gmpy2
+import binascii
+
+e = 65537
+n = 1455925529734358105461406532259911790807347616464991065301847
+c = 69380371057914246192606760686152233225659503366319332065009
+#1.将n分解为p和q
+p = 1201147059438530786835365194567
+q = 1212112637077862917192191913841
+
+phi = (p-1)*(q-1)
+#2.求d
+d = gmpy2.invert(e,phi)
+#3.m=pow(c,d,n)
+m = gmpy2.powmod(c,d,n)
+print(binascii.unhexlify(hex(m)[2:]))
+#binascii.unhexlify(hexstr):从十六进制字符串hexstr返回二进制数据
