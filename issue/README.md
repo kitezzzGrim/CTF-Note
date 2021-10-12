@@ -18,3 +18,12 @@ https://blog.csdn.net/x_yhy/article/details/83903367
 https://github.com/aleaxit/gmpy/releases/tag/gmpy2-2.1.0a1
 
 >pip install C:\Users\86166\Downloads\gmpy2-2.1.0a1-cp36-cp36m-win_amd64.whl
+
+## pipreqs
+
+如果经常写 python 脚本,可以使用 pipreqs 生成自己的 requirements.txt 文件,这样方便在更换主机的时候快速部署好运行环境
+
+```py
+pip install pipreqs
+pipreqs ./ --encoding=utf-8
+```

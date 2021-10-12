@@ -9,6 +9,7 @@
         - [010editor](#010editor)
             - [编码](#编码)
             - [修改长宽](#修改长宽)
+            - [粘贴复制二进制](#粘贴复制二进制)
         - [grep](#grep)
         - [stegsolve](#stegsolve)
         - [右键查看属性](#右键查看属性)
@@ -106,6 +107,11 @@ python2 vol.py  -f tmp.vmem --profile=Win7SP1x64 mimikatz
 
 6是宽 7是高
 
+### 粘贴复制二进制
+
+编辑->粘贴为
+
+编辑->复制为
 ## grep
 
 linux之用 grep -r 关键字 快速搜索在目录下面的含有关键字的文件

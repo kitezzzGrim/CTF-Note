@@ -4,6 +4,14 @@
     - [MD5](#MD5)
     - [RSA](#RSA)
       - [分解n](#分解n)
+      - [在线公私钥分解](#在线公私钥分解)
+      - [已知 p、q、dp、dq、c 求明文 m (dp、dq 泄露)](#)
+      - [已知 e1、e2、n (共模攻击) (模不互质)](#)
+      - [已知 n、e、dp、c，求m (dp 泄露)](#)
+      - [已知 public key、密文 c，求明文 m (公钥提取)](#)
+      - [已知 n、e、c、p、q 批量求 m (n 分解) (Roll 按行加密)](#)
+      - [e=3 (小公钥指数攻击) (小明文攻击) (tereotyped messages攻击)](#)
+    - [UUencode](#UUencode)
     - [摩斯电码](#摩斯电码)
     - [brainfuck](#brainfuck)
     - [Ook](#Ook)
@@ -40,7 +48,7 @@ https://www.cmd5.com/
 
 ## RSA
 
-### 分解n
+#### 分解n
 
 factordb - 在线分解质因数, 通常用于分解 n 得到 p q
 http://www.factordb.com/
@@ -51,6 +59,10 @@ yafu - 离线分解工具
 yafu "factor(82748279383502845283943271120712436408030814624973629060064917325126552245423)"
 yafu-x64.exe "factor(@)" -batchfile 1.txt
 ```
+
+#### 在线公私钥分解
+
+http://tool.chacuo.net/cryptrsakeyparse
 
 #### 已知 p、q、dp、dq、c 求明文 m (dp、dq 泄露)
 
@@ -118,7 +130,182 @@ if __name__ == '__main__':
   main()
 ```
 
+
 结果转16进制得到 flag
+
+#### 已知 n、e、dp、c，求m (dp 泄露)
+
+dp=d%(p-1)
+
+```py
+import gmpy2 as gp
+
+e = 65537
+n = gp.mpz(248254007851526241177721526698901802985832766176221609612258877371620580060433101538328030305219918697643619814200930679612109885533801335348445023751670478437073055544724280684733298051599167660303645183146161497485358633681492129668802402065797789905550489547645118787266601929429724133167768465309665906113)
+dp = gp.mpz(905074498052346904643025132879518330691925174573054004621877253318682675055421970943552016695528560364834446303196939207056642927148093290374440210503657)
+
+c = gp.mpz(140423670976252696807533673586209400575664282100684119784203527124521188996403826597436883766041879067494280957410201958935737360380801845453829293997433414188838725751796261702622028587211560353362847191060306578510511380965162133472698713063592621028959167072781482562673683090590521214218071160287665180751)
+
+for x in range(1, e):
+    if(e*dp%x==1):
+        p=(e*dp-1)//x+1
+        if(n%p!=0):
+            continue
+        q=n//p
+        phin=(p-1)*(q-1)
+        d=gp.invert(e, phin)
+        m=gp.powmod(c, d, n)
+        if(len(hex(m)[2:])%2==1):
+            continue
+        print('--------------')
+        print(m)
+        print(hex(m)[2:])
+        print(bytes.fromhex(hex(m)[2:]))
+```
+
+
+#### 已知 public key、密文 c，求明文 m (公钥提取)
+
+给出一个 pub.key ,一个 flag.enc
+
+通过在线工具解析 RSA 密钥指数、模数
+
+![image](./img/rsa3.png)
+
+http://tool.chacuo.net/cryptrsakeyparse
+
+```py
+import gmpy2
+import rsa
+
+e=65537
+n=86934482296048119190666062003494800588905656017203025617216654058378322103517
+p=285960468890451637935629440372639283459
+q=304008741604601924494328155975272418463
+
+phin = (p-1) * (q-1)
+d=gmpy2.invert(e, phin)
+
+key=rsa.PrivateKey(n,e,int(d),p,q)
+
+with open("flag.enc","rb") as f:
+    f=f.read()
+    print(rsa.decrypt(f,key))
+```
+
+
+#### 已知 n、e、c、p、q 批量求 m (n 分解) (Roll 按行加密)
+
+```
+{920139713,19}
+
+704796792
+752211152
+274704164
+18414022
+368270835
+483295235
+263072905
+459788476
+483295235
+459788476
+663551792
+475206804
+459788476
+428313374
+475206804
+459788476
+425392137
+704796792
+458265677
+341524652
+483295235
+534149509
+425392137
+428313374
+425392137
+341524652
+458265677
+263072905
+483295235
+828509797
+341524652
+425392137
+475206804
+428313374
+483295235
+475206804
+459788476
+306220148
+```
+
+```py
+import gmpy2
+N,p,q,e=920139713,49891,18443,19
+phi = (p-1)*(q-1)
+d=gmpy2.invert(e,phi)
+result=[]
+
+with open("c.txt","r") as f:
+  for c in f.readlines():
+    c=c.strip('\n')
+    result.append(chr(pow(int(c),d,N)))
+
+flag=''
+for i in result:
+  flag+=i
+  print(flag)
+```
+
+## e=3 (小公钥指数攻击) (小明文攻击) (tereotyped messages攻击)
+
+```
+#n:  0x52d483c27cd806550fbe0e37a61af2e7cf5e0efb723dfc81174c918a27627779b21fa3c851e9e94188eaee3d5cd6f752406a43fbecb53e80836ff1e185d3ccd7782ea846c2e91a7b0808986666e0bdadbfb7bdd65670a589a4d2478e9adcafe97c6ee23614bcb2ecc23580f4d2e3cc1ecfec25c50da4bc754dde6c8bfd8d1fc16956c74d8e9196046a01dc9f3024e11461c294f29d7421140732fedacac97b8fe50999117d27943c953f18c4ff4f8c258d839764078d4b6ef6e8591e0ff5563b31a39e6374d0d41c8c46921c25e5904a817ef8e39e5c9b71225a83269693e0b7e3218fc5e5a1e8412ba16e588b3d6ac536dce39fcdfce81eec79979ea6872793L
+#e:  0x3
+#c:0x10652cdfaa6b63f6d7bd1109da08181e500e5643f5b240a9024bfa84d5f2cac9310562978347bb232d63e7289283871efab83d84ff5a7b64a94a79d34cfbd4ef121723ba1f663e514f83f6f01492b4e13e1bb4296d96ea5a353d3bf2edd2f449c03c4a3e995237985a596908adc741f32365
+so,how to get the message?
+```
+
+低加密指数攻击,e 比较小，一般为 3
+
+公钥中的加密指数 e 很小，但是模数 n 很大
+
+有 RSA 加密公式： C=M^e % n (C 密文，M 明文)
+
+则：
+
+当 M^e < n 时，C = M^e ，所以对 C 开方就能得到 M
+
+当 M^e ＞ n 时，此时用爆破的方法
+
+假设我们 Ｍ^e / n 的商为 k 余数为 C，则Ｍ^e = kn + C，对 K 进行爆破，只要 k 满足 kn + C 能够开 e 次方就可以得明文
+
+```py
+# -*- coding: utf-8 -*-#
+#python3
+from gmpy2 import iroot
+import libnum
+e = 0x3
+n = 0x52d483c27cd806550fbe0e37a61af2e7cf5e0efb723dfc81174c918a27627779b21fa3c851e9e94188eaee3d5cd6f752406a43fbecb53e80836ff1e185d3ccd7782ea846c2e91a7b0808986666e0bdadbfb7bdd65670a589a4d2478e9adcafe97c6ee23614bcb2ecc23580f4d2e3cc1ecfec25c50da4bc754dde6c8bfd8d1fc16956c74d8e9196046a01dc9f3024e11461c294f29d7421140732fedacac97b8fe50999117d27943c953f18c4ff4f8c258d839764078d4b6ef6e8591e0ff5563b31a39e6374d0d41c8c46921c25e5904a817ef8e39e5c9b71225a83269693e0b7e3218fc5e5a1e8412ba16e588b3d6ac536dce39fcdfce81eec79979ea6872793
+c = 0x10652cdfaa6b63f6d7bd1109da08181e500e5643f5b240a9024bfa84d5f2cac9310562978347bb232d63e7289283871efab83d84ff5a7b64a94a79d34cfbd4ef121723ba1f663e514f83f6f01492b4e13e1bb4296d96ea5a353d3bf2edd2f449c03c4a3e995237985a596908adc741f32365
+
+k = 0
+while 1:
+    res = iroot(c+k*n,e)  #c+k*n 开3次方根 能开3次方即可
+    #print(res)
+    #res = (mpz(13040004482819713819817340524563023159919305047824600478799740488797710355579494486728991357), True)
+    if(res[1] == True):
+        print(libnum.n2s(int(res[0]))) #转为字符串
+        break
+    k=k+1
+```
+
+## UUencode
+
+Uuencode是二进制信息和文字信息之间的转换编码，也就是机器和人眼识读的转换。
+
+http://www.hiencode.com/uu.html
+https://www.qqxiuzi.cn/bianma/uuencode.php
 ## 摩斯电码
 
 .. .-.. --- ...- . -.-- --- ..-
