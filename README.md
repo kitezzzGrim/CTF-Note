@@ -14,5 +14,6 @@
 - CTF-Web总结: [CTF-Note-Web](https://github.com/kitezzzGrim/CTF-Note/tree/master/Web)
 - CTF-Misc总结：[CTF-Note-Misc](https://github.com/kitezzzGrim/CTF-Note/tree/master/Misc)
 - CTF-Crypher总结: [CTF-Note-Crypher](https://github.com/kitezzzGrim/CTF-Note/tree/master/Crypher)
+- CTF-Pwn总结 : [CTF-Note-Pwn](https://github.com/kitezzzGrim/CTF-Note/tree/master/pwn)
 - CTF-图表 : [CTF-Note-chart](https://github.com/kitezzzGrim/CTF-Note/tree/master/chart)
 - CTF-Issue : [CTF-Note-issue](https://github.com/kitezzzGrim/CTF-Note/tree/master/issue)
