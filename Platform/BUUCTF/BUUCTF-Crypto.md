@@ -74,6 +74,7 @@
     - [鸡藕椒盐味](#鸡藕椒盐味)
     - [网鼎杯2020青龙组-boom](#网鼎杯2020青龙组-boom)
     - [WUSTCTF2020-B@se](#WUSTCTF2020-B@se)
+    - [ACTF-2020-crypto-classic1](#ACTF-2020-crypto-classic1)
 ## MD5
 
 md5解密 admin1
@@ -1434,4 +1435,39 @@ JASGBWcQPRXEFLbCDIlmnHUVKTYZdMovwipatNOefghq56rs****kxyz012789+/
 
 oh holy shit, something is missing...
 
-## ACTF???2020-crypto-classic1
+base64扩展
+
+```py
+str="JASGBWcQPRXEFLbCDIlmnHUVKTYZdMovwipatNOefghq56rs****kxyz012789+/"
+ciper="MyLkTaP3FaA7KOWjTmKkVjWjVzKjdeNvTnAjoH9iZOIvTeHbVD"#(==没有用)
+import string
+import binascii
+# for i in string.ascii_letters+string.digits:
+#     if i not in str:
+#         print(i)
+import itertools
+s=['j','u','3','4']
+for i in itertools.permutations(s,4):
+    ss="JASGBWcQPRXEFLbCDIlmnHUVKTYZdMovwipatNOefghq56rs"+"".join(i)+"kxyz012789+/"
+    bins = ""
+    for j in ciper:
+        bins+=bin(ss.index(j))[2:].zfill(6)
+    # print(hex(eval("0b"+bins))[2:-1])
+    print(binascii.unhexlify(hex(eval("0b"+bins))[2:-1]))
+```
+## ACTF-2020-crypto-classic1
+
+
+```py
+c='SRLU{LZPL_S_UASHKXUPD_NXYTFTJT}'
+m='ACTF{'
+a=[]
+for i in range(4):
+    a.append(str(ord(c[i])-ord(m[i])))
+print(m,end='')
+for i in range(5,len(c)):
+    if 'A'<= c[i]<= 'Z':
+        print(chr((ord(c[i])-int(a[i%4])-ord('A'))%26+ord('A')),end='')
+    else:
+        print(c[i],end='')
+```

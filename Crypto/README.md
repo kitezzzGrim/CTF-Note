@@ -1,6 +1,20 @@
 # CTF-Crypher
 
+> 文章作者 RyuZU & r0fus0d & Kite
+## 大纲
 - [CTF-Crypher](#CTF-Crypher)
+    - [常见编码](#常见编码)
+        -  [ASCII](#ASCII)
+        - [Base](#Base)
+            - [base16](#base16)
+            - [Base32](#Base32)
+            - [base58](#base58)
+            - [Base62](#Base62)
+            - [Base64](#Base64)
+            - [Base85](#Base85)
+            - [base91](#base91)
+            - [base92](#base92)
+            - [base100](#base100)
     - [现代密码](#现代密码)
       - [MD5](#MD5)
       - [DES加密解密](#DES加密解密)
@@ -41,9 +55,7 @@
       - [音符加密解密](#音符加密解密)
       - [敲击码](#敲击码)
       - [维吉尼亚密码-vigenere](#维吉尼亚密码-vigenere)
-    - [Base](#Base)
-      - [Base64](#Base64)
-      - [Base32](#Base32)
+
     - [其它编码](#其它编码)
       - [26个字母顺序](#26个字母顺序)
       - [颜文字加密解密](#颜文字加密解密)
@@ -68,6 +80,73 @@
         - [海明校验码](#海明校验码)
     - [数学](#数学)
         - [一元二次方程在线](#一元二次方程在线)
+
+- 文章
+    - https://ctf-wiki.org/crypto/
+    - https://wiki.ffffffff0x.com/1earn/security/crypto/crypto
+
+## 常见编码
+
+### ASCII
+
+ASCII 编码大致可以分作三部分组成:
+
+- 第一部分是:ASCII 非打印控制字符;
+- 第二部分是:ASCII 打印字符,也就是 CTF 中常用到的转换;
+- 第三部分是:扩展 ASCII 打印字符.
+
+编码转换示例:
+> 源文本: The quick brown fox jumps over the lazy dog
+
+ASCII编码对应十进制:
+
+
+> 84 104 101 32 113 117 105 99 107 32 98 114 111 119 110 32 102111 120 32 106 117 109 112 115 32 111 118 101 114 32 116104 101 32 108 97 122 121 32 100 111 103
+
+对应可以转换成二进制,八进制,十六进制等.
+
+### Base
+
+base64、base32、base16 可以分别编码转化8位字节为6位、5位、4位.16,32,64 分别表示用多少个字符来编码,这里我注重介绍 base64.Base64 常用于在通常处理文本数据的场合,表示、传输、存储一些二进制数据.包括 MIME 的 email,email via MIME,在 XML 中存储复杂数据.
+
+编码原理:Base64 编码要求把3个8位字节转化为4个6位的字节,之后在6位的前面补两个0,形成8位一个字节的形式,6位2进制能表示的最大数是2的6次方是64,这也是为什么是64个字符(A-Z,a-z,0-9,+,/这64个编码字符,=号不属于编码字符,而是填充字符)的原因,这样就需要一张映射表,如下:
+
+![image](./img/base64.png)
+
+
+例子(base64):
+
+```
+源文本 : T h e
+对应 ascii 码 : 84 104 101
+8 位 binary : 01010100 01101000 01100101
+6 位 binary : 010101 000110 100001 100101
+高位补 0 : 000010101 00000110 00100001 00100101
+对应 ascii 码 : 21 6 33 37
+查表 : V G h l
+```
+
+#### Base16
+
+Base16编码使用16个ASCII可打印字符（数字0-9和字母A-F）对任意字节数据进行编码。Base16先获取输入字符串每个字节的二进制值（不足8比特在高位补0），然后将其串联进来，再按照4比特一组进行切分，将每组二进制数分别转换成十进制，在下述表格中找到对应的编码串接起来就是Base16编码。可以看到8比特数据按照4比特切分刚好是两组，所以Base16不可能用到填充符号“=”。
+
+
+base16 就是 hex
+
+https://www.qqxiuzi.cn/bianma/base.php?type=16
+#### Base64
+
+https://base64.us/
+#### Base32
+
+base32和base64原理是一样的，32和64分别是`2^5`和`2^6`。
+拿base32举例来说，每一个字符是有5Bit，但是ASCII字符有8Bit，所以base32是用8个base32字符来代替5个ASCII字符。
+
+
+ToolsFx-1.8.0-jdk11 离线工具
+
+https://www.qqxiuzi.cn/bianma/base.php 在线工具
+
 ## 现代密码
 ## md5
 
@@ -1164,6 +1243,19 @@ https://www.qqxiuzi.cn/bianma/wenbenjiami.php?s=yinyue
 
 https://www.guballa.de/vigenere-solver
 
+```py
+c='SRLU{LZPL_S_UASHKXUPD_NXYTFTJT}'
+m='ACTF{'
+a=[]
+for i in range(4):
+    a.append(str(ord(c[i])-ord(m[i])))
+print(m,end='')
+for i in range(5,len(c)):
+    if 'A'<= c[i]<= 'Z':
+        print(chr((ord(c[i])-int(a[i%4])-ord('A'))%26+ord('A')),end='')
+    else:
+        print(c[i],end='')
+```
 ## 古典密码
 
 ### 凯撒加密解密
@@ -1226,19 +1318,7 @@ https://www.qqxiuzi.cn/bianma/zhalanmima.php
 
 http://www.metools.info/code/fence154.html
 
-## Base
-### Base64
 
-https://base64.us/
-### Base32
-
-base32和base64原理是一样的，32和64分别是`2^5`和`2^6`。
-拿base32举例来说，每一个字符是有5Bit，但是ASCII字符有8Bit，所以base32是用8个base32字符来代替5个ASCII字符。
-
-
-ToolsFx-1.8.0-jdk11 离线工具
-
-https://www.qqxiuzi.cn/bianma/base.php 在线工具
 
 
 ## 26个字母顺序
