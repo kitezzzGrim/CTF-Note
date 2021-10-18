@@ -75,6 +75,7 @@
     - [网鼎杯2020青龙组-boom](#网鼎杯2020青龙组-boom)
     - [WUSTCTF2020-B@se](#WUSTCTF2020-B@se)
     - [ACTF-2020-crypto-classic1](#ACTF-2020-crypto-classic1)
+    - [AFCTF2018-Single](#AFCTF2018-Single)
 ## MD5
 
 md5解密 admin1
@@ -1471,3 +1472,52 @@ for i in range(5,len(c)):
     else:
         print(c[i],end='')
 ```
+
+## AFCTF2018-Single
+
+```
+Jmqrida rva Lfmz (JRL) eu m uqajemf seny xl enlxdomrexn uajiderc jxoqarerexnu. Rvada mda rvdaa jxooxn rcqau xl JRLu: Paxqmdyc, Mrrmjs-Yalanja mny oekay.
+
+Paxqmdyc-urcfa JRLu vmu m jxiqfa xl giaurexnu (rmusu) en dmnza xl jmrazxdeau. Lxd akmoqfa, Wab, Lxdanuej, Jdcqrx, Benmdc xd uxoarvenz afua. Ramo jmn zmen uxoa qxenru lxd atadc uxftay rmus. Oxda qxenru lxd oxda jxoqfejmray rmusu iuimffc. Rva nakr rmus en jvmen jmn ba xqanay xnfc mlrad uxoa ramo uxfta qdatexiu rmus. Rvan rva zmoa reoa eu xtad uio xl qxenru uvxwu cxi m JRL wenad. Lmoxiu akmoqfa xl uijv JRL eu Yaljxn JRL gimfu.
+
+Waff, mrrmjs-yalanja eu mnxrvad enradaurenz seny xl jxoqarerexnu. Vada atadc ramo vmu xwn narwxds(xd xnfc xna vxur) werv tifnmdmbfa uadtejau. Cxid ramo vmu reoa lxd qmrjvenz cxid uadtejau mny yatafxqenz akqfxeru iuimffc. Ux, rvan xdzmnehadu jxnnajru qmdrejeqmnru xl jxoqarerexn mny rva wmdzmoa urmdru! Cxi uvxify qdxrajr xwn uadtejau lxd yalanja qxenru mny vmjs xqqxnanru lxd mrrmjs qxenru. Veurxdejmffc rveu eu m ledur rcqa xl JRLu, atadcbxyc snxwu mbxir YAL JXN JRL - uxoarvenz fesa m Wxdfy Jiq xl mff xrvad jxoqarerexnu.
+
+Oekay jxoqarerexnu omc tmdc qxuuebfa lxdomru. Er omc ba uxoarvenz fesa wmdzmoa werv uqajemf reoa lxd rmus-bmuay afaoanru (a.z. IJUB eJRL).
+
+JRL zmoau xlran rxijv xn omnc xrvad muqajru xl enlxdomrexn uajiderc: jdcqrxzdmqvc, urazx, benmdc mnmfcueu, datadua anzanaadenz, oxbefa uajiderc mny xrvadu. Zxxy ramou zanadmffc vmta urdxnz useffu mny akqadeanja en mff rvaua euuiau.
+
+Iuimffc, lfmz eu uxoa urdenz xl dmnyxo ymrm xd rakr en uxoa lxdomr. Akmoqfa mljrl{Xv_I_lxiny_er_neja_rDc}
+```
+
+```c
+#include <bits/stdc++.h>
+using namespace std;
+int main()
+{
+	freopen("Plain.txt","r",stdin);
+	freopen("Cipher.txt","w",stdout);
+	map<char, char> f;
+	int arr[26];
+	for(int i=0;i<26;++i){
+		arr[i]=i;
+	}
+	random_shuffle(arr,arr+26);
+	for(int i=0;i<26;++i){
+		f['a'+i]='a'+arr[i];
+		f['A'+i]='A'+arr[i];
+	}
+	char ch;
+	while((ch=getchar())!=EOF){
+		if(f.count(ch)){
+			putchar(f[ch]);
+		}else{
+			putchar(ch);
+		}
+	}
+	return 0;
+}
+```
+
+这是古典密码学中经典的加密方式，单表替换。将 a-z 映射到 a-z 排列。
+
+密文很长，且最后有个类似flag的结构，直接拿去字频分析就得到了flag
