@@ -6,6 +6,7 @@
 - [内涵的软件](#内涵的软件)
 - [新年快乐](#新年快乐)
 - [xor](#xor)
+- [reverse3](#reverse3)
 ## easyre
 
 ExenifoPe查看是64位的，丢进ida64跑
@@ -171,3 +172,80 @@ flag{HappyNewYear!}
 
 ## xor
 or的敌人，and 有个兄弟叫or,or有个敌人叫xor，那么你能帮助or战胜他的敌人xor吗，xor的奥秘就在附件中，开始战斗吧！ 注意：得到的 flag 请包上 flag{} 提交
+
+exeinfope查看是macos 64位可执行程序，ida64打开
+
+```c++
+  memset(v6, 0, 0x100uLL);
+  v3 = (char *)256;
+  printf("Input your flag:\n", 0LL);
+  get_line(v6, 256LL);
+  if ( strlen(v6) != 33 ) //v6长度为33位
+    goto LABEL_12;
+  for ( i = 1; i < 33; ++i )
+    v6[i] ^= v6[i - 1]; //  从输入的第二位开始，将其与前一位异或
+  v3 = global;
+  if ( !strncmp(v6, global, 0x21uLL) )  //比较 v6 与 global段存放的前 33 位是否相等
+    printf("Success", v3);
+  else
+LABEL_12:
+    printf("Failed", v3);
+```
+
+关键函数应该是在global数组中,追踪一下发现
+
+![image](./img/xor1.png)
+
+```py
+s = ['f',0xA,'k',0xC,'w','&','O','.','@',0x11,'x',0xD,'Z',';','U',0x11,'p',0x19,'F',0x1F,'v','"','M','#','D',0xE,'g',6,'h',0xF,'G','2','O']
+
+flag = 'f'#第一个字符不用进行异或运算
+for i in range(1,len(s)):
+    if(isinstance(s[i],int)):#将数字转化为字符
+        s[i] = chr(s[i])
+for i in range(1,len(s)):
+    flag += chr(ord(s[i]) ^ ord(s[i-1]))#a^b=c 等于 a^c=b
+
+print(flag)
+```
+
+flag{QianQiuWanDai_YiTongJiangHu}
+
+## helloword
+
+有难的题目，也就有简单的题目，就像程序员一辈子编写的第一个程序，极有可能是helloword，它很普通，但是也很让人怀念。你猜这题flag在哪里？让我们怀念第一次编写的easy程序吧！ 注意：得到的 flag 请包上 flag{} 提交
+
+丢进apkiller跑，点击main入口文件发现flag
+
+flag{7631a988259a00816deda84afb29430a}
+
+## reverse3
+
+32位可执行程序，丢进ida-32跑
+
+```c++
+  for ( i = 0; i < 100; ++i )
+  {
+    if ( (unsigned int)i >= 0x64 )
+      j____report_rangecheckfailure();
+    Dest[i] = 0;
+  }
+  sub_41132F("please enter the flag:");
+  sub_411375("%20s", &Str);
+  v0 = j_strlen(&Str);
+  v1 = (const char *)sub_4110BE(&Str, v0, &v11);
+  strncpy(Dest, v1, 0x28u);
+  v8 = j_strlen(Dest);
+  for ( j = 0; j < v8; ++j )
+    Dest[j] += j;
+  v2 = j_strlen(Dest);
+  if ( !strncmp(Dest, Str2, v2) )
+    sub_41132F("rigth flag!\n");
+  else
+    sub_41132F("wrong flag!\n");
+  HIDWORD(v4) = v3;
+  LODWORD(v4) = 0;
+  return v4;
+```
+
+Str2: e3nifIH9b_C@n@dH
