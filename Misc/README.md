@@ -451,3 +451,5 @@ dtmf2num.exe girlfriend.wav
 ## DOC取证
 
 flag有时候把颜色设置为白色 需要全选换成可见颜色
+
+https://www.cnblogs.com/WhiteHatKevil/articles/10051582.html

@@ -2,6 +2,8 @@
 
 > 文章作者 RyuZU & r0fus0d & Kite
 ## 大纲
+- [密码学简介](#密码学简介)
+
 - [计算机相关编码](#计算机相关编码)
     - [字母表编码](#字母表编码)
     - [ASCII编码](#ASCII编码)
@@ -16,10 +18,12 @@
         - [base91](#base91)
         - [base92](#base92)
         - [base100](#base100)
+    - [JSFUCK](#JSFUCK)
+    - [UUencode](#UUencode)
 
 - [现代密码](#现代密码)
     - [MD5](#MD5)
-    - [DES加密解密](#DES加密解密)
+    - [DES](#DES)
     - [RSA](#RSA)
         - [分解n](#分解n)
         - [公私钥分解](#公私钥分解)
@@ -45,7 +49,7 @@
         - [已知 e、m1、m2、n、pq 接近 ,求原 m](#)
 - [古典密码](#古典密码)
     - [单表代换加密](#单表代换加密)
-        - [quipqiup-词频分析](#quipqiup-词频分析)
+        - [词频分析](#词频分析)
         - [凯撒密码](#凯撒密码)
         - [移位密码-变异凯撒](#移位密码-变异凯撒)
         - [ROT5/13/18/47](#ROT5/13/18/47)
@@ -58,38 +62,43 @@
         - [培根密码](#培根密码)
         - [栅栏密码](#栅栏密码)
         - [60甲子年表](#60甲子年表)
-        - [猪圈密码](#猪圈密码)
+        - [传统猪圈密码](#传统猪圈密码)
+        - [猪圈变种密码](#猪圈变种密码)
+        - [古埃及象形文字](#古埃及象形文字)
         - [圣堂武士密码](#圣堂武士密码)
-        - [变种密码](#变种密码)
         - [标准银河字母](#标准银河字母)
         - [福尔摩斯-跳舞的小人](#福尔摩斯-跳舞的小人)
-        - [音符加密解密](#音符加密解密)
+        - [音符密码](#音符密码)
         - [敲击码](#敲击码)
-        - [颜文字加密解密](#颜文字加密解密)
-        - [中文电码表](#中文电码表)
-        - [五笔编码](#五笔编码)
-        - [时间戳](#时间戳)
-        - [手机键盘密码](#手机键盘密码)
-        - [Rabbit解密](Rabbit解密)
-        - [Quoted-printable编码](#Quoted-printable编码)
-        - [UUencode](#UUencode)
-        - [JSFUCK](#JSFUCK)
-        - [曼彻斯特编码](#曼彻斯特编码)
-        - [brainfuck](#brainfuck)
-        - [Ook](#Ook)
-        - [Serpent](#Serpent)
-        - [核心价值观编码](#核心价值观编码)
-        - [盲文加密解密](#盲文加密解密)
-        - [新约佛论禅](#新约佛论禅)
-        - [校验位](#校验位)
-        - [海明校验码](#海明校验码)
-        - [26个字母顺序](#26个字母顺序)
+        - [四方密码](#四方密码)
+- [其它密码]
+    - [颜文字加密解密](#颜文字加密解密)
+    - [中文电码表](#中文电码表)
+    - [五笔编码](#五笔编码)
+    - [时间戳](#时间戳)
+    - [手机键盘密码](#手机键盘密码)
+    - [26键盘密码](#26键盘密码)
+    - [Rabbit解密](Rabbit解密)
+    - [Quoted-printable编码](#Quoted-printable编码)
+    - [UUencode](#UUencode)
+    - [曼彻斯特编码](#曼彻斯特编码)
+    - [brainfuck](#brainfuck)
+    - [Ook](#Ook)
+    - [Serpent](#Serpent)
+    - [核心价值观编码](#核心价值观编码)
+    - [盲文加密解密](#盲文加密解密)
+    - [新约佛论禅](#新约佛论禅)
+    - [校验位](#校验位)
+    - [海明校验码](#海明校验码)
+
+
 - [数学](#数学)
     - [一元二次方程在线](#一元二次方程在线)
 
 - [文章](#)
     - https://ctf-wiki.org/crypto/introduction/
     - https://wiki.ffffffff0x.com/1earn/security/crypto/crypto
+    - https://zgjx6.github.io/2018/02/14/CTF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/
 
 ## 密码学简介
 
@@ -131,6 +140,8 @@
 ### 字母表编码
 
 A-Z/a-z 对应 1-26 或者 0-25
+
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
 ### ASCII编码
 
 ASCII 编码大致可以分作三部分组成:
@@ -156,6 +167,15 @@ ASCII编码对应十进制:
 对应可以转换成二进制,八进制,十六进制等.
 
 ![image](./img/ascii.jpg)
+
+### 摩斯电码
+
+.. .-.. --- ...- . -.-- --- ..-
+
+https://www.ip138.com/mosi/
+
+![](./img/mosi.png)
+
 ### Base
 
 base64、base32、base16 可以分别编码转化8位字节为6位、5位、4位.16,32,64 分别表示用多少个字符来编码,这里我注重介绍 base64.Base64 常用于在通常处理文本数据的场合,表示、传输、存储一些二进制数据.包括 MIME 的 email,email via MIME,在 XML 中存储复杂数据.
@@ -211,14 +231,38 @@ https://base64.us/
 
 #### base100
 
+### JSFUCK
+
+F12-console
+
+https://www.bugku.com/tools/jsfuck/#
+
+https://utf-8.jp/public/jsfuck.html
+
+https://github.com/aemkei/jsfuck
+
+
+### UUencode
+
+Uuencode是二进制信息和文字信息之间的转换编码，也就是机器和人眼识读的转换。
+
+http://www.hiencode.com/uu.html
+https://www.qqxiuzi.cn/bianma/uuencode.php
 ## 现代密码
-## md5
+### md5
 
 https://www.somd5.com/
 
 https://www.cmd5.com/
+### DES密码
 
-## RSA
+也可能是3DES
+
+https://www.sojson.com/encrypt_triple_des.html
+
+DES密文开头都是`U2FsdGVkX1`,解密需要密钥
+
+### RSA
 
 #### 分解n
 
@@ -1290,140 +1334,6 @@ e 已经给出来了,flag被加密为 F1 F2，要求 c1、c2 还原 flag
 P327 = 797862863902421984951231350430312260517773269684958456342860983236184129602390919026048496119757187702076499551310794177917920137646835888862706126924088411570997141257159563952725882214181185531209186972351469946269508511312863779123205322378452194261217016552527754513215520329499967108196968833163329724620251096080377748737
 P327 = 797862863902421984951231350430312260517773269684958456342860983236184129602390919026048496119757187702076499551310794177917920137646835888862706126924088411570997141257159563952725882214181185531209186972351469946269508511312863779123205322378452194261217016552527754513215520329499967108196968833163329724620251096080377747699
 ```
-## UUencode
-
-Uuencode是二进制信息和文字信息之间的转换编码，也就是机器和人眼识读的转换。
-
-http://www.hiencode.com/uu.html
-https://www.qqxiuzi.cn/bianma/uuencode.php
-
-
-
-## JSFUCK
-
-F12-console
-
-https://www.bugku.com/tools/jsfuck/#
-
-https://utf-8.jp/public/jsfuck.html
-
-https://github.com/aemkei/jsfuck
-
-## 曼彻斯特编码
-
-曼彻斯特编码：曼彻斯特编码将时钟和数据包含在数据流中，在传输代码信息的同时，也将时钟同步信号一起传输到对方，每位编码中有一跳变，不存在直流分量，因此具有自同步能力和良好的抗干扰性能。但每一个码元都被调成两个电平，所以数据传输速率只有调制速率的1/2。
-
-曼彻斯特编码表示0或1有两种不同的方法：
-第一种G. E. Thomas, Andrew S. Tanenbaum1949年提出的，它规定0是由低-高的电平跳变表示，1是高-低的电平跳变。
-按此规则有：
-
-编码0101（即0x5），表示原数据为00；
-编码1001（0x9）表示10；
-编码0110（0x6）表示01；
-编码1010（0xA）表示11。
-第二种IEEE 802.4（令牌总线）和低速版的IEEE 802.3（以太网）中规定, 按照这样的说法, 低-高电平跳变表示1, 高-低的电平跳变表示0。
-编码0101（0x5）表示11；
-编码1001（0x9）表示01；
-编码0110（0x6）表示10；
-编码1010（0xA）表示00；
-
-解密脚本
-```py
-def conv(s):
-    return hex(int(s, 2))[2:]
-
-def IEEE802(bs):
-    pass
-    dict = {
-        "0101": "11",
-        "1001": "01",
-        "0110": "10",
-        "1010": "00"
-    }
-    bs=str(bs)
-    print bs
-    r = ""
-    for j in range(0, len(bs), 4):
-        i=bs[j:j+4]
-        if i in dict.keys():
-            r += dict[i]
-    return r
-
-n = 0x5555555595555A65556AA696AA6666666955 # 密文
-flag = ''
-bs = '0' + bin(n)[2:]
-r = ''
-print bs
-r = IEEE802(bs)
-
-for i in range(0, len(r), 8):
-    tmp = r[i:i + 8][::-1]
-    flag += conv(tmp[:4])
-    flag += conv(tmp[4:])
-print flag.upper()
-```
-
-## 摩斯电码
-
-.. .-.. --- ...- . -.-- --- ..-
-
-https://www.ip138.com/mosi/
-
-![](./img/mosi.png)
-
-## brainfuck
-
- +++++++++++++++++.>
-
-漏洞利用工具：Python-Brainfuck-master
-
-python brainfuck.py 1.txt
-
-![image](./img/brainfuck.png)
-
-## Ook
-
-在线解密网站：https://www.splitbrain.org/services/ook
-
-## Serpent
-
-蛇 snake 需要密钥
-
-http://serpent.online-domain-tools.com/
-
-## 核心价值观编码
-
-社会主义核心价值观：富强、民主、文明、和谐；自由、平等、公正、法治；爱国、敬业、诚信、友善
-
-http://ctf.ssleye.com/cvencode.html
-
-https://wtool.com.cn/cvencode.html
-
-
-## 盲文加密解密
-
-https://www.qqxiuzi.cn/bianma/wenbenjiami.php?s=mangwen
-
-## 福尔摩斯-跳舞的小人
-
-![image](./img/tiaowuxiaoren.png)
-
-## 音符加密解密
-
-https://www.qqxiuzi.cn/bianma/wenbenjiami.php?s=yinyue
-
-## 敲击码
-
-  1  2  3  4  5
-1 A  B C/K D  E
-2 F  G  H  I  J
-3 L  M  N  O  P
-4 Q  R  S  T  U
-5 V  W  X  Y  Z
-
-..... ../... ./... ./... ../
-  5,2     3,1    3,1    3,2
-   W       L      L      M
 
 
 ## 古典密码
@@ -1441,7 +1351,7 @@ https://www.qqxiuzi.cn/bianma/wenbenjiami.php?s=yinyue
 
 当密钥空间足够大，而密文长度足够短的情况下，破解较为困难。
 
-#### quipqiup-词频分析
+#### 词频分析
 
 在密文长度足够长的时候，使用词频分析，http://quipqiup.com/
 
@@ -1593,72 +1503,7 @@ http://www.metools.info/code/fence154.html
 
 
 
-
-## 26个字母顺序
-
-ABCDEFGHIJKLMNOPQRSTUVWXYZ
-## 颜文字加密解密
-
-```
-ﾟωﾟﾉ= /｀ｍ´）ﾉ ~┻━┻   //*´∇｀*/ ['_']; o=(ﾟｰﾟ)  =_=3; c=(ﾟΘﾟ) =(ﾟｰﾟ)-(ﾟｰﾟ); (ﾟДﾟ) =(ﾟΘﾟ)= (o^_^o)/ (o^_^o);(ﾟДﾟ)={ﾟΘﾟ: '_' ,ﾟωﾟﾉ : ((ﾟωﾟﾉ==3) +'_') [ﾟΘﾟ] ,ﾟｰﾟﾉ :(ﾟωﾟﾉ+ '_')[o^_^o -(ﾟΘﾟ)] ,ﾟДﾟﾉ:((ﾟｰﾟ==3) +'_')[ﾟｰﾟ] }; (ﾟДﾟ) [ﾟΘﾟ] =((ﾟωﾟﾉ==3) +'_') [c^_^o];(ﾟДﾟ) ['c'] = ((ﾟДﾟ)+'_') [ (ﾟｰﾟ)+(ﾟｰﾟ)-(ﾟΘﾟ) ];(ﾟДﾟ) ['o'] = ((ﾟДﾟ)+'_') [ﾟΘﾟ];(ﾟoﾟ)=(ﾟДﾟ) ['c']+(ﾟДﾟ) ['o']+(ﾟωﾟﾉ +'_')[ﾟΘﾟ]+ ((ﾟωﾟﾉ==3) +'_') [ﾟｰﾟ] + ((ﾟДﾟ) +'_') [(ﾟｰﾟ)+(ﾟｰﾟ)]+ ((ﾟｰﾟ==3) +'_') [ﾟΘﾟ]+((ﾟｰﾟ==3) +'_') [(ﾟｰﾟ) - (ﾟΘﾟ)]+(ﾟДﾟ) ['c']+((ﾟДﾟ)+'_') [(ﾟｰﾟ)+(ﾟｰﾟ)]+ (ﾟДﾟ) ['o']+((ﾟｰﾟ==3) +'_') [ﾟΘﾟ];(ﾟДﾟ) ['_'] =(o^_^o) [ﾟoﾟ] [ﾟoﾟ];(ﾟεﾟ)=((ﾟｰﾟ==3) +'_') [ﾟΘﾟ]+ (ﾟДﾟ) .ﾟДﾟﾉ+((ﾟДﾟ)+'_') [(ﾟｰﾟ) + (ﾟｰﾟ)]+((ﾟｰﾟ==3) +'_') [o^_^o -ﾟΘﾟ]+((ﾟｰﾟ==3) +'_') [ﾟ
-```
-
-http://www.atoolbox.net/Tool.php?Id=703
-
-
-## 中文电码表
-
-例子：ren
-壬1103 仁0088 人0086 忍1804 韧7282 任0117 认6126 刃0432
-妊1175 纫4771
-
-https://dianma.bmcx.com/
-
-https://gjy.bift.edu.cn/tzgg/22776.htm
-
-## 五笔编码
-
-例子：bnhn s wwy vffg vffg rrhy fhnv
-
-https://www.qqxiuzi.cn/bianma/wubi.php
-
-## 时间戳
-
-https://tool.chinaz.com/tools/unixtime.aspx
-
-## 手机键盘密码
-
-999*666*88*2*777*33*6*999*4*4444*777*555*333*777*444*33*66*3*7777
-
-![](./img/shoujimima.png)
-
-## 26键盘密码
-
-![image](./img/26jianpan.png)
-
-第一行键盘数字对应字母，再转为手机键盘密码
-## DES加密解密
-
-也可能是3DES
-
-https://www.sojson.com/encrypt_triple_des.html
-
-DES密文开头都是`U2FsdGVkX1`,解密需要密钥
-
-## Rabbit解密
-
-在线网站
-https://www.sojson.com/encrypt_rabbit.html
-## Quoted-printable编码
-
-Quoted-printable可译为“可打印字符引用编码”，Quoted-printable将任何8-bit字节值可编码为3个字符：一个等号"=“后跟随两个十六进制数字(0–9或A–F)表示该字节的数值。例如，ASCII码换页符（十进制值为12）可以表示为”=0C"，
-
-在线解密网站：
-http://www.mxcz.net/tools/QuotedPrintable.aspx
-http://web.chacuo.net/charsetquotedprintable
-
-
-## 60甲子年表
+#### 60甲子年表
 
 ```
 01 甲子
@@ -1727,47 +1572,250 @@ http://web.chacuo.net/charsetquotedprintable
 
 ![image](./img/60甲子年表.png)
 
-## 猪圈密码
+
+#### 传统猪圈密码
 
 http://www.hiencode.com/pigpen.html
 
 ![image](./img/zhuquan.png)
 
-## 圣堂武士密码
-
-圣堂武士密码(Templar Cipher)是共济会的“猪圈密码”的一个变种，一直被共济会圣殿骑士用。明文字母和对应密文：
-
-![image](./img/shengwutang.png)
-## 变种密码
+#### 猪圈变种密码
 
 ![image](./img/bianzhongmima.png)
 
 
-## 标准银河字母
+#### 古埃及象形文字
+
+![image](./img/xiangxing.png)
+#### 圣堂武士密码
+
+圣堂武士密码(Templar Cipher)是共济会的“猪圈密码”的一个变种，一直被共济会圣殿骑士用。明文字母和对应密文：
+
+![image](./img/shengwutang.png)
+#### 标准银河字母
 
 ![image](./img/biaozhunyinhe.png)
 
-## 新约佛论禅
+
+#### 福尔摩斯-跳舞的小人
+
+![image](./img/tiaowuxiaoren.png)
+
+#### 音符密码
+
+https://www.qqxiuzi.cn/bianma/wenbenjiami.php?s=yinyue
+
+#### 敲击码
+
+  1  2  3  4  5
+1 A  B C/K D  E
+2 F  G  H  I  J
+3 L  M  N  O  P
+4 Q  R  S  T  U
+5 V  W  X  Y  Z
+
+..... ../... ./... ./... ../
+  5,2     3,1    3,1    3,2
+   W       L      L      M
+
+#### 四方密码
+
+https://zh.wikipedia.org/wiki/%E5%9B%9B%E6%96%B9%E5%AF%86%E7%A2%BC
+
+首先选择两个英文字作密匙，例如example和keyword。对于每一个密匙，将重复出现的字母去除，即example要转成exampl，然后将每个字母顺序放入矩阵，再将余下的字母顺序放入矩阵，便得出加密矩阵。
+
+四方密码用4个5×5的矩阵来加密。每个矩阵都有25个字母（通常会取消Q或将I,J视作同一样，或改进为6×6的矩阵，加入10个数字）。
+
+将这两个加密矩阵放在右上角和左下角，余下的两个角放a到z顺序的矩阵：
+
+加密的步骤：
+
+两个字母一组地分开讯息：（例如hello world变成he ll ow or ld）；
+
+找出第一个字母在左上角矩阵的位置；
+
+同样道理，找第二个字母在右下角矩阵的位置；
+
+找右上角矩阵中，和第一个字母同行，第二个字母同列的字母；
+
+找左下角矩阵中，和第一个字母同列，第二个字母同行的字母；
+
+得到的这两个字母就是加密过的讯息。
+he lp me ob iw an ke no bi的加密结果：FY NF NE HW BX AF FO KH MD
+
+
+![image](./img/sifang.png)
+
+根据key1:security将确认秘钥1：securityabdfghklmnopvwxz
+根据key2:information确认秘钥2：informatbcdeghklpsuvwxyz
+
+
+在线加密解密
+- http://www.metools.info/code/four-square244.html
+- http://www.hiencode.com/four.html
+
+## 其它密码
+
+
+### 颜文字加密解密
+
+```
+ﾟωﾟﾉ= /｀ｍ´）ﾉ ~┻━┻   //*´∇｀*/ ['_']; o=(ﾟｰﾟ)  =_=3; c=(ﾟΘﾟ) =(ﾟｰﾟ)-(ﾟｰﾟ); (ﾟДﾟ) =(ﾟΘﾟ)= (o^_^o)/ (o^_^o);(ﾟДﾟ)={ﾟΘﾟ: '_' ,ﾟωﾟﾉ : ((ﾟωﾟﾉ==3) +'_') [ﾟΘﾟ] ,ﾟｰﾟﾉ :(ﾟωﾟﾉ+ '_')[o^_^o -(ﾟΘﾟ)] ,ﾟДﾟﾉ:((ﾟｰﾟ==3) +'_')[ﾟｰﾟ] }; (ﾟДﾟ) [ﾟΘﾟ] =((ﾟωﾟﾉ==3) +'_') [c^_^o];(ﾟДﾟ) ['c'] = ((ﾟДﾟ)+'_') [ (ﾟｰﾟ)+(ﾟｰﾟ)-(ﾟΘﾟ) ];(ﾟДﾟ) ['o'] = ((ﾟДﾟ)+'_') [ﾟΘﾟ];(ﾟoﾟ)=(ﾟДﾟ) ['c']+(ﾟДﾟ) ['o']+(ﾟωﾟﾉ +'_')[ﾟΘﾟ]+ ((ﾟωﾟﾉ==3) +'_') [ﾟｰﾟ] + ((ﾟДﾟ) +'_') [(ﾟｰﾟ)+(ﾟｰﾟ)]+ ((ﾟｰﾟ==3) +'_') [ﾟΘﾟ]+((ﾟｰﾟ==3) +'_') [(ﾟｰﾟ) - (ﾟΘﾟ)]+(ﾟДﾟ) ['c']+((ﾟДﾟ)+'_') [(ﾟｰﾟ)+(ﾟｰﾟ)]+ (ﾟДﾟ) ['o']+((ﾟｰﾟ==3) +'_') [ﾟΘﾟ];(ﾟДﾟ) ['_'] =(o^_^o) [ﾟoﾟ] [ﾟoﾟ];(ﾟεﾟ)=((ﾟｰﾟ==3) +'_') [ﾟΘﾟ]+ (ﾟДﾟ) .ﾟДﾟﾉ+((ﾟДﾟ)+'_') [(ﾟｰﾟ) + (ﾟｰﾟ)]+((ﾟｰﾟ==3) +'_') [o^_^o -ﾟΘﾟ]+((ﾟｰﾟ==3) +'_') [ﾟ
+```
+
+http://www.atoolbox.net/Tool.php?Id=703
+
+
+### 中文电码表
+
+例子：ren
+壬1103 仁0088 人0086 忍1804 韧7282 任0117 认6126 刃0432
+妊1175 纫4771
+
+https://dianma.bmcx.com/
+
+https://gjy.bift.edu.cn/tzgg/22776.htm
+
+### 五笔编码
+
+例子：bnhn s wwy vffg vffg rrhy fhnv
+
+https://www.qqxiuzi.cn/bianma/wubi.php
+
+### 时间戳
+
+https://tool.chinaz.com/tools/unixtime.aspx
+
+### 手机键盘密码
+
+999*666*88*2*777*33*6*999*4*4444*777*555*333*777*444*33*66*3*7777
+
+![](./img/shoujimima.png)
+
+### 26键盘密码
+
+![image](./img/26jianpan.png)
+
+第一行键盘数字对应字母，再转为手机键盘密码
+
+### Rabbit解密
+
+在线网站
+https://www.sojson.com/encrypt_rabbit.html
+### Quoted-printable编码
+
+Quoted-printable可译为“可打印字符引用编码”，Quoted-printable将任何8-bit字节值可编码为3个字符：一个等号"=“后跟随两个十六进制数字(0–9或A–F)表示该字节的数值。例如，ASCII码换页符（十进制值为12）可以表示为”=0C"，
+
+在线解密网站：
+http://www.mxcz.net/tools/QuotedPrintable.aspx
+http://web.chacuo.net/charsetquotedprintable
+
+### 曼彻斯特编码
+
+曼彻斯特编码：曼彻斯特编码将时钟和数据包含在数据流中，在传输代码信息的同时，也将时钟同步信号一起传输到对方，每位编码中有一跳变，不存在直流分量，因此具有自同步能力和良好的抗干扰性能。但每一个码元都被调成两个电平，所以数据传输速率只有调制速率的1/2。
+
+曼彻斯特编码表示0或1有两种不同的方法：
+第一种G. E. Thomas, Andrew S. Tanenbaum1949年提出的，它规定0是由低-高的电平跳变表示，1是高-低的电平跳变。
+按此规则有：
+
+编码0101（即0x5），表示原数据为00；
+编码1001（0x9）表示10；
+编码0110（0x6）表示01；
+编码1010（0xA）表示11。
+第二种IEEE 802.4（令牌总线）和低速版的IEEE 802.3（以太网）中规定, 按照这样的说法, 低-高电平跳变表示1, 高-低的电平跳变表示0。
+编码0101（0x5）表示11；
+编码1001（0x9）表示01；
+编码0110（0x6）表示10；
+编码1010（0xA）表示00；
+
+解密脚本
+```py
+def conv(s):
+    return hex(int(s, 2))[2:]
+
+def IEEE802(bs):
+    pass
+    dict = {
+        "0101": "11",
+        "1001": "01",
+        "0110": "10",
+        "1010": "00"
+    }
+    bs=str(bs)
+    print bs
+    r = ""
+    for j in range(0, len(bs), 4):
+        i=bs[j:j+4]
+        if i in dict.keys():
+            r += dict[i]
+    return r
+
+n = 0x5555555595555A65556AA696AA6666666955 # 密文
+flag = ''
+bs = '0' + bin(n)[2:]
+r = ''
+print bs
+r = IEEE802(bs)
+
+for i in range(0, len(r), 8):
+    tmp = r[i:i + 8][::-1]
+    flag += conv(tmp[:4])
+    flag += conv(tmp[4:])
+print flag.upper()
+```
+
+
+### brainfuck
+
+ +++++++++++++++++.>
+
+漏洞利用工具：Python-Brainfuck-master
+
+python brainfuck.py 1.txt
+
+![image](./img/brainfuck.png)
+
+### Ook
+
+在线解密网站：https://www.splitbrain.org/services/ook
+
+### Serpent
+
+蛇 snake 需要密钥
+
+http://serpent.online-domain-tools.com/
+
+### 核心价值观编码
+
+社会主义核心价值观：富强、民主、文明、和谐；自由、平等、公正、法治；爱国、敬业、诚信、友善
+
+http://ctf.ssleye.com/cvencode.html
+
+https://wtool.com.cn/cvencode.html
+
+
+### 盲文加密解密
+
+https://www.qqxiuzi.cn/bianma/wenbenjiami.php?s=mangwen
+
+
+### 新约佛论禅
 
 佛曰加密
 
 http://hi.pcmoe.net/buddha.html
 
 
-## 校验位
+### 校验位
 
-### 海明校验码
+#### 海明校验码
 
 https://blog.csdn.net/qq2489021103/article/details/109563484
 
 https://blog.csdn.net/weixin_44831109/article/details/107011597
 
 
-## quipqiup
 
-quipqiup是Edwin Olson的快速自动密码求解器。它可以解决报纸上经常出现的简单替代密码，包括诸如密码窃听器（保留单词边界）之类的难题和爱国主义者（如密码迷）之类的难题。
-
-https://quipqiup.com/
 ## 数学
 
 ## 一元二次方程在线
@@ -1775,3 +1823,9 @@ https://quipqiup.com/
 http://www.ab126.com/shuxue/8009.html
 
 https://tool.520101.com/calculator/yiyuanerci/
+
+
+
+
+
+
