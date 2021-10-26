@@ -66,6 +66,7 @@
     - [明文攻击](#明文攻击)
     - [蜘蛛侠呀](#蜘蛛侠呀)
     - [UTCTF2020-file-header](#UTCTF2020-file-header)
+    - [安洵杯-2019-easy-misc](#安洵杯-2019-easy-misc)
 
 ## 二维码扫描
 
@@ -887,3 +888,5 @@ binwalk woojpg发现有zip，无法分离出来，需要手动添加zip文件头
 ## UTCTF2020-file-header
 
 题目提示很明显，拿到文件放进010，补上文件头89504e47，得到flag
+
+## 安洵杯-2019-easy-misc

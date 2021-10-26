@@ -48,6 +48,9 @@
     - [磁盘取证](#磁盘取证)
         - [Ntfs隐写](#Ntfs隐写)
     - [DOC取证](#DOC取证)
+
+- [文章](#文章)
+    - https://ctf-wiki.org/misc/introduction/
 ## 内存取证
 
 ### ISO

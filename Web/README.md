@@ -19,6 +19,8 @@
     - [MD5-MD5-MD5](#MD5-MD5-MD5)
     - [十六进制&&科学计数法](#十六进制&&科学计数法)
     - [反序列化常见方法](#反序列化常见方法)
+- [Burpsuite](#Burpsuite)
+    - [单一payload组+延时爆破](单一payload组+延时爆破)
 
 
 ## 思路
@@ -350,3 +352,11 @@ __isset() //在不可访问的属性上调用isset()或empty()触发
 __unset() //在不可访问的属性上使用unset()时触发
 __invoke() //当脚本尝试将对象调用为函数时触发
 ```
+
+# Brupsuite
+
+## 单一payload组+延时爆破
+
+attack type： battering ram 这一模式是使用单一的payload组
+
+options： throttle可设置延时毫秒

@@ -88,8 +88,10 @@
     - [核心价值观编码](#核心价值观编码)
     - [盲文加密解密](#盲文加密解密)
     - [新约佛论禅](#新约佛论禅)
-    - [校验位](#校验位)
-    - [海明校验码](#海明校验码)
+    - [校验码](#校验码)
+        - [奇偶校验码](#奇偶校验码)
+        - [循环冗余码](#循环冗余码)
+        - [海明校验码](#海明校验码)
 
 
 - [数学](#数学)
@@ -1459,6 +1461,7 @@ f	AABAB	m	ABABB	s	BAAAB	z	BABBB
 
 To encode a message each letter of the plaintext is replaced by a group of five of the letters 'A' or 'B'.
 
+
 可以看到，培根密码主要有以下特点
 
 - 只有两种字符
@@ -1704,6 +1707,8 @@ https://tool.chinaz.com/tools/unixtime.aspx
 https://www.sojson.com/encrypt_rabbit.html
 ### Quoted-printable编码
 
+> 有多个等号
+
 Quoted-printable可译为“可打印字符引用编码”，Quoted-printable将任何8-bit字节值可编码为3个字符：一个等号"=“后跟随两个十六进制数字(0–9或A–F)表示该字节的数值。例如，ASCII码换页符（十进制值为12）可以表示为”=0C"，
 
 在线解密网站：
@@ -1806,9 +1811,70 @@ https://www.qqxiuzi.cn/bianma/wenbenjiami.php?s=mangwen
 http://hi.pcmoe.net/buddha.html
 
 
-### 校验位
+### 校验码
 
+#### 奇偶校验码
+
+用来检测数据传输过程中是否发生错误，是众多校验码中最为简单的一种。
+
+它有两种校验方法：奇校验和偶校验
+
+- 奇校验：原始码流+校验位 总共有奇数个1
+
+- 偶校验：原始码流+校验位 总共有偶数个1
+
+跟CRC类似，也是在原始码流后面，加上校验位。不同的是，它的校验位只有一位，要么是0，要么是1。并且它的校验码还可以放在码流的前面。
+
+![image](./img/qiou1.png)
+
+
+**错误检测能力**
+
+只能检测出奇数个错误。
+
+例如ASCII码 大写字母 A
+
+奇校验 正确码流 11000001
+
+```
+错1位 11000011 变成了偶数个1，能检测出错误
+
+错2位 11000010 变成了奇数个1，检测不出错误
+```
+错1位 01000011 变成了奇数个1，能检测出错误
+
+错3位 11001010 变成了偶数个1，能检测出错误
+```
+
+偶校验 正确码流 01000001
+
+错2位 01000010 变成了偶数个1，检测不出错误
+
+错3位 01001010 变成了奇数个1，能检测出错误
+```
+
+#### 循环冗余码
 #### 海明校验码
+
+海明码公式：`2^k-1 >= n+k` 意思是:可以用来校验错误的数字个数2^k-1 要大于或者等于原数据位数n和校验位数k的和。显然在2^k中我们要留出一个数表示数据正确，所以用 `2^k-1`来代表出错的位数。
+
+[海明码计算步骤](https://blog.csdn.net/jihezhixin/article/details/86579085?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4.channel_param)
+
+![](./img/haiming.png)
+
+例子：
+设数据为01101001，求海明码。
+
+数据位为8，则2⁴-1=15>8+4=12,则校验位为4位，即这个海明码长12位；
+D7D6D5D4D3D2D1D0=01101001；
+P0=2⁰=1，P1=2¹=2，P2=2²=4，P3=2³=8；
+P0=D0⊕D1⊕D3⊕D4⊕D6=1⊕0⊕1⊕0⊕1=1
+P1=D0⊕D2⊕D3⊕D5⊕D6=1⊕0⊕1⊕1⊕1=0
+P2=D1⊕D2⊕D3⊕D7=0⊕0⊕1⊕0=1
+P3=D4⊕D5⊕D6⊕D7=0⊕1⊕1⊕0=0
+
+则海明码为011001001101
+
 
 https://blog.csdn.net/qq2489021103/article/details/109563484
 
