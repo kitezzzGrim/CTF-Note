@@ -30,6 +30,8 @@ hex(16)     # 10进制转16进制
 oct(8)      # 10进制转8进制
 bin(8)      # 10进制转2进制
 
+
+
 例子：
 int('10')       # 字符串转换成10进制整数
 int('10',16)    # 字符串转换成16进制整数
@@ -57,6 +59,12 @@ str通过encode()方法可以编码为指定的bytes
 - ord()  字符->十进制符
 - bin() 十进制->二进制
 
+二进制转十六进制
+
+ hex(int('0000010010001101', 2))
+
+
+
 例子：
 ```py
 chr(65)  # 输出 : 'A'
@@ -73,8 +81,9 @@ with open('1.txt','r'):
 with open('1.txt','r'):
     line = f.readline()
 
+read()，一次读取全部内容到内存
 readline()
-readlines()
+readlines() 逐行读取
 
 **文件模式**
 r rb w wb 区别

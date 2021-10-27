@@ -227,6 +227,8 @@ http://tomeko.net/online_tools/base32.php
 https://base64.us/
 #### base85
 
+http://www.atoolbox.net/Tool.php?Id=934
+
 #### base91
 
 #### base92

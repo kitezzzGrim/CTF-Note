@@ -890,3 +890,76 @@ binwalk woojpg发现有zip，无法分离出来，需要手动添加zip文件头
 题目提示很明显，拿到文件放进010，补上文件头89504e47，得到flag
 
 ## 安洵杯-2019-easy-misc
+
+加密的压缩包注释有
+
+```
+FLAG IN ((√2524921X85÷5+2)÷15-1794)+NNULLULL,
+```
+
+计算可得 7+NNULLULL
+
+掩码爆破
+
+![image](./img/yanma1.png)
+
+得到密码为2019456NNULLULL, 解压后得到如下：
+
+```
+a = dIW
+b = sSD
+c = adE
+d = jVf
+e = QW8
+f = SA=
+g = jBt
+h = 5RE
+i = tRQ
+j = SPA
+k = 8DS
+l = XiE
+m = S8S
+n = MkF
+o = T9p
+p = PS5
+q = E/S
+r = -sd
+s = SQW
+t = obW
+u = /WS
+v = SD9
+w = cw=
+x = ASD
+y = FTa
+z = AE7
+```
+
+binwalk一下图片，可以发现有两张png图片，foremost即可
+
+两张一模一样的图片可以联想到盲水印，跑出一张图片提示11.txt
+
+```py
+# -*- coding:utf-8 -*-
+alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+- =\\{\\}[]"
+strings = open('./flag.txt',encoding='utf-8').read()
+
+result = {}
+for i in alphabet:
+	counts = strings.count(i) # 计算出现的次数
+	i = '{0}'.format(i)
+	result[i] = counts
+
+res = sorted(result.items(),key=lambda item:item[1],reverse=True)  # 排序操作 True降序
+for data in res:
+	print(data)
+
+for i in res:
+	flag = str(i[0])
+	print(flag[0],end="")
+```
+
+etaonrhsidluygw 再结合decode.txt
+
+QW8obWdIWT9pMkFSQWtRQjVfXiE/WSFTajBtcw==
+
+base64解码得到Ao(mgHY?i2ARAkQB5_^!?Y!Sj0ms

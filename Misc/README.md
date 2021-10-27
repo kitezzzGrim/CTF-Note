@@ -29,6 +29,7 @@
         - [7z](#7z)
         - [F5-steganography](#F5-steganography)
         - [outguess](#outguess)
+        - [盲水印](盲水印)
         - [base64隐写](#base64隐写)
         - [ScreenToGif](#ScreenToGif)
         - [exiftool](#exiftool)
@@ -295,6 +296,22 @@ outguess -k "my secret key" -d hidden.txt demo.jpg out.jpg
 # 解密
  outguess -k "my secret key" -r out.jpg hidden.txt
 
+```
+
+### 盲水印
+
+https://github.com/chishaxie/BlindWaterMark
+
+```py
+
+pip install -r requirements.txt
+
+#requirements.txt里面版本有点问题，修改别的版本即可
+#合成盲水印图
+python bwm.py encode hui.png wm.png hui_with_wm.png
+
+#提取图中的盲水印 (需要原图)
+python bwm.py decode hui.png hui_with_wm.png wm_from_hui.png
 ```
 
 ### base64隐写
