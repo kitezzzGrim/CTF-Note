@@ -27,6 +27,7 @@
         - [爆破压缩包](#爆破压缩包)
             - [掩码爆破](#掩码爆破)
         - [7z](#7z)
+        - [图片拼接](#图片拼接)
         - [F5-steganography](#F5-steganography)
         - [outguess](#outguess)
         - [盲水印](盲水印)
@@ -37,6 +38,7 @@
         - [pyc隐写](#pyc隐写)
         - [LSB隐写](#LSB隐写)
         - [TTL隐写](#TTL隐写)
+        - [时间隐写](#时间隐写)
         - [logo语言解释器](#logo语言解释器)
     - [流量取证](#流量取证)
         - [wireshark](#wireshark)
@@ -273,6 +275,23 @@ linux下7z解压vmdk更完整，windows下7z有问题
 7z x flag.vmdk
 ```
 
+### 图片拼接
+
+kali
+
+```bash
+montage -tile 10x12 -geometry 200x100+0+0 *jpg flag.jpg
+gaps --image=flag.jpg --generations=40 --population=120 --size=100
+```
+
+环境安装：
+```
+apt-get install graphicsmagick-imagemagick-compat
+git clone https://github.com/nemanja-m/gaps.git
+cd gaps
+python3 set-up.py install
+pip3 install -r requirement.txt
+```
 ### F5-steganography
 
 ```bash
@@ -354,6 +373,11 @@ python stegosaurus.py -x 123.pyc
 
 ### LSB隐写
 
+1. Stegosolve
+
+- Anglyse-Data-Extract 选择Bit Planes 的0 红绿蓝都试试 -save bin
+
+2.？
 https://github.com/livz/cloacked-pixel
 
 python2 lsb.py extract 1.png 1.txt 123456
@@ -371,6 +395,15 @@ IP报文在路由间穿梭的时候每经过一个路由，TTL就会减1，当TT
     如：须传送H字符，只需把H字符换成二进制，每两位为一组，每次填充到TTL字段的开头两位并把剩下的6位设置为1（xx111111），这样发4个IP报文即可传送1个字节。
 ```
 
+### 时间隐写
+
+例子：得到一张flag.gif。考虑一下每帧停顿的时间。
+
+使用`identify`命令。
+
+`identify -format “%T” flag.gif`
+
+会得到一串数字
 ### logo语言解释器
 
 ```

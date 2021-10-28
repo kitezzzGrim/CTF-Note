@@ -67,7 +67,9 @@
     - [蜘蛛侠呀](#蜘蛛侠呀)
     - [UTCTF2020-file-header](#UTCTF2020-file-header)
     - [安洵杯-2019-easy-misc](#安洵杯-2019-easy-misc)
-
+    - [MRCTF2020-Hello_misc](#MRCTF2020-Hello_misc)
+    - [BSidesSF2019-zippy](#BSidesSF2019-zippy)
+    - [MRCTF2020-不眠之夜](#MRCTF2020-不眠之夜)
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -885,6 +887,18 @@ binwalk woojpg发现有zip，无法分离出来，需要手动添加zip文件头
 
 ## 蜘蛛侠呀
 
+所有的icmp包后面都跟了一串数据，使用tshark把这些全部提取出来
+
+`tshark -r out.pcap -T fields -e data > data.txt`
+
+脚本去重-> 十六进制数据转为字符 -> 去除首尾两行，将base64解码以字节流形式写成zip，里面是一张图片，时间隐写
+
+2050502050502050205020202050202020205050205020502050205050505050202050502020205020505050205020206666
+
+20替换0 50替换 1
+
+二进制转字符，然后md5
+
 ## UTCTF2020-file-header
 
 题目提示很明显，拿到文件放进010，补上文件头89504e47，得到flag
@@ -963,3 +977,33 @@ etaonrhsidluygw 再结合decode.txt
 QW8obWdIWT9pMkFSQWtRQjVfXiE/WSFTajBtcw==
 
 base64解码得到Ao(mgHY?i2ARAkQB5_^!?Y!Sj0ms
+
+## MRCTF2020-Hello_misc
+
+图片binwalk后有加密的压缩包，红色的图片拿去stegsolve lsb隐写提取红色0发现有图片格式，save bin下来有密码，解压后文本可知是ttl隐写
+
+隐写后得到0ac1fe6b77be5dbe
+
+解压后发现是文档的格式，更改后缀，打开后全部加深颜色,notepad base64逐行解码得到二进制，0的形状就是flag
+
+
+## BSidesSF2019-zippy
+
+追踪tcp流
+
+![image](./img/zip1.png)
+
+可以看见是一个压缩包，密码是supercomplexpassword
+
+binwalk分解下输入密码得到flag
+
+## MRCTF2020-不眠之夜
+
+https://mochu.blog.csdn.net/article/details/109649446?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link
+
+
+montage -tile 10x12 -geometry 200x100+0+0 *jpg flag.jpg
+gaps --image=flag.jpg --generations=40 --population=120 --size=100
+
+
+环境失败的话见misc 图片拼接
