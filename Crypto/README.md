@@ -24,6 +24,7 @@
 - [现代密码](#现代密码)
     - [MD5](#MD5)
     - [DES](#DES)
+    - [AES](#AES)
     - [RSA](#RSA)
         - [分解n](#分解n)
         - [公私钥分解](#公私钥分解)
@@ -258,7 +259,7 @@ https://www.qqxiuzi.cn/bianma/uuencode.php
 https://www.somd5.com/
 
 https://www.cmd5.com/
-### DES密码
+### DES
 
 也可能是3DES
 
@@ -266,6 +267,11 @@ https://www.sojson.com/encrypt_triple_des.html
 
 DES密文开头都是`U2FsdGVkX1`,解密需要密钥
 
+### ARS
+
+http://www.jsons.cn/aesencrypt/
+
+需要密钥
 ### RSA
 
 #### 分解n

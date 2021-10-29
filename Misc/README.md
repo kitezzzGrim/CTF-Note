@@ -39,6 +39,7 @@
         - [LSB隐写](#LSB隐写)
         - [TTL隐写](#TTL隐写)
         - [时间隐写](#时间隐写)
+        - [零宽度字节隐写](#零宽度字节隐写)
         - [logo语言解释器](#logo语言解释器)
     - [流量取证](#流量取证)
         - [wireshark](#wireshark)
@@ -47,10 +48,12 @@
             - [UsbKeyboardDataHacker](#UsbKeyboardDataHacker)
     - [音频取证](#音频取证)
         - [Audacity](#Audacity)
-        - [dtmf2um](dtmf2um)
+        - [dtmf2num](#dtmf2num)
+        - [音频LSB隐写](#音频LSB隐写)
     - [磁盘取证](#磁盘取证)
         - [Ntfs隐写](#Ntfs隐写)
     - [DOC取证](#DOC取证)
+        - [密码爆破](#密码爆破)
 
 - [文章](#文章)
     - https://ctf-wiki.org/misc/introduction/
@@ -169,12 +172,16 @@ MIDI (mid)，                              文件头：4D546864
 ```
 ### binwalk
 
+kali
 ```py
-python binwalk.py mianju.jpg
+binwalk xxx
+binwalk -e xxx
+```
 
-# 从图片中分离 -e
-python binwalk.py -e mianju.jpg
+```
+XML document, version: "1.0"
 
+表示ppt文件、docx文件
 ```
 
 ### foremost
@@ -404,6 +411,18 @@ IP报文在路由间穿梭的时候每经过一个路由，TTL就会减1，当TT
 `identify -format “%T” flag.gif`
 
 会得到一串数字
+
+### 零宽度字节隐写
+
+http://330k.github.io/misc_tools/unicode_steganography.html
+
+vim打开可以发现有很多<200b>
+
+![image](./img/zero1.png)
+
+![image](./img/zero2.png)
+
+
 ### logo语言解释器
 
 ```
@@ -488,11 +507,17 @@ morse2ascii good.wav
 
 ### dtmf2num
 
+
+
 DTMF拨号音识别
 
 dtmf2num.exe girlfriend.wav
 
 ![](./img/dtmf1.png)
+
+### 音频LSB隐写
+
+SilentEye工具解码
 ## 磁盘取证
 
 ### Ntfs隐写
@@ -506,3 +531,11 @@ dtmf2num.exe girlfriend.wav
 flag有时候把颜色设置为白色 需要全选换成可见颜色
 
 https://www.cnblogs.com/WhiteHatKevil/articles/10051582.html
+
+### 密码爆破
+
+https://down.52pojie.cn/?query=
+
+Accent OFFICE Password Recovery v5.1 CracKed By Hmily[LCG][LSG]
+
+一般猜测四位纯数字

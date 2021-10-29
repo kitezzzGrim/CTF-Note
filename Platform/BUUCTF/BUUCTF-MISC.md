@@ -70,6 +70,12 @@
     - [MRCTF2020-Hello_misc](#MRCTF2020-Hello_misc)
     - [BSidesSF2019-zippy](#BSidesSF2019-zippy)
     - [MRCTF2020-不眠之夜](#MRCTF2020-不眠之夜)
+    - [hashcat](#hashcat)
+    - [派大星的烦恼](#派大星的烦恼)
+    - [UTCTF2020-zero](#UTCTF2020-zero)
+    - [粽子的来历](#粽子的来历)
+    - [MRCTF2020-Unravel!!](#MRCTF2020-Unravel!!)
+    - [UTCTF2020-basic-forensics](#UTCTF2020-basic-forensics)
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -1007,3 +1013,47 @@ gaps --image=flag.jpg --generations=40 --population=120 --size=100
 
 
 环境失败的话见misc 图片拼接
+
+## hashcat
+
+文档爆破，用Accent OFFICE Password Recovery爆破即可
+
+ppt在倒数第二页全选红色即可
+
+## 派大星的烦恼
+
+首先放到010里搜索字节22,根据提示0x22，0x44 想到二进制,吧右边的DD"复制下来，将"替换成0 D替换成1，然后每8位一组倒序转为字符即可
+
+## UTCTF2020-zero
+
+vim打开可以发现有很多<200b>
+
+零宽度字节隐写
+
+http://330k.github.io/misc_tools/unicode_steganography.html
+
+## 粽子的来历
+
+FF 修复 4个文档
+每个文档内容一样，但行间距不同，设置 1.5倍为 1，1倍为0，则有
+
+```
+100111100010
+111110010011
+100100100001
+111100100001
+```
+
+第三个md5为flag
+
+## MRCTF2020-Unravel!!
+
+binwalk分离出aes.png，上面写Tokyo
+
+010打开wav 末尾发现
+
+key=U2FsdGVkX1/nSQN+hoHL8OwV9iJB/mSdKk5dmusulz4=
+
+可知是aes解密 得到CCGandGulu ，解压压缩包得到wav
+
+## UTCTF2020-basic-forensics
