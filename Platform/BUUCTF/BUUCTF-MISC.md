@@ -79,6 +79,11 @@
     - [WUSTCTF2020-spaceclub](#WUSTCTF2020-spaceclub)
     - [CFI-CTF-2018-webLogon-capture](#CFI-CTF-2018-webLogon-capture)
     - [SCTF2019-电单车](#SCTF2019-电单车)
+    - [MRCTF2020-pyFlag](#MRCTF2020-pyFlag)
+    - [watevrCTF-2019-Evil-Cuteness](#watevrCTF-2019-Evil-Cuteness)
+    - [*CTF2019-otaku](#*CTF2019-otaku)
+    - [湖南省赛2019-Findme](#湖南省赛2019-Findme)
+    - [UTCTF2020-File-Carving](#UTCTF2020-File-Carving)
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -1086,3 +1091,84 @@ sublime打开全选有不可见字符，有两个不同长度，一个为6 一�
 地址位长度为20bit，后4位为数据位即01110100101010100110
 
 flag{01110100101010100110}
+
+## MRCTF2020-pyFlag
+
+有三张图片，根据提示在末尾都有PK的十六进制，拼接起来得到一个压缩包，暴力破解密码是1234
+
+最后base16-32-64-85解密即可
+
+## watevrCTF-2019-Evil-Cuteness
+
+```
+dd if=attachment.jpg of=test.zip skip=21639 bs=1
+```
+
+也可以binwalk -e
+
+## QCTF2018-X-man-A-face
+
+
+打开是残缺的二维码 只缺少左上角和左下角的方块，截图补全即可
+
+
+KFBVIRT3KBZGK5DUPFPVG2LTORSXEX2XNBXV6QTVPFZV6TLFL5GG6YTTORSXE7I=
+
+base32解密
+
+## *CTF2019-otaku
+
+第一步伪加密
+
+第二步 word取证，把隐藏文字的选项去掉即可
+
+第三步，将隐藏文字转为存文本,文本以asci格式另存，用对应的winrar压缩，可以看到crc一样 再进行明文攻击
+
+![image](./img/crc1.png)
+
+得到图片，lsb隐写即可
+
+## 湖南省赛2019-Findme
+
+考点：多张图片隐藏信息
+
+得到5张png图片，第一张不显示，需要爆破长宽高脚本利用
+
+修复png图片，010editor补上IDAT标识
+
+第一张stegsolve隐写，在blue plane2发现二维码，扫描得到
+
+ZmxhZ3s0X3
+
+第二张010打开，在结尾发现7z，寻找png文件尾，后面全部复制到新的文本，将7z替换成PK，解压，在第618.txt大小与其它不一样，发现字符
+
+1RVcmVfc
+
+第三张010打开 chunk[0]-chunk[6]的每一个数据块的crc值都是可打印的Ascii字符
+
+```py
+a = [0x33,0x52,0x6C,0x5A,0x33,0x30,0x3D]
+for i in a:
+    print(chr(i),end="")
+
+#运行结果：3RlZ30=
+```
+
+3RlZ30=
+
+第四张
+
+```bash
+exiftool 4.png
+```
+
+cExlX1BsY
+
+
+第五张末尾处发现 Yzcllfc0lN
+
+ZmxhZ3s0X3Yzcllfc0lNcExlX1BsY1RVcmVfc3RlZ30=
+
+flag{4_v3rY_sIMpLe_PlcTUre_steg}
+
+## UTCTF2020-File-Carving

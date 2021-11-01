@@ -1,6 +1,8 @@
 # CTF-Misc
 
 - [CTF-Misc](#CTF-Misc)
+    - [时间取证](#时间取证)
+        - [时间戳](#时间戳)
     - [内存取证](#内存取证)
         - [iso](#iso)
         - [Volatility](#Volatility)
@@ -10,11 +12,13 @@
             - [编码](#编码)
             - [修改长宽](#修改长宽)
             - [粘贴复制二进制](#粘贴复制二进制)
+            - [IDAT标识缺失](#IDAT标识缺失)
         - [grep](#grep)
         - [stegsolve](#stegsolve)
         - [右键查看属性](#右键查看属性)
         - [常见文件头](#常见文件头)
         - [binwalk](#binwalk)
+            - [dd](#dd)
         - [foremost](#foremost)
         - [压缩包分析文件头](#压缩包分析文件头)
             - [RAR](#RAR)
@@ -34,6 +38,7 @@
         - [base64隐写](#base64隐写)
         - [ScreenToGif](#ScreenToGif)
         - [exiftool](#exiftool)
+        - [strings](#strings)
         - [pyc反编译](#pyc反编译)
         - [pyc隐写](#pyc隐写)
         - [LSB隐写](#LSB隐写)
@@ -54,9 +59,16 @@
         - [Ntfs隐写](#Ntfs隐写)
     - [DOC取证](#DOC取证)
         - [密码爆破](#密码爆破)
+        - [隐藏文字](#隐藏文字)
 
 - [文章](#文章)
     - https://ctf-wiki.org/misc/introduction/
+
+## 时间取证
+
+### 时间戳
+
+https://tool.chinaz.com/tools/unixtime.aspx
 ## 内存取证
 
 ### ISO
@@ -108,6 +120,8 @@ python2 vol.py  -f tmp.vmem --profile=Win7SP1x64 mimikatz
 **如何导入十六进制文件**
 
 文件->导入十六进制文件
+
+安装插件：Templates
 ### 编码
 
 ### 修改长宽
@@ -121,6 +135,10 @@ python2 vol.py  -f tmp.vmem --profile=Win7SP1x64 mimikatz
 编辑->粘贴为
 
 编辑->复制为
+
+## IDAT标识缺失
+
+对比好的png，利用png插件来增加IDAT标识
 ## grep
 
 linux之用 grep -r 关键字 快速搜索在目录下面的含有关键字的文件
@@ -182,6 +200,14 @@ binwalk -e xxx
 XML document, version: "1.0"
 
 表示ppt文件、docx文件
+```
+
+### dd
+
+分离指定命令
+
+```bash
+dd if=attachment.jpg of=test.zip skip=21639 bs=1
 ```
 
 ### foremost
@@ -248,7 +274,7 @@ CRC32:CRC本身是“冗余校验码”的意思，CRC32则表示会产生一个
 
 题给的压缩包里面有一个flag.txt，和刚解压出的txt大小相同，则可以明文攻击
 
-攻击时要注意txt重新压缩
+攻击时要注意txt重新压缩（找对应的压缩软件winrar）
 
 用archpr2明文攻击 - 破解类型 纯文本/明文攻击
 
@@ -258,7 +284,7 @@ CRC32:CRC本身是“冗余校验码”的意思，CRC32则表示会产生一个
 ### 爆破压缩包
 
 archpr2 可爆破rar
-
+{vI0_l3t_Ev3rg@RdeN}
 #### 掩码爆破
 
 archpr工具可掩码爆破
@@ -356,12 +382,20 @@ gif分帧工具
 
 用于读写和处理图像
 
-"exiftool(-k).exe" attachment.jpg
+exiftool attachment.jpg
 
 kali:
 
 `exiftool * | grep flag`
 
+
+也可以用kali下的strings 4.png
+
+### strings
+
+ 打印文件中可打印的字符
+
+strings 4.png
 ### pyc反编译
 
 https://tool.lu/pyc/
@@ -539,3 +573,9 @@ https://down.52pojie.cn/?query=
 Accent OFFICE Password Recovery v5.1 CracKed By Hmily[LCG][LSG]
 
 一般猜测四位纯数字
+
+### 隐藏文字
+
+文件->选项->显示->隐藏文字
+
+格式刷或者右键文字隐藏去掉 就可以复制
