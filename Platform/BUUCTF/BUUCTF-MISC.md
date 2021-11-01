@@ -76,6 +76,9 @@
     - [粽子的来历](#粽子的来历)
     - [MRCTF2020-Unravel!!](#MRCTF2020-Unravel!!)
     - [UTCTF2020-basic-forensics](#UTCTF2020-basic-forensics)
+    - [WUSTCTF2020-spaceclub](#WUSTCTF2020-spaceclub)
+    - [CFI-CTF-2018-webLogon-capture](#CFI-CTF-2018-webLogon-capture)
+    - [SCTF2019-电单车](#SCTF2019-电单车)
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -1057,3 +1060,29 @@ key=U2FsdGVkX1/nSQN+hoHL8OwV9iJB/mSdKk5dmusulz4=
 可知是aes解密 得到CCGandGulu ，解压压缩包得到wav
 
 ## UTCTF2020-basic-forensics
+
+010全局搜索flag
+
+## WUSTCTF2020-spaceclub
+
+sublime打开全选有不可见字符，有两个不同长度，一个为6 一个为12
+
+假设 6为0 12为1，写脚本转为二进制得到
+
+011101110110001101110100011001100011001000110000001100100011000001111011011010000011001101110010011001010101111100110001011100110101111101111001001100000111010101110010010111110110011001101100010000000110011101011111011100110011000101111000010111110111001100110001011110000101111101110011001100010111100001111101
+
+转字符得wctf2020{h3re_1s_y0ur_fl@g_s1x_s1x_s1x}
+
+## CFI-CTF-2018-webLogon-capture
+
+抓包追踪流url解密password即可
+
+## SCTF2019-电单车
+
+将wav文件放在audacity中查看波形图
+
+将其转为0和1，细的为0宽的为1，0 0111010010101010011000100 011101001010101001100010
+钥匙信号(PT224X) = 同步引导码(8bit) + 地址位(20bit) + 数据位(4bit) + 停止码(1bit)
+地址位长度为20bit，后4位为数据位即01110100101010100110
+
+flag{01110100101010100110}
