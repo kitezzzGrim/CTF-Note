@@ -90,6 +90,13 @@
     - [Business-Planning-Group](#Business-Planning-Group)
     - [真的很杂](#真的很杂)
     - [UTCTF2020-spectogram](#UTCTF2020-spectogram)
+    - [INSHack2017-sanity](#INSHack2017-sanity)
+    - [ACTF新生赛2020-剑龙](#ACTF新生赛2020-剑龙)
+    - [UTCTF2020-sstv](#UTCTF2020-sstv)
+    - [greatescape](#greatescape)
+    - [INSHack2019-INSAnity](#INSHack2019-INSAnity)
+    - [MRCTF2020-小O的考研复试](#MRCTF2020-小O的考研复试)
+    - [BSidesSF2019-table-tennis](#BSidesSF2019-table-tennis)
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -1277,3 +1284,79 @@ https://www.sonicvisualiser.org/download.html
 ![image](./img/guangpu1.png)
 
 flag{sp3tr0gr4m0ph0n3}
+
+
+## INSHack2017-sanity
+
+flag{Youre_sane_Good_for_you}
+
+## ACTF新生赛2020-剑龙
+
+颜文字解密得到welcom3!
+
+
+`steghide extract -sf hh.jpg `
+
+想要flag吗？解出我的密文吧~
+U2FsdGVkX1/7KeHVl5984OsGUVSanPfPednHpK9lKvp0kdrxO4Tj/Q==
+
+右键图片属性得到@#$%^&%%$)
+
+des解密得到
+
+think about stegosaurus
+
+./stegosaurus -x O_O.pyc
+
+## UTCTF2020-sstv
+
+慢扫描电视（SSTV）
+
+kali安装QSSTV
+
+`apt-get install qsstv`
+
+Options->Configuration->Sound勾选From file
+
+然后点击这个小按钮，选择attachment.wav开始解码
+
+## greatescape
+在tcp流18发现ssc.key,且为TLS协议
+
+![image](./img/greatescape1.png)
+
+流19发现私钥，保存为1.key
+
+![image](./img/greatescape2.png)
+
+接下来编辑->首选项->protocols->TLS，再把1.key导入，就可以解密出内容了
+
+![image](./img/greatescape3.png)
+
+追踪TLS流可发现flag
+
+## GWCTF2019-huyao
+
+频域盲水印
+
+`python2 pinyubwm.py --original huyao.png --image stillhuyao.png --result out.png`
+
+
+## INSHack2019-INSAnity
+
+flag{YouRe_Crazy_and_I_Love_it}
+
+## MRCTF2020-小O的考研复试
+
+```py
+flag=0
+j = 0
+for i in range(19260817):
+    flag = (flag*10+2)%1000000007
+
+print('end:   ',flag)
+```
+
+注意：在循环增加print会耗费数倍时间
+
+## BSidesSF2019-table-tennis

@@ -37,7 +37,8 @@
         - [图片拼接](#图片拼接)
         - [F5-steganography](#F5-steganography)
         - [outguess](#outguess)
-        - [盲水印](盲水印)
+        - [盲水印](#盲水印)
+        - [频域盲水印](#频域盲水印)
         - [base64隐写](#base64隐写)
         - [ScreenToGif](#ScreenToGif)
         - [exiftool](#exiftool)
@@ -54,12 +55,14 @@
             - [tshark](#tshark)
             - [lsass.dmp](#lsass.dmp)
             - [UsbKeyboardDataHacker](#UsbKeyboardDataHacker)
+            - [私钥解密](#私钥解密)
     - [音频取证](#音频取证)
         - [Audacity](#Audacity)
         - [dtmf2num](#dtmf2num)
         - [音频LSB隐写](#音频LSB隐写)
         - [Steghide](#Steghide)
         - [频谱图](#频谱图)
+        - [qsstv](#qsstv)
     - [磁盘取证](#磁盘取证)
         - [Ntfs隐写](#Ntfs隐写)
     - [DOC取证](#DOC取证)
@@ -399,6 +402,69 @@ python bwm.py encode hui.png wm.png hui_with_wm.png
 python bwm.py decode hui.png hui_with_wm.png wm_from_hui.png
 ```
 
+### 频域盲水印
+
+```py
+import cv2
+import numpy as np
+import random
+import os
+from argparse import ArgumentParser
+
+ALPHA = 5
+
+def build_parser():
+    parser = ArgumentParser()
+    parser.add_argument('--original', dest='ori', required=True)
+    parser.add_argument('--image', dest='img', required=True)
+    parser.add_argument('--result', dest='res', required=True)
+    parser.add_argument('--alpha', dest='alpha', default=ALPHA)
+    return parser
+
+def main():
+    parser = build_parser()
+    options = parser.parse_args()
+    ori = options.ori
+    img = options.img
+    res = options.res
+    alpha = options.alpha
+    if not os.path.isfile(ori):
+        parser.error("original image %s does not exist." % ori)
+    if not os.path.isfile(img):
+        parser.error("image %s does not exist." % img)
+    decode(ori, img, res, alpha)
+
+def decode(ori_path, img_path, res_path, alpha):
+    ori = cv2.imread(ori_path)
+    img = cv2.imread(img_path)
+    ori_f = np.fft.fft2(ori)
+    img_f = np.fft.fft2(img)
+    height, width = ori.shape[0], ori.shape[1]
+    watermark = (ori_f - img_f) / alpha
+    watermark = np.real(watermark)
+    res = np.zeros(watermark.shape)
+    random.seed(height + width)
+    x = range(height / 2)
+    y = range(width)
+    random.shuffle(x)
+    random.shuffle(y)
+    for i in range(height / 2):
+        for j in range(width):
+            res[x[i]][y[j]] = watermark[i][j]
+    cv2.imwrite(res_path, res, [int(cv2.IMWRITE_JPEG_QUALITY), 100])
+
+if __name__ == '__main__':
+    main()
+```
+
+```py
+# 如果报错装这个
+pip install opencv-python==4.2.0.32 -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com
+
+# 解密命令
+python2 pinyubwm.py --original huyao.png --image stillhuyao.png --result out.png
+
+```
 ### base64隐写
 
 
@@ -443,8 +509,11 @@ Stegosaurus 是一款隐写工具，它允许我们在 Python 字节码文件( p
 
 python -m stegosaurus aaa.py -s --payload "test{123}"
 
-python stegosaurus.py -x 123.pyc
+./stegosaurus -x O_O.pyc
 
+直接用github releases已经打包好的bin文件 kali下运行
+
+![image](./img/stegosaurus.png)
 ### LSB隐写
 
 1. Stegosolve
@@ -504,16 +573,25 @@ https://www.calormen.com/jslogo/
 
 过滤POST包
 
+```
 http.request.method==POST
+```
 
 去掉404
-
+```
 http.response.code !=404
+```
+
 
 搜索有没有包含"flag"的包
-
+```
 ip.contains "flag"
+```
 
+tcp流
+```
+tcp.stream eq 0
+```
 #### tshark
 
 ```
@@ -550,7 +628,13 @@ https://github.com/WangYihang/UsbKeyboardDataHacker
 
 `python UsbKeyboardHacker.py data.pcap`
 
+### 私钥解密
 
+在流量包发现私钥后另存为本地1.key
+
+编辑->首选项->protocols->TLS 把1.key导入即可，追踪TLS流
+
+例题：greatescape
 ## 音频取证
 
 ### Audacity
@@ -609,6 +693,22 @@ steghide extract -sf 1.jpg
 https://www.sonicvisualiser.org/download.html
 
 layer->Add Peak Frequency Spectrogram或者Shift+K
+
+### qsstv
+
+慢扫描电视（SSTV）
+慢扫描电视（Slow-scan television）是业余无线电爱好者的一种主要图片传输方法，慢扫描电视通过无线电传输和接收单色或彩色静态图片。
+
+
+kali安装QSSTV
+
+`apt-get install qsstv`
+
+Options->Configuration->Sound勾选From file
+
+然后点击这个小按钮，选择attachment.wav开始解码
+
+![image](./img/qsstv.png)
 
 ## 磁盘取证
 

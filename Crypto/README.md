@@ -98,10 +98,11 @@
 - [数学](#数学)
     - [一元二次方程在线](#一元二次方程在线)
 
-- [文章](#)
+- [文章工具](#)
     - https://ctf-wiki.org/crypto/introduction/
     - https://wiki.ffffffff0x.com/1earn/security/crypto/crypto
     - https://zgjx6.github.io/2018/02/14/CTF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/
+    - https://github.com/guyoung/CaptfEncoder
 
 ## 密码学简介
 
