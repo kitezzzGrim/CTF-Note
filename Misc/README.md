@@ -13,6 +13,8 @@
             - [修改长宽](#修改长宽)
             - [粘贴复制二进制](#粘贴复制二进制)
             - [IDAT标识缺失](#IDAT标识缺失)
+        - [ELF](#ELF)
+        - [反转](#反转)
         - [grep](#grep)
         - [stegsolve](#stegsolve)
         - [右键查看属性](#右键查看属性)
@@ -30,6 +32,7 @@
             - [明文攻击](#明文攻击)
         - [爆破压缩包](#爆破压缩包)
             - [掩码爆破](#掩码爆破)
+        - [BGP](#BGP)
         - [7z](#7z)
         - [图片拼接](#图片拼接)
         - [F5-steganography](#F5-steganography)
@@ -55,6 +58,8 @@
         - [Audacity](#Audacity)
         - [dtmf2num](#dtmf2num)
         - [音频LSB隐写](#音频LSB隐写)
+        - [Steghide](#Steghide)
+        - [频谱图](#频谱图)
     - [磁盘取证](#磁盘取证)
         - [Ntfs隐写](#Ntfs隐写)
     - [DOC取证](#DOC取证)
@@ -95,7 +100,19 @@ git clone https://github.com/volatilityfoundation/volatility.git
 ```bash
 # 先通过 imageinfo 获取系统信息
 python2 vol.py -f Target.vmem imageinfo
+python2 vol.py -f ../memory.img imageinfo
 
+# 查看进程
+python2 vol.py -f ../memory.img --profile=Win2003SP1x86 pslist
+
+# 查看cmd命令使用记录
+python2 vol.py -f ../memory.img --profile=Win2003SP1x86 cmdscan
+
+# 将DumpIT.exe进程dump下来 -p为进程号
+python2 vol.py -f ../memory.img --profile=Win2003SP1x86 memdump -p 1992 --dump-dir=../
+
+# 分离dmp
+foremost 1992.dmp
 # 使用hashdump命令获取用户名
 python2 vol.py -f Target.vmem --profile=Win7SP1x64 hashdump
 
@@ -139,6 +156,16 @@ python2 vol.py  -f tmp.vmem --profile=Win7SP1x64 mimikatz
 ## IDAT标识缺失
 
 对比好的png，利用png插件来增加IDAT标识
+
+## ELF
+
+./ 执行即可
+
+## 反转
+
+```bash
+cat 1 | rev
+```
 ## grep
 
 linux之用 grep -r 关键字 快速搜索在目录下面的含有关键字的文件
@@ -299,7 +326,13 @@ archpr工具可掩码爆破
 
 19700000-20000000
 
+### BGP
 
+BPG（Better Portable Graphics）是一种新的图像格式。它的目的是在质量或文件大小有问题时替换 JPEG 图像格式
+
+工具下载地址：https://bellard.org/bpg/
+
+直接将BGP拖动到bgview.exe即可
 ### 7z
 
 linux下7z解压vmdk更完整，windows下7z有问题
@@ -552,6 +585,31 @@ dtmf2num.exe girlfriend.wav
 ### 音频LSB隐写
 
 SilentEye工具解码
+
+### Steghide
+
+Steghide是一个可以将文件隐藏到图片或音频中的工具
+
+```bash
+apt-get install steghide
+
+# 隐藏文件
+steghide embed -cf [图片文件载体] -ef [待隐藏文件]
+steghide embed -cf 1.jpg -ef 1.txt
+
+# 查看图片中嵌入的文件信息
+steghide info 1.jpg
+
+# 提取图片中隐藏的文件
+steghide extract -sf 1.jpg
+```
+
+### 频谱图
+
+https://www.sonicvisualiser.org/download.html
+
+layer->Add Peak Frequency Spectrogram或者Shift+K
+
 ## 磁盘取证
 
 ### Ntfs隐写

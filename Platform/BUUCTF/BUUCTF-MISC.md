@@ -84,6 +84,12 @@
     - [*CTF2019-otaku](#*CTF2019-otaku)
     - [湖南省赛2019-Findme](#湖南省赛2019-Findme)
     - [UTCTF2020-File-Carving](#UTCTF2020-File-Carving)
+    - [GUET-CTF2019-soul-sipse](#GUET-CTF2019-soul-sipse)
+    - [HDCTF2019-你能发现什么蛛丝马迹吗](#HDCTF2019-你能发现什么蛛丝马迹吗)
+    - [voip](#voip)
+    - [Business-Planning-Group](#Business-Planning-Group)
+    - [真的很杂](#真的很杂)
+    - [UTCTF2020-spectogram](#UTCTF2020-spectogram)
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -1172,3 +1178,102 @@ ZmxhZ3s0X3Yzcllfc0lNcExlX1BsY1RVcmVfc3RlZ30=
 flag{4_v3rY_sIMpLe_PlcTUre_steg}
 
 ## UTCTF2020-File-Carving
+
+下载后是一张图片，binwalk分离后有一个ELF文件，直接./执行即可
+
+## GKCTF-2021-签到
+
+在tcp stream eq 5 发现读取flag的http报文，复制十六进制，hex解码-》base64解码得到
+
+```
+wIDIgACIgACIgAyIK0wIjMyIjMyIjMyIjMyIjMyIjMyIjMyIjMyIjMyIjMyIjMyIjMyIjMiCNoQD
+jMyIjMyIjMyIjMyIjMyIjMyIjMyIjMyIjMyIjoQDjACIgACIgACIggDM6EDM6AjMgAzMtMDMtEjM
+t0SLt0SLt0SLt0SLt0SLt0SLt0SLt0SLt0SLt0SLt0SLt0SLt0SLt0SLt0iCNMyIjMyIjMyIjMyI
+6AjMgAzMtMDMtEjMwIjO0eZ62ep5K0wKrQWYwVGdv5EItAiM1Aydl5mK6M6jlfpqnrQDt0SLt0SL
+t0SLt0SLt0SLt0SLt0SLt0SLt0SLt0SLt0SLt0SLt0SLt0SLt0SLK0AIdZavo75mlvlCNMTM6EDM
+z0yMw0SMyAjM6Q7lpb7lmrQDrsCZhBXZ09mTg0CIyUDI3VmbqozoPW+lqeuCN0SLt0SLt0SLt0SL
+sxWZld1V913e7d2ZhFGbsZmZg0lp9iunbW+Wg0lp9iunbW+Wg0lp9iunbW+WK0wMxoTMwoDMyACM
+DN0QDN0QDlWazNXMx0Wbf9lRGRDNDN0ard0Rf9VZl1WbwADIdRampDKilvFIdRampDKilvVKpM2Y
+==QIhM0QDN0Q
+```
+
+根据别的报文可知，是base64反转，kali下：`cat 1 | rev`
+
+## GUET-CTF2019-soul-sipse
+
+out.wav可用Steghide无密码分离出download.txt
+
+https://share.weiyun.com/5wVTIN3
+
+下载得到GUET.png，修改为正确的PNG文件头得到
+
+```
+\u0034\u0030\u0037\u0030\u000d\u000a\u0031\u0032\u0033\u0034\u000d\u000a
+```
+
+unicode解码得到4070 1234
+
+flag{5304}
+
+## HDCTF2019-你能发现什么蛛丝马迹吗
+
+内存取证
+
+```bash
+python2 vol.py -f ../memory.img imageinfo
+```
+
+![image](./img/vol1.png)
+
+可以得知是win2003SP系统,接下来查看进程
+
+```bash
+python2 vol.py -f ../memory.img --profile=Win2003SP1x86 pslist
+```
+
+![image](./img/vol2.png)
+
+发现DumpIT.exe，然后查看cmd命令使用记录
+
+```bash
+python2 vol.py -f ../memory.img --profile=Win2003SP1x86 cmdscan
+```
+![image](./img/vol3.png)
+
+发现Flag字样，将DumpIt.exe这个程序dump下来
+
+
+```bash
+python2 vol.py -f ../memory.img --profile=Win2003SP1x86 memdump -p 1992 --dump-dir=../
+```
+
+foremost分离即可
+
+key: Th1s_1s_K3y00000
+iv: 1234567890123456
+
+jfXvUoypb8p3zvmPks8kJ5Kt0vmEw0xUZyRGOicraY4=
+
+给了key(密码)和iv(偏移量)，AES加密
+
+## voip
+
+## Business-Planning-Group
+
+用010editor打开，在png结尾处发现了BPG：复制下来另存为，用honeyview打开即可
+
+https://bellard.org/bpg/
+
+## 真的很杂
+
+foremost分离出压缩包，后缀改为apk，丢进androidkiller跑
+
+flag{25f991b27fcdc2f7a82a2b34386e81c4}
+
+## UTCTF2020-spectogram
+
+https://www.sonicvisualiser.org/download.html
+
+![image](./img/guangpu1.png)
+
+flag{sp3tr0gr4m0ph0n3}
