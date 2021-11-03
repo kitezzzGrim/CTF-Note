@@ -100,6 +100,12 @@
     - [RCTF2019-disk](#RCTF2019-disk)
     - [key不在这里](#key不在这里)
     - [GKCTF-2021-excel-骚操作](#GKCTF-2021-excel-骚操作)
+    - [INSHack2019-gflag](#INSHack2019-gflag)
+    - [很好的色彩呃？](#很好的色彩呃？)
+    - [ACTF新生赛2020-frequency](#ACTF新生赛2020-frequency)
+    - [XMAN2018排位赛-file](#XMAN2018排位赛-file)
+    - [MRCTF2020-摇滚DJ-建议大声播放](#MRCTF2020-摇滚DJ-建议大声播放)
+    - [大流量分析一](#大流量分析一)
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -1422,3 +1428,66 @@ ctrl+f 替换1为黑色可发现二维码
 G语言运行即可
 
 ## 很好的色彩呃？
+
+ps提每部分色彩，发现只有最后两位不同
+
+![image](./img/secai1.png)
+
+9797112106101115
+
+flag{aapjes}
+
+## ACTF新生赛2020-frequency
+
+属性备注+word隐藏文字组合 base64解码后字频统计
+
+
+## XMAN2018排位赛-file
+
+挂载：指的就是将设备文件中的顶级目录连接到Linux根目录下的某一目录，访问此目录就等同于访问设备。
+
+```bash
+mount attachment.img /mnt
+cd /mnt
+```
+
+修复：
+```bash
+extundelete attachment.img --restore-all
+```
+
+在同级目录下会生成一个名为RECOVERED_FILES的文件夹。flag就在恢复的文件里。
+
+## MRCTF2020-摇滚DJ-建议大声播放
+
+qsstv
+
+## 大流量分析一
+
+
+统计出现最多的IP
+统计 -> IPv4 Statistics -> All Addresses
+
+## SCTF2019-Ready_Player_One
+
+按住W往前走出屏幕就有flag了
+
+flag{You_Are_The_Ready_Player_One!!!For_Sure!!!}
+
+## GUET-CTF2019-520的暗示
+
+猜jpg文件头FF D8 FF E0
+
+和0x33异或
+
+```py
+data = open("photo.dat","rb")
+strs = data.read()
+flag = open("flag.jpg","ab+")
+for i in strs:
+	flag.write(bytes([i ^ 0x33]))
+```
+
+得到一张联通图片，基站定位即可
+
+基站定位，桂林电子科技大学花江校区，即是flag

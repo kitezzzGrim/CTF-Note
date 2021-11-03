@@ -7,6 +7,7 @@
         - [iso](#iso)
         - [Volatility](#Volatility)
         - [fat](#fat)
+        - [挂载修复](#挂载修复)
     - [文件取证](#文件取证)
         - [Notepad++](#Notepad++)
         - [010editor](#010editor)
@@ -14,6 +15,7 @@
             - [修改长宽](#修改长宽)
             - [粘贴复制二进制](#粘贴复制二进制)
             - [IDAT标识缺失](#IDAT标识缺失)
+            - [测试异或](#测试异或)
         - [二维码扫描](#二维码扫描)
             - [QR-Research](#QR-Research)
             - [汉信码](#汉信码)
@@ -36,6 +38,8 @@
             - [明文攻击](#明文攻击)
         - [爆破压缩包](#爆破压缩包)
             - [掩码爆破](#掩码爆破)
+            - [生日爆破](#生日爆破)
+        - [apng](#apng)
         - [BGP](#BGP)
         - [7z](#7z)
         - [vmdk](#vmdk)
@@ -64,6 +68,7 @@
             - [UsbKeyboardDataHacker](#UsbKeyboardDataHacker)
             - [私钥解密](#私钥解密)
             - [流量包提取数据](#流量包提取数据)
+            - [大流量统计](#大流量统计)
     - [音频取证](#音频取证)
         - [Audacity](#Audacity)
         - [dtmf2num](#dtmf2num)
@@ -76,7 +81,8 @@
     - [DOC取证](#DOC取证)
         - [密码爆破](#密码爆破)
         - [隐藏文字](#隐藏文字)
-
+    - [其它](#其它)
+        - [基站定位查询](#基站定位查询)
 - [文章](#文章)
     - https://ctf-wiki.org/misc/introduction/
 
@@ -149,6 +155,25 @@ VeraCrypt 进行挂载
 ![image](./img/veracrypt1.png)
 
 打不开的文件可以winhex->工具->打开磁盘
+
+### 挂载修复
+
+挂载：指的就是将设备文件中的顶级目录连接到Linux根目录下的某一目录，访问此目录就等同于访问设备。
+
+```bash
+mount attachment.img /mnt/cdrom
+cd /mnt
+```
+
+修复：
+```bash
+extundelete attachment.img --restore-all
+```
+
+取消挂载
+```
+umount /mnt/cdrom
+```
 ## 文件取证
 
 ### Notepad++
@@ -179,6 +204,9 @@ VeraCrypt 进行挂载
 
 对比好的png，利用png插件来增加IDAT标识
 
+### 测试异或
+
+取目标的十六进制与猜测的文件头异或，若都为同一个值，存在异或
 ## 二维码
 
 ### QR-Research
@@ -354,6 +382,18 @@ archpr工具可掩码爆破
 #### 生日爆破
 
 19700000-20000000
+
+### apng
+
+https://products.aspose.app/imaging/zh-hans/image-view
+
+免费在线图像查看器
+
+kali下用ffmpeg转为gif
+
+```bash
+ffmpeg -i girl.apng -f gif out.gif
+```
 
 ### BGP
 
@@ -689,6 +729,11 @@ for packet in packets:
             print packet[ICMP].load[-8:]
 
 ```
+
+### 大流量统计
+
+统计出现最多的IP
+统计 -> IPv4 Statistics -> All Addresses
 ## 音频取证
 
 ### Audacity
@@ -791,3 +836,8 @@ Accent OFFICE Password Recovery v5.1 CracKed By Hmily[LCG][LSG]
 文件->选项->显示->隐藏文字
 
 格式刷或者右键文字隐藏去掉 就可以复制
+
+## 其它
+
+### 基站定位查询
+https://v.juhe.cn/cell/Triangulation/index.html?s=inner
