@@ -7,6 +7,8 @@
 - [计算机相关编码](#计算机相关编码)
     - [字母表编码](#字母表编码)
     - [ASCII编码](#ASCII编码)
+    - [URL编码](#URL编码)
+    - [UTF-7编码](#UTF-7编码)
     - [摩斯电码](#摩斯电码)
     - [Base](#Base)
         - [base16](#base16)
@@ -172,6 +174,14 @@ ASCII编码对应十进制:
 
 ![image](./img/ascii.jpg)
 
+### URL编码
+
+https://tool.chinaz.com/tools/urlencode.aspx
+### UTF-7编码
+
+TF-7 (7-位元 Unicode 转换格式（Unicode Transformation Format，简写成 UTF））是一种可变长度字符编码方式，用以将 Unicode 字符以 ASCII 编码的字符串来呈现，可以应用在电子邮件传输之类的应用。
+
+http://toolswebtop.com/text/process/decode/utf-7
 ### 摩斯电码
 
 .. .-.. --- ...- . -.-- --- ..-

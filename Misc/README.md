@@ -6,6 +6,7 @@
     - [内存取证](#内存取证)
         - [iso](#iso)
         - [Volatility](#Volatility)
+        - [fat](#fat)
     - [文件取证](#文件取证)
         - [Notepad++](#Notepad++)
         - [010editor](#010editor)
@@ -13,6 +14,9 @@
             - [修改长宽](#修改长宽)
             - [粘贴复制二进制](#粘贴复制二进制)
             - [IDAT标识缺失](#IDAT标识缺失)
+        - [二维码扫描](#二维码扫描)
+            - [QR-Research](#QR-Research)
+            - [汉信码](#汉信码)
         - [ELF](#ELF)
         - [反转](#反转)
         - [grep](#grep)
@@ -34,6 +38,7 @@
             - [掩码爆破](#掩码爆破)
         - [BGP](#BGP)
         - [7z](#7z)
+        - [vmdk](#vmdk)
         - [图片拼接](#图片拼接)
         - [F5-steganography](#F5-steganography)
         - [outguess](#outguess)
@@ -49,13 +54,16 @@
         - [TTL隐写](#TTL隐写)
         - [时间隐写](#时间隐写)
         - [零宽度字节隐写](#零宽度字节隐写)
-        - [logo语言解释器](#logo语言解释器)
+        - [编程语言](#编程语言)
+            - [logo语言解释器](#logo语言解释器)
+            - [G语言解释器](#G语言解释器)
     - [流量取证](#流量取证)
         - [wireshark](#wireshark)
             - [tshark](#tshark)
             - [lsass.dmp](#lsass.dmp)
             - [UsbKeyboardDataHacker](#UsbKeyboardDataHacker)
             - [私钥解密](#私钥解密)
+            - [流量包提取数据](#流量包提取数据)
     - [音频取证](#音频取证)
         - [Audacity](#Audacity)
         - [dtmf2num](#dtmf2num)
@@ -130,6 +138,17 @@ cp mimikatz.py /volatility/plugins/
 python2 vol.py  -f tmp.vmem --profile=Win7SP1x64 mimikatz
 ```
 
+### fat
+
+VeraCrypt 进行挂载
+
+需要挂载密码，可猜测，任意选一个挂载盘
+
+不同的密码能开启不同的盘
+
+![image](./img/veracrypt1.png)
+
+打不开的文件可以winhex->工具->打开磁盘
 ## 文件取证
 
 ### Notepad++
@@ -156,10 +175,17 @@ python2 vol.py  -f tmp.vmem --profile=Win7SP1x64 mimikatz
 
 编辑->复制为
 
-## IDAT标识缺失
+### IDAT标识缺失
 
 对比好的png，利用png插件来增加IDAT标识
 
+## 二维码
+
+### QR-Research
+
+### 汉信码
+
+需要用手机app 中国编码扫描
 ## ELF
 
 ./ 执行即可
@@ -344,6 +370,12 @@ linux下7z解压vmdk更完整，windows下7z有问题
 7z x flag.vmdk
 ```
 
+### vmdk
+
+VMDK：（VMWare Virtual Machine Disk Format）是虚拟机VMware创建的虚拟硬盘格式，文件存在于VMware文件系统中，被称为VMFS（虚拟机文件系统）
+
+遇到vmdk可以试试使用7z这个压缩软件打开
+
 ### 图片拼接
 
 kali
@@ -390,6 +422,7 @@ outguess -k "my secret key" -d hidden.txt demo.jpg out.jpg
 
 https://github.com/chishaxie/BlindWaterMark
 
+
 ```py
 
 pip install -r requirements.txt
@@ -403,6 +436,8 @@ python bwm.py decode hui.png hui_with_wm.png wm_from_hui.png
 ```
 
 ### 频域盲水印
+
+https://github.com/linyacool/blind-watermark
 
 ```py
 import cv2
@@ -559,7 +594,8 @@ vim打开可以发现有很多<200b>
 ![image](./img/zero2.png)
 
 
-### logo语言解释器
+### 编程语言
+#### logo语言解释器
 
 ```
 cs pu lt 90 fd 500 rt 90 pd fd 100 rt 90 repeat 18[fd 5 rt 10]
@@ -567,6 +603,9 @@ cs pu lt 90 fd 500 rt 90 pd fd 100 rt 90 repeat 18[fd 5 rt 10]
 
 https://www.calormen.com/jslogo/
 
+#### G语言解释器
+
+https://ncviewer.com/
 ## 流量取证
 
 ### Wireshark
@@ -635,6 +674,21 @@ https://github.com/WangYihang/UsbKeyboardDataHacker
 编辑->首选项->protocols->TLS 把1.key导入即可，追踪TLS流
 
 例题：greatescape
+
+### 流量包提取数据
+
+以下是提取ICMP最后8位的例子
+```py
+from scapy.all import *
+
+packets = rdpcap('out.pcapng')
+
+for packet in packets:
+    if packet.haslayer(ICMP):
+        if packet[ICMP].type == 0:
+            print packet[ICMP].load[-8:]
+
+```
 ## 音频取证
 
 ### Audacity

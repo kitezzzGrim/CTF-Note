@@ -97,6 +97,9 @@
     - [INSHack2019-INSAnity](#INSHack2019-INSAnity)
     - [MRCTF2020-小O的考研复试](#MRCTF2020-小O的考研复试)
     - [BSidesSF2019-table-tennis](#BSidesSF2019-table-tennis)
+    - [RCTF2019-disk](#RCTF2019-disk)
+    - [key不在这里](#key不在这里)
+    - [GKCTF-2021-excel-骚操作](#GKCTF-2021-excel-骚操作)
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -1360,3 +1363,62 @@ print('end:   ',flag)
 注意：在循环增加print会耗费数倍时间
 
 ## BSidesSF2019-table-tennis
+
+分析流量包，可发现ICMP包最后都有字符
+
+```py
+from scapy.all import *
+
+packets = rdpcap('out.pcapng')
+
+for packet in packets:
+    if packet.haslayer(ICMP):
+        if packet[ICMP].type == 0:
+            print packet[ICMP].load[-8:]
+```
+
+base64解码得到flag
+
+## RCTF2019-disk
+
+1.010打开发现一部分ctf{unseCure_quick_form4t_vo1ume
+
+2.7z打开发现fat文件，FAT文件就可以使用VeraCrypt进行挂载
+
+密码猜测为：rctf 图片名提示：useless file for ctf just ignore it，图片无用，在password.txt有个Password 2，这里就有个盲区知识点，在挂载输入密码的时候，不同的密码可以进入不同的文件系统
+
+重新挂载，输入密码为：RCTF2019
+
+无法直接打开，通过Winhex->工具->打开磁盘打开这个盘
+
+发现另一半flag
+_and_corrupted_1nner_v0lume}
+
+flag{unseCure_quick_form4t_vo1ume_and_corrupted_1nner_v0lume}
+
+## key不在这里
+
+https://cn.bing.com/search?q=key%E4%B8%8D%E5%9C%A8%E8%BF%99%E9%87%8C&m=10210897103375566531005253102975053545155505050521025256555254995410298561015151985150375568&qs=n&form=QBRE&sp=-1&sc=0-38&sk=&cvid=2CE15329C18147CBA4C1CA97C8E1BB8C
+
+10210897103375566531005253102975053545155505050521025256555254995410298561015151985150375568
+
+十进制转字符 脚本跑即可
+
+## INSHack2018-Self-Congratulation
+
+图片左上角有个一部分二维码 黑为1 白为0 转换为字符即可
+
+## GKCTF-2021-excel-骚操作
+
+将值为1 的单元格显示出来。
+选中若干单元格，右击，单元格格式
+
+ctrl+f 替换1为黑色可发现二维码
+
+最后显示合适的列宽高 汉信码app扫描即可
+
+## INSHack2019-gflag
+
+G语言运行即可
+
+## 很好的色彩呃？
