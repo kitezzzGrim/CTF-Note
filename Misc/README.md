@@ -8,7 +8,9 @@
         - [Volatility](#Volatility)
         - [fat](#fat)
         - [挂载修复](#挂载修复)
+        - [vmdk](#vmdk)
     - [文件取证](#文件取证)
+        - [stegsolve](#stegsolve)
         - [Notepad++](#Notepad++)
         - [010editor](#010editor)
             - [编码](#编码)
@@ -19,48 +21,57 @@
         - [二维码扫描](#二维码扫描)
             - [QR-Research](#QR-Research)
             - [汉信码](#汉信码)
-        - [ELF](#ELF)
-        - [反转](#反转)
-        - [grep](#grep)
-        - [stegsolve](#stegsolve)
-        - [右键查看属性](#右键查看属性)
+            - [修补二维码](#修补二维码)
         - [常见文件头](#常见文件头)
-        - [binwalk](#binwalk)
-            - [dd](#dd)
-        - [foremost](#foremost)
-        - [压缩包分析文件头](#压缩包分析文件头)
-            - [RAR](#RAR)
-        - [加密的压缩包zip](#加密的压缩包zip)
-            - [伪加密](#伪加密)
-            - [弱密码](#弱密码)
-            - [zip-图片](#zip图片)
-            - [CRC32爆破](#CRC32爆破)
-            - [明文攻击](#明文攻击)
-        - [爆破压缩包](#爆破压缩包)
-            - [掩码爆破](#掩码爆破)
-            - [生日爆破](#生日爆破)
-        - [apng](#apng)
-        - [BGP](#BGP)
-        - [7z](#7z)
-        - [vmdk](#vmdk)
-        - [图片拼接](#图片拼接)
-        - [F5-steganography](#F5-steganography)
-        - [outguess](#outguess)
-        - [盲水印](#盲水印)
-        - [频域盲水印](#频域盲水印)
-        - [base64隐写](#base64隐写)
-        - [ScreenToGif](#ScreenToGif)
-        - [exiftool](#exiftool)
-        - [strings](#strings)
-        - [pyc反编译](#pyc反编译)
-        - [pyc隐写](#pyc隐写)
-        - [LSB隐写](#LSB隐写)
-        - [TTL隐写](#TTL隐写)
-        - [时间隐写](#时间隐写)
-        - [零宽度字节隐写](#零宽度字节隐写)
+        - [压缩包](#压缩包)
+            - [压缩包分析文件头](#压缩包分析文件头)
+                - [RAR](#RAR)
+            - [加密的压缩包zip](#加密的压缩包zip)
+                - [伪加密](#伪加密)
+                - [弱密码](#弱密码)
+                - [zip-图片](#zip图片)
+                - [CRC32爆破](#CRC32爆破)
+                - [明文攻击](#明文攻击)
+            - [爆破压缩包](#爆破压缩包)
+                - [掩码爆破](#掩码爆破)
+                - [生日爆破](#生日爆破)
+                - [循环解压](#循环解压)
+        - [隐写类](#隐写类)
+            - [base64隐写](#base64隐写)
+                - [base64转图片](#base64转图片)
+            - [pyc隐写](#pyc隐写)
+                - [pyc反编译](#pyc反编译)
+            - [水印隐写](#水印隐写)
+                - [盲水印](#盲水印)
+                - [频域盲水印](#频域盲水印)
+            - [F5隐写](F5隐写)
+            - [outguess隐写](#outguess隐写)
+            - [LSB隐写](#LSB隐写)
+            - [TTL隐写](#TTL隐写)
+            - [时间隐写](#时间隐写)
+            - [零宽度字节隐写](#零宽度字节隐写)
         - [编程语言](#编程语言)
             - [logo语言解释器](#logo语言解释器)
             - [G语言解释器](#G语言解释器)
+        - [其它常用操作](#其它常用操作)
+            - [Windows](#Windows)
+                - [右键查看属性](#右键查看属性)
+                - [分帧](#分帧)
+                    - [ScreenToGif](#ScreenToGif)
+                - [文字识别](#文字识别)
+                    - [QCR](#QCR)
+            - [Linux](#Linux)
+                - [ELF](#ELF)
+                - [字符串反转](#字符串反转)
+                - [grep](#grep)
+                - [binwalk](#binwalk)
+                - [dd](#dd)
+                - [foremost](#foremost)
+                - [strings](#strings)
+                - [exiftool](#exiftool)
+                - [图片拼接](#图片拼接)
+                - [apng](#apng)
+                - [BGP](#BGP)
     - [流量取证](#流量取证)
         - [wireshark](#wireshark)
             - [tshark](#tshark)
@@ -174,7 +185,24 @@ extundelete attachment.img --restore-all
 ```
 umount /mnt/cdrom
 ```
+#### vmdk
+
+VMDK：（VMWare Virtual Machine Disk Format）是虚拟机VMware创建的虚拟硬盘格式，文件存在于VMware文件系统中，被称为VMFS（虚拟机文件系统）
+
+遇到vmdk可以试试使用7z这个压缩软件打开
+
+linux下7z解压vmdk更完整，windows下7z有问题
+
+```bash
+7z x flag.vmdk
+```
+
+
 ## 文件取证
+
+### stegsolve
+
+Frame Browser:帧浏览器   主要是对GIF之类的动图进行分解，把动图一帧帧的放，有时候会是二维码
 
 ### Notepad++
 
@@ -214,27 +242,13 @@ umount /mnt/cdrom
 ### 汉信码
 
 需要用手机app 中国编码扫描
-## ELF
 
-./ 执行即可
+### 修补二维码
 
-## 反转
+https://merricx.github.io/qrazybox/
 
-```bash
-cat 1 | rev
-```
-## grep
+完成后tools->extract
 
-linux之用 grep -r 关键字 快速搜索在目录下面的含有关键字的文件
-
-`grep -r 'CTF' ./output `
-
-## stegsolve
-
-Frame Browser:帧浏览器   主要是对GIF之类的动图进行分解，把动图一帧帧的放，有时候会是二维码
-### 右键查看属性
-
-右键查看属性-详情信息-备注
 ### 常见文件头
 
 https://vxhly.github.io/views/windows/file-header-and-tail.html#%E4%BB%8E-ultraedit-%E6%8F%90%E5%8F%96%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B4%E4%BF%A1%E6%81%AF
@@ -272,31 +286,6 @@ Quicktime (mov)，                     文件头：6D6F6F76
 Windows Media (asf)，               文件头：3026B2758E66CF11
 MIDI (mid)，                              文件头：4D546864
 ```
-### binwalk
-
-kali
-```py
-binwalk xxx
-binwalk -e xxx
-```
-
-```
-XML document, version: "1.0"
-
-表示ppt文件、docx文件
-```
-
-### dd
-
-分离指定命令
-
-```bash
-dd if=attachment.jpg of=test.zip skip=21639 bs=1
-```
-
-### foremost
-
-kali下用foremost
 
 ### 压缩包分析文件头
 
@@ -383,82 +372,51 @@ archpr工具可掩码爆破
 
 19700000-20000000
 
-### apng
-
-https://products.aspose.app/imaging/zh-hans/image-view
-
-免费在线图像查看器
-
-kali下用ffmpeg转为gif
+#### 循环解压
 
 ```bash
-ffmpeg -i girl.apng -f gif out.gif
-```
-
-### BGP
-
-BPG（Better Portable Graphics）是一种新的图像格式。它的目的是在质量或文件大小有问题时替换 JPEG 图像格式
-
-工具下载地址：https://bellard.org/bpg/
-
-直接将BGP拖动到bgview.exe即可
-### 7z
-
-linux下7z解压vmdk更完整，windows下7z有问题
-
-```bash
-7z x flag.vmdk
-```
-
-### vmdk
-
-VMDK：（VMWare Virtual Machine Disk Format）是虚拟机VMware创建的虚拟硬盘格式，文件存在于VMware文件系统中，被称为VMFS（虚拟机文件系统）
-
-遇到vmdk可以试试使用7z这个压缩软件打开
-
-### 图片拼接
-
-kali
-
-```bash
-montage -tile 10x12 -geometry 200x100+0+0 *jpg flag.jpg
-gaps --image=flag.jpg --generations=40 --population=120 --size=100
-```
-
-环境安装：
-```
-apt-get install graphicsmagick-imagemagick-compat
-git clone https://github.com/nemanja-m/gaps.git
-cd gaps
-python3 set-up.py install
-pip3 install -r requirement.txt
-```
-### F5-steganography
-
-```bash
-git clone https://github.com/matthewgao/F5-steganography
-
-java Extract 文件
-java Extract 文件 -p 密码 -e 输出文件
+while [ "`find . -type f -name '*.tar.xz' | wc -l`" -gt 0 ]; do
+    find -type f -name "*.tar.xz" -exec tar xf '{}' \;
+    -exec rm -- '{}' \;;
+done;
 ```
 
 
-### outguess
 
-```bash
-git clone https://github.com/crorvick/outguess
-cd outguess
-./configure && make && make install
 
-# 加密
-outguess -k "my secret key" -d hidden.txt demo.jpg out.jpg
 
-# 解密
- outguess -k "my secret key" -r out.jpg hidden.txt
 
-```
 
-### 盲水印
+### 隐写类
+
+#### base64隐写
+
+py脚本跑
+##### base64转图片
+
+https://the-x.cn/base64 右下角另存为即可
+#### pyc隐写
+https://github.com/AngelKitty/stegosaurus
+
+https://zhuanlan.zhihu.com/p/51226097
+
+Stegosaurus 是一款隐写工具，它允许我们在 Python 字节码文件( pyc 或 pyo )中嵌入任意 Payload 。由于编码密度较低，因此我们嵌入 Payload 的过程既不会改变源代码的运行行为，也不会改变源文件的文件大小。 Payload 代码会被分散嵌入到字节码之中，所以类似 strings 这样的代码工具无法查找到实际的 Payload 。 Python 的 dis 模块会返回源文件的字节码，然后我们就可以使用 Stegosaurus 来嵌入 Payload 了。
+
+
+python -m stegosaurus aaa.py -s --payload "test{123}"
+
+./stegosaurus -x O_O.pyc
+
+直接用github releases已经打包好的bin文件 kali下运行
+
+![image](./img/stegosaurus.png)
+##### pyc反编译
+
+https://tool.lu/pyc/
+
+#### 水印隐写
+
+##### 盲水印
 
 https://github.com/chishaxie/BlindWaterMark
 
@@ -475,7 +433,7 @@ python bwm.py encode hui.png wm.png hui_with_wm.png
 python bwm.py decode hui.png hui_with_wm.png wm_from_hui.png
 ```
 
-### 频域盲水印
+##### 频域盲水印
 
 https://github.com/linyacool/blind-watermark
 
@@ -540,56 +498,37 @@ pip install opencv-python==4.2.0.32 -i http://mirrors.aliyun.com/pypi/simple --t
 python2 pinyubwm.py --original huyao.png --image stillhuyao.png --result out.png
 
 ```
-### base64隐写
+
+#### F5隐写
+
+F5隐写-steganography
+
+```bash
+git clone https://github.com/matthewgao/F5-steganography
+
+java Extract 文件
+java Extract 文件 -p 密码 -e 输出文件
+```
+
+
+#### outguess隐写
+
+```bash
+git clone https://github.com/crorvick/outguess
+cd outguess
+./configure && make && make install
+
+# 加密
+outguess -k "my secret key" -d hidden.txt demo.jpg out.jpg
+
+# 解密
+ outguess -k "my secret key" -r out.jpg hidden.txt
+
+```
 
 
 
-### ScreenToGif
-
-gif分帧工具
-
-打开编辑器拖进图片即可
-
-### exiftool
-
-跟右键查看属性类似 一个升级版
-
-用于读写和处理图像
-
-exiftool attachment.jpg
-
-kali:
-
-`exiftool * | grep flag`
-
-
-也可以用kali下的strings 4.png
-
-### strings
-
- 打印文件中可打印的字符
-
-strings 4.png
-### pyc反编译
-
-https://tool.lu/pyc/
-
-### pyc隐写
-https://github.com/AngelKitty/stegosaurus
-
-https://zhuanlan.zhihu.com/p/51226097
-
-Stegosaurus 是一款隐写工具，它允许我们在 Python 字节码文件( pyc 或 pyo )中嵌入任意 Payload 。由于编码密度较低，因此我们嵌入 Payload 的过程既不会改变源代码的运行行为，也不会改变源文件的文件大小。 Payload 代码会被分散嵌入到字节码之中，所以类似 strings 这样的代码工具无法查找到实际的 Payload 。 Python 的 dis 模块会返回源文件的字节码，然后我们就可以使用 Stegosaurus 来嵌入 Payload 了。
-
-
-python -m stegosaurus aaa.py -s --payload "test{123}"
-
-./stegosaurus -x O_O.pyc
-
-直接用github releases已经打包好的bin文件 kali下运行
-
-![image](./img/stegosaurus.png)
-### LSB隐写
+#### LSB隐写
 
 1. Stegosolve
 
@@ -600,7 +539,7 @@ https://github.com/livz/cloacked-pixel
 
 python2 lsb.py extract 1.png 1.txt 123456
 
-### TTL隐写
+#### TTL隐写
 
 https://www.cnblogs.com/yunqian2017/p/14671031.html
 
@@ -613,7 +552,7 @@ IP报文在路由间穿梭的时候每经过一个路由，TTL就会减1，当TT
     如：须传送H字符，只需把H字符换成二进制，每两位为一组，每次填充到TTL字段的开头两位并把剩下的6位设置为1（xx111111），这样发4个IP报文即可传送1个字节。
 ```
 
-### 时间隐写
+#### 时间隐写
 
 例子：得到一张flag.gif。考虑一下每帧停顿的时间。
 
@@ -623,7 +562,7 @@ IP报文在路由间穿梭的时候每经过一个路由，TTL就会减1，当TT
 
 会得到一串数字
 
-### 零宽度字节隐写
+#### 零宽度字节隐写
 
 http://330k.github.io/misc_tools/unicode_steganography.html
 
@@ -646,8 +585,131 @@ https://www.calormen.com/jslogo/
 #### G语言解释器
 
 https://ncviewer.com/
-## 流量取证
 
+
+### 其它常用操作
+
+#### Windows
+
+##### 右键查看属性
+
+右键查看属性-详情信息-备注
+
+##### 分帧
+###### ScreenToGif
+
+gif分帧工具
+
+打开编辑器拖进图片即可
+
+#### 文字识别
+
+### QCR
+
+https://www.onlineocr.net/zh_hant/
+
+识别后，需要手动纠正很多容易识别错误的地方
+
+#### Linux
+
+##### ELF
+
+./ 执行即可
+
+##### 字符串反转
+
+```bash
+cat 1 | rev
+```
+##### grep
+
+linux之用 grep -r 关键字 快速搜索在目录下面的含有关键字的文件
+
+`grep -r 'CTF' ./output `
+
+##### binwalk
+
+kali
+```py
+binwalk xxx
+binwalk -e xxx
+```
+
+```
+XML document, version: "1.0"
+
+表示ppt文件、docx文件
+```
+
+##### dd
+
+分离指定命令
+
+```bash
+dd if=attachment.jpg of=test.zip skip=21639 bs=1
+```
+
+##### foremost
+
+kali下用foremost
+
+##### strings
+
+ 打印文件中可打印的字符
+
+strings 4.png
+
+##### exiftool
+
+跟右键查看属性类似 一个升级版
+
+用于读写和处理图像
+
+exiftool attachment.jpg
+
+kali:
+
+`exiftool * | grep flag`
+
+
+也可以用kali下的strings 4.png
+
+##### 图片拼接
+
+kali
+
+```bash
+montage -tile 10x12 -geometry 200x100+0+0 *jpg flag.jpg
+gaps --image=flag.jpg --generations=40 --population=120 --size=100
+```
+
+环境安装：
+```
+apt-get install graphicsmagick-imagemagick-compat
+git clone https://github.com/nemanja-m/gaps.git
+cd gaps
+python3 set-up.py install
+pip3 install -r requirement.txt
+```
+##### apng
+
+https://products.aspose.app/imaging/zh-hans/image-view
+
+免费在线图像查看器。建议用这个 更高清准确点
+
+kali下用ffmpeg转为gif
+
+```bash
+ffmpeg -i girl.apng -f gif out.gif
+```
+##### BGP
+
+BPG（Better Portable Graphics）是一种新的图像格式。它的目的是在质量或文件大小有问题时替换 JPEG 图像格式
+
+工具下载地址：https://bellard.org/bpg/
+
+直接将BGP拖动到bgview.exe即可
+## 流量取证
 ### Wireshark
 
 过滤POST包
@@ -663,8 +725,10 @@ http.response.code !=404
 
 
 搜索有没有包含"flag"的包
+搜索私钥
 ```
 ip.contains "flag"
+tcp contains "KEY"
 ```
 
 tcp流

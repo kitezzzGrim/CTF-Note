@@ -106,6 +106,14 @@
     - [XMAN2018排位赛-file](#XMAN2018排位赛-file)
     - [MRCTF2020-摇滚DJ-建议大声播放](#MRCTF2020-摇滚DJ-建议大声播放)
     - [大流量分析一](#大流量分析一)
+    - [SCTF2019-Ready_Player_One](#SCTF2019-Ready_Player_One)
+    - [GUET-CTF2019-520的暗示](#GUET-CTF2019-520的暗示)
+    - [GKCTF-2021-你知道apng吗](#GKCTF-2021-你知道apng吗)
+    - [DDCTF2018-流量分析](#DDCTF2018-流量分析)
+    - [Beautiful_Side](#Beautiful_Side)
+    - [DDCTF2018-第四扩展FS](#DDCTF2018-第四扩展FS)
+    - [我爱Linux](#我爱Linux)
+    - [INSHack2018-42.tar.xz](#INSHack2018-42.tar.xz)
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -1491,3 +1499,154 @@ for i in strs:
 得到一张联通图片，基站定位即可
 
 基站定位，桂林电子科技大学花江校区，即是flag
+
+## GKCTF-2021-你知道apng吗
+
+可以用ffmpeg转化为gif图片，再用screentogif分帧
+
+用PS编辑->变换->扭曲，到这个程度可扫描
+
+![image](./img/apng1.png)
+
+flag{a3c7e4e5
+
+第二个二维码扫描stegsolve -9b9d
+
+第三个二维码直接扫 -ad20
+
+第四个 -0327-288a235370ea}
+
+## DDCTF2018-流量分析
+
+给了pcap流量包和tip
+
+```
+流量分析
+200pt
+
+提示一：若感觉在中间某个容易出错的步骤，若有需要检验是否正确时，可以比较MD5: 90c490781f9c320cd1ba671fcb112d1c
+提示二：注意补齐私钥格式
+-----BEGIN RSA PRIVATE KEY-----
+XXXXXXX
+-----END RSA PRIVATE KEY-----
+```
+
+流量包中搜索KEY
+`tcp contains "KEY"`
+
+找到base64转为图片，发现密钥，用在线QRC识别后修补另存为本地1.key
+
+-----BEGIN RSA PRIVATE KEY-----
+MIICXAIBAAKBgQDCm6vZmclJrVH1AAyGuCuSSZ8O+mIQiOUQCvN0HYbj8153JfSQ
+LsJIhbRYS7+zZ1oXvPemWQDv/u/tzegt58q4ciNmcVnq1uKiygc6QOtvT7oiSTyO
+vMX/q5iE2iClYUIHZEKX3BjjNDxrYvLQzPyGD1EY2DZIO6T45FNKYC2VDwIDAQAB
+AoGAbtWUKUkx37lLfRq7B5sqjZVKdpBZe4tL0jg6cX5Djd3Uhk1inR9UXVNw4/y4
+QGfzYqOn8+Cq7QSoBysHOeXSiPztW2cL09ktPgSlfTQyN6ELNGuiUOYnaTWYZpp/
+QbRcZ/eHBulVQLlk5M6RVs9BLI9X08RAl7EcwumiRfWas6kCQQDvqC0dxl2wIjwN
+czILcoWLig2c2u71Nev9DrWjWHU8eHDuzCJWvOUAHIrkexddWEK2VHd+F13GBCOQ
+ZCM4prBjAkEAz+ENahsEjBE4+7H1HdIaw0+goe/45d6A2ewO/lYH6dDZTAzTW9z9
+kzV8uz+Mmo5163/JtvwYQcKF39DJGGtqZQJBAKa18XR16fQ9TFL64EQwTQ+tYBzN
++04eTWQCmH3haeQ/0Cd9XyHBUveJ42Be8/jeDcIx7dGLxZKajHbEAfBFnAsCQGq1
+AnbJ4Z6opJCGu+UP2c8SC8m0bhZJDelPRC8IKE28eB6SotgP61ZqaVmQ+HLJ1/wH
+/5pfc3AmEyRdfyx6zwUCQCAH4SLJv/kprRz1a1gx8FR5tj4NeHEFFNEgq1gmiwmH
+2STT5qZWzQFz8NRe+/otNOHBR2Xk4e8IS+ehIJ3TvyE=
+-----END RSA PRIVATE KEY-----
+
+
+
+编辑->首选项->Protocols->TLS->RSA keys list Edit->添加key file->完成
+
+追踪http流即可
+
+
+## Beautiful_Side
+
+foremost分离得到图片，是右半张二维码
+
+https://merricx.github.io/qrazybox/
+
+将其上传到 QRazyBox 尝试修复二维码。在纠错等级为高，遮掩层模式为 2 的时候发现可以成功提取出 flag。
+
+记得，补全黑色部分后，也要把白色的部分填补上，因为灰色是算“空”的。
+
+然后点击“Tools”，
+
+选择“Extract QR Information”
+
+
+
+![image](./img/xiubu1.png)
+
+## DDCTF2018-第四扩展FS
+
+binwalk分离出压缩包 密码为右键属性的备注
+
+字频分析即可
+
+## 我爱Linux
+
+分析图片，找PNG图片结尾 FF D9 复制后面字符另存为文本
+
+考点：python反序列化 +坐标转换
+
+```py
+import pickle
+
+fp = open("123.txt","rb+")
+fw = open('pickle.txt', 'w')
+a=pickle.load(fp)
+pickle=str(a)
+fw.write( pickle )
+fw.close()
+fp.close()
+```
+
+```py
+fw = open("pickle.txt","r")
+text=fw.read( )
+i=0
+a=0
+
+while i<len(text)+1:
+    if(text[i]==']'):
+       print('\n')
+       a=0
+    elif(text[i]=='('):
+        if(text[i+2]==','):
+            b=text[i+1]
+            d=text[i+1]
+            b=int(b)-int(a)
+            c=1
+            while c<b:
+                print(" ", end="")
+                c += 1
+            print(text[i+5], end="")
+            a=int(d)
+        else:
+            b=text[i+1]+text[i+2]
+            d=text[i+1]+text[i+2]
+            b=int(b)-int(a)
+            c=1
+            while c<b:
+                print(" ", end="")
+                c += 1
+            print(text[i+6], end="")
+            a=int(d)
+    i +=1
+```
+
+## INSHack2018-42.tar.xz
+
+- 考点：循环解压压缩包
+
+```bash
+while [ "`find . -type f -name '*.tar.xz' | wc -l`" -gt 0 ]; do
+    find -type f -name "*.tar.xz" -exec tar xf '{}' \;
+    -exec rm -- '{}' \;;
+done;
+```
+
+bash test即可
+
+当脚本运行开始报错时停止，得到名为flag的文件，strings命令查看一下字符串即可得到flag
+
