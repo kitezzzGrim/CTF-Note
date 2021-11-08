@@ -114,6 +114,15 @@
     - [DDCTF2018-第四扩展FS](#DDCTF2018-第四扩展FS)
     - [我爱Linux](#我爱Linux)
     - [INSHack2018-42.tar.xz](#INSHack2018-42.tar.xz)
+    - [XMAN2018排位赛-AutoKey](#XMAN2018排位赛-AutoKey)
+    - [QCTF2018-X-man-Keyword](#QCTF2018-X-man-Keyword)
+    - [GKCTF2021-FireFox-Forensics](#GKCTF2021-FireFox-Forensics)
+    - [INSHack2017-hiding-in-plain-sight](#INSHack2017-hiding-in-plain-sight)
+    - [HDCTF2019-信号分析](#HDCTF2019-信号分析)
+    - [BSidesSF2019-diskimage](#BSidesSF2019-diskimage)
+    - [RoarCTF2019-forensic](#RoarCTF2019-forensic)
+
+
 ## 二维码扫描
 
 sudo apt install zbar-tools
@@ -1650,3 +1659,95 @@ bash test即可
 
 当脚本运行开始报错时停止，得到名为flag的文件，strings命令查看一下字符串即可得到flag
 
+## XMAN2018排位赛-AutoKey
+
+打开wireshark发现全是usb流量，用UsbKeyboardDataHacker
+
+`python3 UsbKeyboardDataHacker.py attachment.pcapng`
+
+
+<CAP>是转换大小写的键，<DEL>就是删除键
+
+得到：MPLRVFFCZEYOUJFJKYBXGZVDGQAURKXZOLKOLVTUFBLRNJESQITWAHXNSIJXPNMPLSHCJBTYHZEALOGVIAAISSPLFHLFSWFEHJNCRWHTINSMAMBVEXPZIZ
+
+使用autokey爆破脚本即可，在py脚本修改密文
+
+![image](./img/autokey1.png)
+
+
+flag{JHAWLZKEWXHNCDHSLWBAQJTUQZDXZQPF}
+
+## QCTF2018-X-man-Keyword
+
+stegsolve lsb观察东西，猜测是LSB隐写
+
+`python lsb.py extract attachment.png 1.txt lovekfc`
+
+PVSF{vVckHejqBOVX9C1c13GFfkHJrjIQeMwf}
+
+Nihilist密码
+
+```py
+import string
+# enc是待解密的，grid的前半部分是题目给的密钥，然后从A到Z把其他的放到后面
+enc='PVSF{vVckHejqBOVX9C1c13GFfkHJrjIQeMwf}'
+grid='LOVEKFC'+'ABDGHIJMNPQRSTUWXY'
+flag=''
+
+for i in enc:
+    if i in string.ascii_lowercase:
+        index=grid.lower().index(i)
+        flag+=string.ascii_lowercase[index]
+        continue
+    if i in string.ascii_uppercase:
+        index=grid.upper().index(i)
+        flag+=string.ascii_uppercase[index]
+        continue
+    flag+=i
+print flag
+```
+
+flag{cCgeLdnrIBCX9G1g13KFfeLNsnMRdOwf}
+
+## GKCTF2021-FireFox-Forensics
+
+下载附件看到一个sqlite的数据库文件和一个json文件
+
+`python3 firepwd.py logins.json `
+
+flag{l337_h4xx0r5_c0mmun1c473_w17h_PNGs}
+
+## INSHack2017-hiding-in-plain-sight
+
+foremost即可
+
+## HDCTF2019-信号分析
+
+## BSidesSF2019-diskimage
+
+```
+zsteg -a attachment.png
+```
+
+![image](./img/zsteg1.png)
+
+发现磁盘数据
+
+分离FAT格式的数据
+```
+zsteg -e 'b8,rgb,lsb,xy' attachment.png > data.dat
+```
+
+
+使用TestDisk对文件进行分析
+```
+testdisk data.dat
+```
+
+一路回车 找到_LAG.ICO
+
+![image](./img/zsteg2.png)
+
+https://blog.csdn.net/mochu7777777/article/details/110079540
+
+## RoarCTF2019-forensic

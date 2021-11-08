@@ -74,6 +74,7 @@
         - [音符密码](#音符密码)
         - [敲击码](#敲击码)
         - [四方密码](#四方密码)
+        - [Nihilist](#Nihilist)
 - [其它密码](#其它密码)
     - [颜文字加密解密](#颜文字加密解密)
     - [中文电码表](#中文电码表)
@@ -1679,6 +1680,38 @@ he lp me ob iw an ke no bi的加密结果：FY NF NE HW BX AF FO KH MD
 在线加密解密
 - http://www.metools.info/code/four-square244.html
 - http://www.hiencode.com/four.html
+
+
+#### Nihilist
+
+矩阵式替换密码，也称关键字密码 属于Polybius密码的变形种类
+
+原26个英文字母为ABCDEFGHIJKLMNOPQRSTUVWXYZ
+把关键字提前后为LOVEKFCABDGHIJMNPQRSTUWXYZ
+
+在置换后的序列里可以发现对应关系P=Q，V=C，S=T，F=F
+
+```py
+import string
+# enc是待解密的，grid的前半部分是题目给的密钥，然后从A到Z把其他的放到后面
+enc='PVSF{vVckHejqBOVX9C1c13GFfkHJrjIQeMwf}' # 密文
+grid='LOVEKFC'+'ABDGHIJMNPQRSTUWXY' # 关键字
+flag=''
+
+for i in enc:
+    if i in string.ascii_lowercase:
+        index=grid.lower().index(i)
+        flag+=string.ascii_lowercase[index]
+        continue
+    if i in string.ascii_uppercase:
+        index=grid.upper().index(i)
+        flag+=string.ascii_uppercase[index]
+        continue
+    flag+=i
+print flag
+```
+
+`python nihilist.py`
 
 ## 其它密码
 

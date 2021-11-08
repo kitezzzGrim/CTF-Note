@@ -72,11 +72,13 @@
                 - [图片拼接](#图片拼接)
                 - [apng](#apng)
                 - [BGP](#BGP)
+                - [zsteg](#zsteg)
     - [流量取证](#流量取证)
         - [wireshark](#wireshark)
             - [tshark](#tshark)
             - [lsass.dmp](#lsass.dmp)
-            - [UsbKeyboardDataHacker](#UsbKeyboardDataHacker)
+            - [USB流量](#USB流量)
+                - [UsbKeyboardDataHacker](#UsbKeyboardDataHacker)
             - [私钥解密](#私钥解密)
             - [流量包提取数据](#流量包提取数据)
             - [大流量统计](#大流量统计)
@@ -92,6 +94,11 @@
     - [DOC取证](#DOC取证)
         - [密码爆破](#密码爆破)
         - [隐藏文字](#隐藏文字)
+    - [密码取证](#密码取证)
+        - [古典密码类](#古典密码类)
+            - [autokey爆破](#autokey爆破)
+        - [登录取证](#登录取证)
+            - [Mozilla](#Mozilla)
     - [其它](#其它)
         - [基站定位查询](#基站定位查询)
 - [文章](#文章)
@@ -530,11 +537,13 @@ outguess -k "my secret key" -d hidden.txt demo.jpg out.jpg
 
 #### LSB隐写
 
+一般判断方式 stegsolve lsb观察有东西
+
 1. Stegosolve
 
 - Anglyse-Data-Extract 选择Bit Planes 的0 红绿蓝都试试 -save bin
 
-2.？
+
 https://github.com/livz/cloacked-pixel
 
 python2 lsb.py extract 1.png 1.txt 123456
@@ -709,6 +718,30 @@ BPG（Better Portable Graphics）是一种新的图像格式。它的目的是�
 工具下载地址：https://bellard.org/bpg/
 
 直接将BGP拖动到bgview.exe即可
+
+##### zsteg
+
+zsteg可以检测PNG和BMP图片里的隐写数据。
+
+```bash
+git clone https://github.com/zed-0xff/zsteg
+cd zsteg/
+gem install zsteg
+
+
+# 查看LSB信息
+zsteg pcat.png
+
+# 查看所有通道全部信息
+zsteg -a 1.png
+
+# 发现DOS扇区数据，用-e命令提取
+zsteg -e "b8,rgb,lsb,xy" att.png > diskimage.dat
+
+# testdisk恢复文件
+testdisk diskimage.dat
+```
+
 ## 流量取证
 ### Wireshark
 
@@ -762,14 +795,16 @@ sekurlsa::logonpasswords full
 
 ```
 
+### USB流量
 
-### UsbKeyboardDataHacker
-
-usb取证 wireshark里全是USB协议流量数据包可用UsbKeyboardDataHacker工具提取
+usb取证 wireshark里全是USB协议流量数据包
+#### UsbKeyboardDataHacker
 
 https://github.com/WangYihang/UsbKeyboardDataHacker
 
-`python UsbKeyboardHacker.py data.pcap`
+虚拟机下运行
+
+`python3 UsbKeyboardHacker.py data.pcap`
 
 ### 私钥解密
 
@@ -901,6 +936,43 @@ Accent OFFICE Password Recovery v5.1 CracKed By Hmily[LCG][LSG]
 
 格式刷或者右键文字隐藏去掉 就可以复制
 
+
+
+## 密码取证
+### 古典密码类
+#### autokey爆破
+
+py文件下载地址
+
+```
+http://www.practicalcryptography.com/cryptanalysis/stochastic-searching/cryptanalysis-autokey-cipher/
+
+配置文件下载地址
+
+http://www.practicalcryptography.com/cryptanalysis/text-characterisation/quadgrams/#a-python-implementation
+```
+
+需要先下载三个配置文件，两个txt一个ngram_score.py文件
+
+安装pycipher库
+
+`pip install pycipher`
+
+py文件里改一下要爆破的字符串，python2环境运行
+
+`python2 break_autokey.py`
+
+### 登录取证
+
+#### Mozilla
+
+https://github.com/lclevy/firepwd
+
+Firepwd.py，一个用于解密 Mozilla 保护密码的开源工具
+
+默认情况下，firepwd.py 处理当前目录中的 key3.db（或 key4.db）和 signons.sqlite（logins.json）文件，但可以使用 -d 选项提供替代目录。不要忘记末尾的“/”。
+
+`python3 firepwd.py logins.json `
 ## 其它
 
 ### 基站定位查询
