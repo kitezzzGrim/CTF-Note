@@ -121,6 +121,8 @@
     - [HDCTF2019-信号分析](#HDCTF2019-信号分析)
     - [BSidesSF2019-diskimage](#BSidesSF2019-diskimage)
     - [RoarCTF2019-forensic](#RoarCTF2019-forensic)
+    - [INSHack2017-remote-multimedia-controller](#INSHack2017-remote-multimedia-controller)
+    - [INSHack2017-10-cl0v3rf13ld-lane-signal](#INSHack2017-10-cl0v3rf13ld-lane-signal)
 
 
 ## 二维码扫描
@@ -1751,3 +1753,28 @@ testdisk data.dat
 https://blog.csdn.net/mochu7777777/article/details/110079540
 
 ## RoarCTF2019-forensic
+
+## INSHack2017-remote-multimedia-controller
+
+流量包有一段很长的base64编码 循环解码即可
+
+## INSHack2017-10-cl0v3rf13ld-lane-signal
+
+
+010或者file命令可发现是jpeg文件，修改后缀即可
+
+binwalk分离出png图片
+
+![image](./img/file1.png)
+
+左下角有摩斯电码.... . .-.. .--. -- . 解码得到helpme
+
+binwalk信息表示png后还有些东西 010打开在png结尾处发现ogg格式,复制另存为ogg，用audacity打开
+
+![image](./img/ogg1.png)
+
+明显的摩斯电码
+
+.. -. ... .- -.--. -- ----- .-. ..... ...-- ..--.- .-- .---- .-.. .-.. ..--.- -. ...-- ...- ...-- .-. ..--.- ....- --. ...-- -.-.-- -.--.-
+
+flag{M0R53_W1LL_N3V3R_4G3!}

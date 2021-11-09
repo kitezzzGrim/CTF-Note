@@ -22,7 +22,6 @@
             - [QR-Research](#QR-Research)
             - [汉信码](#汉信码)
             - [修补二维码](#修补二维码)
-        - [常见文件头](#常见文件头)
         - [压缩包](#压缩包)
             - [压缩包分析文件头](#压缩包分析文件头)
                 - [RAR](#RAR)
@@ -70,9 +69,14 @@
                 - [strings](#strings)
                 - [exiftool](#exiftool)
                 - [图片拼接](#图片拼接)
+                - [zsteg](#zsteg)
+                - [file](#file)
+        - [文件格式](#文件格式)
+            - [常见文件头](#常见文件头)
+            - [其它文件](#其它文件)
                 - [apng](#apng)
                 - [BGP](#BGP)
-                - [zsteg](#zsteg)
+                - [OGG](#OGG)
     - [流量取证](#流量取证)
         - [wireshark](#wireshark)
             - [tshark](#tshark)
@@ -256,43 +260,7 @@ https://merricx.github.io/qrazybox/
 
 完成后tools->extract
 
-### 常见文件头
 
-https://vxhly.github.io/views/windows/file-header-and-tail.html#%E4%BB%8E-ultraedit-%E6%8F%90%E5%8F%96%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B4%E4%BF%A1%E6%81%AF
-
-```
-JPEG (jpg)，                        　　文件头：FFD8FF E0　　　　　　　　　　　　　　　　　　　　 文件尾：FF D9　　　　　　　　　　　　　　　
-PNG (png)，                       　　 文件头：89504E47　　　　　　　　　　　　　　　　　　　　　　文件尾：AE 42 60 82
-GIF89 (gif)，                           　　文件头：4749463839　　　　　　　　　　　　　　　　　　　　　　文件尾：00 3B                                                                 ZIP Archive (zip)，                     文件头：504B0304　　　　　　　　　　　　　　　　　　　　　　文件尾：50 4B
-
-TIFF (tif)，                           　  文件头：49492A00　　　　　　　　　　　　　　　　　　　　　　文件尾：
-Windows Bitmap (bmp)，      　  文件头：424D　　　　　　　　　　　　　　　　　　　　　　　　 文件尾：
-CAD (dwg)，                        　  文件头：41433130　　　　　　　　　　　　　　　　　　　　　　文件尾：
-Adobe Photoshop (psd)，          文件头：38425053　　　　　　　　　　　　　　　　　　　　　　文件尾：
-Rich Text Format (rtf)，             文件头：7B5C727466　　　　　　　　　　　　　　　　　　　　  文件尾：
-XML (xml)，                              文件头：3C3F786D6C　　　　　　　　　　　　　　　　　　　　 文件尾：
-HTML (html)，                           文件头：68746D6C3E
-Email [thorough only] (eml)，     文件头：44656C69766572792D646174653A
-Outlook Express (dbx)，            文件头：CFAD12FEC5FD746F
-Outlook (pst)，                         文件头：2142444E
-MS Word/Excel (xls.or.doc)，      文件头：D0CF11E0
-MS Access (mdb)，                    文件头：5374616E64617264204A
-WordPerfect (wpd)，                  文件头：FF575043
-Adobe Acrobat (pdf)，               文件头：255044462D312E
-Quicken (qdf)，                         文件头：AC9EBD8F
-Windows Password (pwl)，         文件头：E3828596
-
-RAR Archive (rar)，                    文件头：526172211A0700 文件尾：0700
-Wave (wav)，                            文件头：57415645
-AVI (avi)，                                 文件头：41564920
-Real Audio (ram)，                     文件头：2E7261FD
-Real Media (rm)，                       文件头：2E524D46
-MPEG (mpg)，                           文件头：000001BA
-MPEG (mpg)，                           文件头：000001B3
-Quicktime (mov)，                     文件头：6D6F6F76
-Windows Media (asf)，               文件头：3026B2758E66CF11
-MIDI (mid)，                              文件头：4D546864
-```
 
 ### 压缩包分析文件头
 
@@ -700,25 +668,6 @@ cd gaps
 python3 set-up.py install
 pip3 install -r requirement.txt
 ```
-##### apng
-
-https://products.aspose.app/imaging/zh-hans/image-view
-
-免费在线图像查看器。建议用这个 更高清准确点
-
-kali下用ffmpeg转为gif
-
-```bash
-ffmpeg -i girl.apng -f gif out.gif
-```
-##### BGP
-
-BPG（Better Portable Graphics）是一种新的图像格式。它的目的是在质量或文件大小有问题时替换 JPEG 图像格式
-
-工具下载地址：https://bellard.org/bpg/
-
-直接将BGP拖动到bgview.exe即可
-
 ##### zsteg
 
 zsteg可以检测PNG和BMP图片里的隐写数据。
@@ -742,6 +691,79 @@ zsteg -e "b8,rgb,lsb,xy" att.png > diskimage.dat
 testdisk diskimage.dat
 ```
 
+##### file
+
+```bash
+file xxx
+```
+可查看文件详情信息
+
+![image](./img/file1.png)
+
+### 文件格式
+
+#### 常见文件头
+
+https://vxhly.github.io/views/windows/file-header-and-tail.html#%E4%BB%8E-ultraedit-%E6%8F%90%E5%8F%96%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B4%E4%BF%A1%E6%81%AF
+
+```
+JPEG (jpg)，                        　　文件头：FFD8FF E0　　　　　　　　　　　　　　　　　　　　 文件尾：FF D9　　　　　　　　　　　　　　　
+PNG (png)，                       　　 文件头：89504E47　　　　　　　　　　　　　　　　　　　　　　文件尾：AE 42 60 82
+GIF89 (gif)，                           　　文件头：4749463839　　　　　　　　　　　　　　　　　　　　　　文件尾：00 3B                                                                 ZIP Archive (zip)，                     文件头：504B0304　　　　　　　　　　　　　　　　　　　　　　文件尾：50 4B
+
+TIFF (tif)，                           　  文件头：49492A00　　　　　　　　　　　　　　　　　　　　　　文件尾：
+Windows Bitmap (bmp)，      　  文件头：424D　　　　　　　　　　　　　　　　　　　　　　　　 文件尾：
+CAD (dwg)，                        　  文件头：41433130　　　　　　　　　　　　　　　　　　　　　　文件尾：
+Adobe Photoshop (psd)，          文件头：38425053　　　　　　　　　　　　　　　　　　　　　　文件尾：
+Rich Text Format (rtf)，             文件头：7B5C727466　　　　　　　　　　　　　　　　　　　　  文件尾：
+XML (xml)，                              文件头：3C3F786D6C　　　　　　　　　　　　　　　　　　　　 文件尾：
+HTML (html)，                           文件头：68746D6C3E
+Email [thorough only] (eml)，     文件头：44656C69766572792D646174653A
+Outlook Express (dbx)，            文件头：CFAD12FEC5FD746F
+Outlook (pst)，                         文件头：2142444E
+MS Word/Excel (xls.or.doc)，      文件头：D0CF11E0
+MS Access (mdb)，                    文件头：5374616E64617264204A
+WordPerfect (wpd)，                  文件头：FF575043
+Adobe Acrobat (pdf)，               文件头：255044462D312E
+Quicken (qdf)，                         文件头：AC9EBD8F
+Windows Password (pwl)，         文件头：E3828596
+
+RAR Archive (rar)，                    文件头：526172211A0700 文件尾：0700
+Wave (wav)，                            文件头：57415645
+AVI (avi)，                                 文件头：41564920
+Real Audio (ram)，                     文件头：2E7261FD
+Real Media (rm)，                       文件头：2E524D46
+MPEG (mpg)，                           文件头：000001BA
+MPEG (mpg)，                           文件头：000001B3
+Quicktime (mov)，                     文件头：6D6F6F76
+Windows Media (asf)，               文件头：3026B2758E66CF11
+MIDI (mid)，                              文件头：4D546864
+```
+
+#### 其它文件
+
+##### apng
+
+https://products.aspose.app/imaging/zh-hans/image-view
+
+免费在线图像查看器。建议用这个 更高清准确点
+
+kali下用ffmpeg转为gif
+
+```bash
+ffmpeg -i girl.apng -f gif out.gif
+```
+##### BGP
+
+BPG（Better Portable Graphics）是一种新的图像格式。它的目的是在质量或文件大小有问题时替换 JPEG 图像格式
+
+工具下载地址：https://bellard.org/bpg/
+
+直接将BGP拖动到bgview.exe即可
+
+##### OGG
+
+OGG是一种音频压缩格式，扩展为.ogg,用audacity打开
 ## 流量取证
 ### Wireshark
 
