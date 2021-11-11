@@ -123,6 +123,9 @@
     - [RoarCTF2019-forensic](#RoarCTF2019-forensic)
     - [INSHack2017-remote-multimedia-controller](#INSHack2017-remote-multimedia-controller)
     - [INSHack2017-10-cl0v3rf13ld-lane-signal](#INSHack2017-10-cl0v3rf13ld-lane-signal)
+    - [NPUCTF2020-misc-碰上彩虹吃定彩虹](#NPUCTF2020-misc-碰上彩虹吃定彩虹)
+    - [SUCTF2018-dead_z3r0](#SUCTF2018-dead_z3r0)
+    - [INSHack2018-so-deep](#INSHack2018-so-deep)
 
 
 ## 二维码扫描
@@ -1778,3 +1781,91 @@ binwalk信息表示png后还有些东西 010打开在png结尾处发现ogg格式
 .. -. ... .- -.--. -- ----- .-. ..... ...-- ..--.- .-- .---- .-.. .-.. ..--.- -. ...-- ...- ...-- .-. ..--.- ....- --. ...-- -.-.-- -.--.-
 
 flag{M0R53_W1LL_N3V3R_4G3!}
+
+## NPUCTF2020-misc-碰上彩虹吃定彩虹
+
+![image](./img/NPUCTF2020-1.png)
+
+- 考点：零字节宽度隐写
+
+根据图片提示以及vim查看发现有很多200b 则存在零字节隐写，拿去网站解密
+
+![image](./img/npuctf2020-2.png)
+
+得到do u know NTFS?
+
+考点：NTFS隐写
+
+用NTFSstreamseditor2读取
+
+=wwZlZ=8W=cndwljcdcG8wdj8W8Z8dZllGjZc=8lWjnlWd8WwZ5j=l8ccWZcZGjd5ZwZ5WZ8d=Zcwjwl5Gnn=WdwcwlnWd5lGnZWlnnwdnjnw8ndnc58d5cndl=njZl=WddjwWWwZllj5c5jGwZnZ5W=cZljdwd8c=85ndGGljcl5ccwd=W=l8w=5lwWn8WnwnWlGZwdcnGGl5G=8W==cnnWZnWjZ=wWcGwZcWc8ncWW=5jnWwcZl8W=8cdwWldlnwW5ddwlnlwncWlcwGZddj5djZWc5jcWdn5jdjwnj85GWGjnjwGd=jZGj5j==jwjlw8dlwWj5Wjn5n8dwwdjZlc5lZwdWldZlnGwl85cWnjd=WcWlwj8WGdlGncnZWGGd5ZncW5d55nW5wl=Wj8jGWnWj8jwZ=ZwWZ88nWG5nn5WlWnGdWw5Zn8jdl=nGcnll8WncZjnGn=dlwn5W8wlWjlnl5ccnGWGnnnc58WnjlGnG55Zwdn5cZdjdZZ5WljG5G5wcldd=Wlc8Z=8nGj=jWd8w8Wd=w8nccc8wZdjcnGdljZnnj5ww8885=lcWW8W8j5dG8jZZwG55GjnwZ=W5Z8G5ZlGc5ZZncZ5cd8j85GW5nj=WWncn55Gj5nj5nwnW58jG8GcnjZdWcl8wj8n=cj=8l8cn5jjcjn8lldn=Gjw8=cjcdWWjGddZljdjdZnG8djnZccZldlWllw5ZZ8wj5Gn==5w8Z=j55n=ZZ5wdww8lndwd8Wlj8WGjnl=nncZ=W8ZZWZnjjlwWGZZlZc5c==d8Zl855wZn=W=w8wWjZ85cGc==5Z8ccjdw5GnZWnGjcdGGnZ5wwwWGG5d=W5ldjwGZZdZwdG5cGGnZGlGc=W5ccWZ8=cGljdGcdld=8cj8jwn=lj88ZZ5jn5lcZ=Gdw=Zl58WZZl5ccwccwG5d5w8Z5wllj5ddnn=5=w8588WwGj=l5G55dWG8cl=GcjWwlwG=lWWnZ=dZG85Gcjc5=wnw=j==Gndnddjwn5c=c5W5wwdWlG5nWZwnGw8=lcWldcwnG5Wcjj=cWlGZc8Gn58ZWjZ85ljlncZj5cc=dZWGjd=d8ncZ8www55=cw=GWZn5ZZlnWld=cWcnclWlZG5djGW=cl8=ZG8cZwwc8wl=88W5ZwZ=jwZGGlcWcWnZZ5Zj5w5ZdZclZZWnccGw==cG8W8ZWlc8wcZ555Z85ljWG5jZ=8=wllWjWjlZc5lG8cwWlnjlGlW=l5=n=lGwnjGGjGdwj85ddW5ZwZ=ddjWldj=cjljjGwndZjWWZGcdWcZW5cdldj8WZjGljlWncZ5=8jnZWjl8wjZG5Zwlcl5dd
+
+考点：字词频率分析
+
+ZW5jcnlwdG8= base64解码得到encrypto
+
+接下来看lookatme文件
+
+achnrvxzzuglarucalznwcygfggrufryvbzqjoxjymxvchhhdmliddcwmhghclpebtzwlojvew
+
+全选可发现有摩斯电码
+
+.- ..- - --- -.- . -.-- 解码得到AUTOKEY 提示autokey爆破
+
+
+得到 CONGRATULATIONSONFINDINGMYSECRETNOWIWILLGIVEYOUTHEPASSWORDITISIAMTHEPASSWD
+
+congratulation son finding my secret now i will give you the password it is i am the passwd
+
+
+考点：encrypto软件解密
+
+提示是个密码iamthepasswd 结合前面的encrypto软件解密
+
+解密很久没反应，用strings输出可打印字符，发现有(Oh! You caught me! But...），010删掉即可 解密成功
+
+得到一张彩虹图片
+
+
+考点： 颜色后两位十六进制
+foremost分离出压缩包 要密码 回到图片可以发现跟`很好的色彩呃？`类似,用PS提取出颜色
+
+112 64 115 115 87 100
+
+转ascii得到p@ssWd
+
+eeeeeeeeeepaeaeeeaeeeeeeeaeeeeeeeeeeccccisaaaaeejeeeeeejiiiiiiLiiiiijeeeeeejeeeeeeeeeeeeeeeeeeeejcceeeeeeeeeeeeeeeeeeejaaiiiiiiijcciiiiiiiiiijaaijiiiiiiiiiiiiiiiiiiiijeeeeeeeeeeeeeeeeeeeeeeejcceeeeeeeeeeeejaaiiiijeeeeeeejceeeeeeeeeeeeeeeeeeeeeeeeejceeeeeeeeeeeeeeeeejaeeeeeejciiiiiiiiiiiiiiiiiiijaeeeejceeeeeeeeeeeeeeeeeejajciiiiiiiiiiiiiiiiiiijaaiiiijiijeeeeeeeeeeejcciiiiiiiiiiiiiiijaaij
+
+提取大写字母
+
+ALPHUCK
+
+把上面大写字母去掉
+
+https://www.dcode.fr/alphuck-language 解密
+
+flag{1t's_v3ry_De1iCi0us~!}
+
+## SUCTF2018-dead_z3r0
+
+010打开发现开头base64信息，解码貌似没啥用，后面看着像pyc文件，把前面base64删掉另存为pyc文件
+
+stegosaurus提取数据即可
+
+
+## INSHack2018-so-deep
+
+首先用Audacity打开转为频谱图发现一半flag
+
+再根据题目提醒用 DeepSound打开，发现需要密码
+
+则用john脚本爆破
+
+https://github.com/magnumripper/JohnTheRipper/blob/bleeding-jumbo/run/deepsound2john.py
+
+提取hashes.txt文件，再john爆破
+
+`python3 deepsound2john.py final_flag.wav>hashes.txt`
+`john hashes.txt`
+
+flag{Aud1o_st3G4n0_1s_4lwayS_Th3_S4me}

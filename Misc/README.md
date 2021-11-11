@@ -38,7 +38,8 @@
         - [隐写类](#隐写类)
             - [base64隐写](#base64隐写)
                 - [base64转图片](#base64转图片)
-            - [pyc隐写](#pyc隐写)
+            - [pyc文件](#pyc文件)
+                - [pyc隐写](#pyc隐写)
                 - [pyc反编译](#pyc反编译)
             - [水印隐写](#水印隐写)
                 - [盲水印](#盲水印)
@@ -59,6 +60,9 @@
                     - [ScreenToGif](#ScreenToGif)
                 - [文字识别](#文字识别)
                     - [QCR](#QCR)
+                - [字词频率统计](#字词频率统计)
+                - [Ps](#Ps)
+                    - [颜色十六进制号](#颜色十六进制号)
             - [Linux](#Linux)
                 - [ELF](#ELF)
                 - [字符串反转](#字符串反转)
@@ -93,6 +97,7 @@
         - [Steghide](#Steghide)
         - [频谱图](#频谱图)
         - [qsstv](#qsstv)
+        - [DeepSound](#DeepSound)
     - [磁盘取证](#磁盘取证)
         - [Ntfs隐写](#Ntfs隐写)
     - [DOC取证](#DOC取证)
@@ -101,6 +106,8 @@
     - [密码取证](#密码取证)
         - [古典密码类](#古典密码类)
             - [autokey爆破](#autokey爆破)
+            - [encrypto](#encrypto)
+            - [ALPHUCK](#ALPHUCK)
         - [登录取证](#登录取证)
             - [Mozilla](#Mozilla)
     - [其它](#其它)
@@ -356,12 +363,6 @@ while [ "`find . -type f -name '*.tar.xz' | wc -l`" -gt 0 ]; do
 done;
 ```
 
-
-
-
-
-
-
 ### 隐写类
 
 #### base64隐写
@@ -370,7 +371,9 @@ py脚本跑
 ##### base64转图片
 
 https://the-x.cn/base64 右下角另存为即可
-#### pyc隐写
+
+#### pyc文件
+##### pyc隐写
 https://github.com/AngelKitty/stegosaurus
 
 https://zhuanlan.zhihu.com/p/51226097
@@ -581,12 +584,27 @@ gif分帧工具
 
 #### 文字识别
 
-### QCR
+##### QCR
 
 https://www.onlineocr.net/zh_hant/
 
 识别后，需要手动纠正很多容易识别错误的地方
 
+#### 字词频率统计
+
+在线网站：http://www.aihanyu.org/cncorpus/CpsTongji.aspx
+
+![image](./img/zicitongji.png)
+
+### Ps
+
+#### 颜色十六进制号
+
+用PS的颜色取样器工具，点击图片上的颜色
+
+![image](./img/yanse1.png)
+
+颜色后两位十六进制转ascii
 #### Linux
 
 ##### ELF
@@ -914,6 +932,8 @@ https://www.sonicvisualiser.org/download.html
 
 layer->Add Peak Frequency Spectrogram或者Shift+K
 
+audacity 转为频谱图，在声道左侧下拉即可
+
 ### qsstv
 
 慢扫描电视（SSTV）
@@ -930,13 +950,27 @@ Options->Configuration->Sound勾选From file
 
 ![image](./img/qsstv.png)
 
+### DeepSound
+
+https://deepsound.soft112.com/
+
+
+存在密码的话，需要破解脚本
+
+https://github.com/magnumripper/JohnTheRipper/blob/bleeding-jumbo/run/deepsound2john.py
+
+`python3 deepsound2john.py final_flag.wav>hashes.txt`
+`john hashes.txt`
+
+![image](./img/john1.png)
+
 ## 磁盘取证
 
 ### Ntfs隐写
 
 工具：NtfsStreamsEditor
 
-虚拟机 有些需要winrar解压才能提取到
+虚拟机 有些需要winrar、7z解压才能提取到
 
 ## DOC取证
 
@@ -983,6 +1017,18 @@ http://www.practicalcryptography.com/cryptanalysis/text-characterisation/quadgra
 py文件里改一下要爆破的字符串，python2环境运行
 
 `python2 break_autokey.py`
+
+#### encrypto
+
+https://macpaw.com/encrypto
+
+Encrypto 接受任何文件或文件夹并为其添加 AES-256 加密。通过加密，您知道您的文件非常安全，只有合适的人才能访问它。Encrypto 接受任何文件或文件夹并为其添加 AES-256 加密。通过加密，您知道您的文件非常安全，只有合适的人才能访问它。
+
+.crypto格式
+
+#### ALPHUCK
+
+https://www.dcode.fr/alphuck-language
 
 ### 登录取证
 
