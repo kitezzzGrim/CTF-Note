@@ -126,6 +126,12 @@
     - [NPUCTF2020-misc-碰上彩虹吃定彩虹](#NPUCTF2020-misc-碰上彩虹吃定彩虹)
     - [SUCTF2018-dead_z3r0](#SUCTF2018-dead_z3r0)
     - [INSHack2018-so-deep](#INSHack2018-so-deep)
+    - [watevrCTF-2019-Unspaellablle](#watevrCTF-2019-Unspaellablle)
+    - [*CTF2019-She](#*CTF2019-She)
+    - [XMAN2018排位赛-ppap](#XMAN2018排位赛-ppap)
+    - [SUCTF2019-protocol](#SUCTF2019-protocol)
+    - [De1CTF2019-Mine-Sweeping](#De1CTF2019-Mine-Sweeping)
+    - [羊城杯-2020-signin](#羊城杯-2020-signin)
 
 
 ## 二维码扫描
@@ -177,8 +183,6 @@ binwalk分离得到压缩包，里面有cipher和key两个文本，打开key  ba
 snake还有另外一个英文翻译：Serpent算法 解密即可
 
 http://serpent.online-domain-tools.com/
-
-
 
 ## [BJDCTF2020]认真你就输了
 
@@ -1869,3 +1873,107 @@ https://github.com/magnumripper/JohnTheRipper/blob/bleeding-jumbo/run/deepsound2
 `john hashes.txt`
 
 flag{Aud1o_st3G4n0_1s_4lwayS_Th3_S4me}
+
+## watevrCTF-2019-Unspaellablle
+
+google可以搜到国外的剧本，用beyond compare工具对比下
+
+可以看出多出来一些字符，拼起来就是
+
+watevr{icantspeel_tiny.cc/2qtdez}
+
+## *CTF2019-She
+
+## XMAN2018排位赛-ppap
+
+追踪很长的TCP流发现base64编码，拿去网站跑报错不能识别~ 则搜索~分割一一下，最终得到一张图片，一个 xml 文件，一个加密的包含 flag 的压缩包
+
+将图片 foremost 之后可以得到很多图片，根据提示可以知道需要找一张 pirate 的图片。有海盗图片 脑洞很大猜出skullandcrossbones
+
+flag{b31Ng_4_P1r4tE_1s_4lR1GHT_w1Th_M3}
+
+https://blog.csdn.net/mochu7777777/article/details/110410893
+
+## SUCTF2019-protocol
+
+foremost分离压缩包可以得到很多图片
+
+![image](./img/protocol1.png)
+
+接着分析流量包 按长度排序可以发现
+
+![image](./img/po.png)
+
+往下读取十五个流量包这个字节可以发现
+
+04 03 02 01 00 09 08 07 06 05 0e 0d 0c 0b 0a
+
+后面十个为
+
+06 07 0e 04 01 0d 00 02 0b 09
+
+接着后面十五个是一样的 但十个是不一样的
+
+总结起来，去掉15个多余重复的
+
+
+```
+04 03 02 01 00 09 08 07 06 05 0e 0d 0c 0b 0a
+06 07 0e 04 01 0d 00 02 0b 09
+01 0e 08 06 0d 0c 00 05 09 0b
+02 09 03 05 01 07 0d 0b 0e 04
+06 0d 0a 08 09 04 0b 03 0c 02
+```
+
+
+结合原来的图片寻找规律 假设第一行是对应15个有文字的图片，那么我们要读
+取的顺序在第二行，如06对应第一行的第9列，以此类推
+
+1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
+04 03 02 01 00 09 08 07 06 05 0e 0d 0c 0b 0a
+
+suctf{My_usb_pr0toco1_s0_w3ak}
+
+## De1CTF2019-Mine-Sweeping
+
+用Dnspy反编译
+
+![image](./img/dnspy1.png)
+
+修改this.bIsMine为false 右键编辑类可修改
+
+改完后编译，这样点到雷不会退出，一直点即可
+
+## 羊城杯-2020-signin
+
+玩具总动员里面，巴斯光年成功上天，胡迪给他发了一段加密短信，但是不知道是什么？你能帮巴斯光年破解吗？胡迪给了一段明文，一表人才，二表倒立，相信聪明的你一定可以帮助他吧！ 得到的 flag 需要包上 flag{} 提交。https://github.com/gwht/2020YCBCTF
+
+BCEHACEIBDEIBDEHBDEHADEIACEGACFIBDFHACEGBCEHBCFIBDEGBDEGADFGBDEHBDEGBDFHBCEGACFIBCFGADEIADEIADFH
+
+脑洞题：玩具总动员：Toy Story ->toy密码 可以理解是替换密码
+
+```py
+list1 = {'M':'ACEG','R':'ADEG','K':'BCEG','S':'BDEG','A':'ACEH','B':'ADEH','L':'BCEH','U':'BDEH','D':'ACEI','C':'ADEI','N':'BCEI','V':'BDEI','H':'ACFG','F':'ADFG','O':'BCFG','W':'BDFG','T':'ACFH','G':'ADFH','P':'BCFH','X':'BDFH','E':'ACFI','I':'ADFI','Q':'BCFI','Y':'BDFI'}
+list2 = original_list = ['M','R','K','S','A','B','L','U','D','C','N','V','H','F','O','W','T','G','P','X','E','I','Q','Y']
+list2_re =list2[::-1]
+
+ori_str = 'BCEHACEIBDEIBDEHBDEHADEIACEGACFIBDFHACEGBCEHBCFIBDEGBDEGADFGBDEHBDEGBDFHBCEGACFIBCFGADEIADEIADFH'
+
+flag_1 = ''
+for i in range(0,len(ori_str),4):
+    _val = ori_str[i:i+4]
+    for key, val in list1.items():
+        if val == _val:
+            flag_1 += key
+print(flag_1)
+flag = ''
+for i in flag_1:
+    for j,k in enumerate(list2):
+        if i == k:
+            flag += list2_re[j]
+print(flag)
+```
+
+flag{TOYSAYGREENTEAISCOOL}
+
+## QCTF2018-picture

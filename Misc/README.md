@@ -22,6 +22,7 @@
             - [QR-Research](#QR-Research)
             - [汉信码](#汉信码)
             - [修补二维码](#修补二维码)
+            - [批量二维码](#批量二维码)
         - [压缩包](#压缩包)
             - [压缩包分析文件头](#压缩包分析文件头)
                 - [RAR](#RAR)
@@ -50,12 +51,15 @@
             - [TTL隐写](#TTL隐写)
             - [时间隐写](#时间隐写)
             - [零宽度字节隐写](#零宽度字节隐写)
+            - [BMP隐写](#BMP隐写)
         - [编程语言](#编程语言)
             - [logo语言解释器](#logo语言解释器)
             - [G语言解释器](#G语言解释器)
         - [其它常用操作](#其它常用操作)
             - [Windows](#Windows)
                 - [右键查看属性](#右键查看属性)
+                - [文本比较](#文本比较)
+                    - [Beyond_compare4](#Beyond_compare4)
                 - [分帧](#分帧)
                     - [ScreenToGif](#ScreenToGif)
                 - [文字识别](#文字识别)
@@ -63,6 +67,8 @@
                 - [字词频率统计](#字词频率统计)
                 - [Ps](#Ps)
                     - [颜色十六进制号](#颜色十六进制号)
+                - [dnspy](#dnspy)
+                - [PowerRename](#PowerRename)
             - [Linux](#Linux)
                 - [ELF](#ELF)
                 - [字符串反转](#字符串反转)
@@ -83,6 +89,8 @@
                 - [OGG](#OGG)
     - [流量取证](#流量取证)
         - [wireshark](#wireshark)
+            - [分组字节流搜索](#分组字节流搜索)
+            - [追踪流](#追踪流)
             - [tshark](#tshark)
             - [lsass.dmp](#lsass.dmp)
             - [USB流量](#USB流量)
@@ -108,10 +116,13 @@
             - [autokey爆破](#autokey爆破)
             - [encrypto](#encrypto)
             - [ALPHUCK](#ALPHUCK)
+            - [toy密码](#toy密码)
         - [登录取证](#登录取证)
             - [Mozilla](#Mozilla)
+            - [VNC](#VNC)
     - [其它](#其它)
         - [基站定位查询](#基站定位查询)
+        - [IP反查域名](#IP反查域名)
 - [文章](#文章)
     - https://ctf-wiki.org/misc/introduction/
 
@@ -155,7 +166,7 @@ python2 vol.py -f ../memory.img --profile=Win2003SP1x86 pslist
 python2 vol.py -f ../memory.img --profile=Win2003SP1x86 cmdscan
 
 # 将DumpIT.exe进程dump下来 -p为进程号
-python2 vol.py -f ../memory.img --profile=Win2003SP1x86 memdump -p 1992 --dump-dir=../
+python2 vol.py -f ../memory.img --profile=Win2003SP1x86 memdump -p 3512 --dump-dir=../
 
 # 分离dmp
 foremost 1992.dmp
@@ -240,6 +251,8 @@ Frame Browser:帧浏览器   主要是对GIF之类的动图进行分解，把动
 
 6是宽 7是高
 
+也可以用脚本爆破对应正常的宽高
+
 ### 粘贴复制二进制
 
 编辑->粘贴为
@@ -267,6 +280,11 @@ https://merricx.github.io/qrazybox/
 
 完成后tools->extract
 
+### 批量二维码
+
+`微微二维码`
+
+https://pc.wwei.cn/
 
 
 ### 压缩包分析文件头
@@ -552,6 +570,13 @@ vim打开可以发现有很多<200b>
 
 ![image](./img/zero2.png)
 
+#### BMP隐写
+
+wbStego4.3open 加解密
+
+![image](./img/wbstego4.png)
+
+保存为txt
 
 ### 编程语言
 #### logo语言解释器
@@ -575,6 +600,11 @@ https://ncviewer.com/
 
 右键查看属性-详情信息-备注
 
+#### 文本比较
+
+
+##### Beyond_compare4
+
 ##### 分帧
 ###### ScreenToGif
 
@@ -596,15 +626,27 @@ https://www.onlineocr.net/zh_hant/
 
 ![image](./img/zicitongji.png)
 
-### Ps
+#### Ps
 
-#### 颜色十六进制号
+##### 颜色十六进制号
 
 用PS的颜色取样器工具，点击图片上的颜色
 
 ![image](./img/yanse1.png)
 
 颜色后两位十六进制转ascii
+
+#### dnspy
+
+dnspy反编译工具
+
+将dll拖进去，右键编辑类 可修改后编译
+
+#### PowerRename
+
+Windows微软的一款批量命名工具软件
+
+![image](./img/powername.png)
 #### Linux
 
 ##### ELF
@@ -620,8 +662,14 @@ cat 1 | rev
 
 linux之用 grep -r 关键字 快速搜索在目录下面的含有关键字的文件
 
-`grep -r 'CTF' ./output `
+```bash
+grep -r 'CTF' ./output
 
+grep -rn 'flag{' ./*
+grep -rn 'key' ./*
+grep -rn 'password' ./*
+grep -rn 'ctf' ./*
+```
 ##### binwalk
 
 kali
@@ -784,6 +832,7 @@ BPG（Better Portable Graphics）是一种新的图像格式。它的目的是�
 OGG是一种音频压缩格式，扩展为.ogg,用audacity打开
 ## 流量取证
 ### Wireshark
+### 过滤器
 
 过滤POST包
 
@@ -796,18 +845,30 @@ http.request.method==POST
 http.response.code !=404
 ```
 
-
-搜索有没有包含"flag"的包
-搜索私钥
-```
-ip.contains "flag"
-tcp contains "KEY"
+```bash
+ip.contains "flag" # 
+tcp contains "KEY" # 搜索tcp协议有没有KEY关键字
+udp contains "flag" # 搜索UDP协议有没有flag关键字
 ```
 
 tcp流
 ```
 tcp.stream eq 0
 ```
+
+### 分组字节流搜索
+
+Ctrl+F 可打开如下
+
+![image](./img/wireshark1.png)
+
+可以快速搜索关键字符串
+
+如：password flag {} 对应比赛需求关键字等
+
+### 追踪流
+
+例子：TCP追踪流 点击TCP右键追踪流往往有flag以及关键字
 #### tshark
 
 ```
@@ -986,15 +1047,26 @@ Accent OFFICE Password Recovery v5.1 CracKed By Hmily[LCG][LSG]
 
 一般猜测四位纯数字
 
+![image](./img/word1.png)
 ### 隐藏文字
 
 文件->选项->显示->隐藏文字
 
 格式刷或者右键文字隐藏去掉 就可以复制
 
+### doc改为zip
+
+ppt也可以改为zip
+
+grep -rn 'flag{' ./*
+
 
 
 ## 密码取证
+
+https://passwordrecovery.io/zip-file-password-removal/
+
+据说是个在线爆破工具，但用不了 先放着吧
 ### 古典密码类
 #### autokey爆破
 
@@ -1030,6 +1102,32 @@ Encrypto 接受任何文件或文件夹并为其添加 AES-256 加密。通过�
 
 https://www.dcode.fr/alphuck-language
 
+#### toy密码
+
+https://eprint.iacr.org/2020/301.pdf
+
+```py
+list1 = {'M':'ACEG','R':'ADEG','K':'BCEG','S':'BDEG','A':'ACEH','B':'ADEH','L':'BCEH','U':'BDEH','D':'ACEI','C':'ADEI','N':'BCEI','V':'BDEI','H':'ACFG','F':'ADFG','O':'BCFG','W':'BDFG','T':'ACFH','G':'ADFH','P':'BCFH','X':'BDFH','E':'ACFI','I':'ADFI','Q':'BCFI','Y':'BDFI'}
+list2 = original_list = ['M','R','K','S','A','B','L','U','D','C','N','V','H','F','O','W','T','G','P','X','E','I','Q','Y']
+list2_re =list2[::-1]
+
+ori_str = 'BCEHACEIBDEIBDEHBDEHADEIACEGACFIBDFHACEGBCEHBCFIBDEGBDEGADFGBDEHBDEGBDFHBCEGACFIBCFGADEIADEIADFH'
+
+flag_1 = ''
+for i in range(0,len(ori_str),4):
+    _val = ori_str[i:i+4]
+    for key, val in list1.items():
+        if val == _val:
+            flag_1 += key
+print(flag_1)
+flag = ''
+for i in flag_1:
+    for j,k in enumerate(list2):
+        if i == k:
+            flag += list2_re[j]
+print(flag)
+```
+
 ### 登录取证
 
 #### Mozilla
@@ -1041,7 +1139,21 @@ Firepwd.py，一个用于解密 Mozilla 保护密码的开源工具
 默认情况下，firepwd.py 处理当前目录中的 key3.db（或 key4.db）和 signons.sqlite（logins.json）文件，但可以使用 -d 选项提供替代目录。不要忘记末尾的“/”。
 
 `python3 firepwd.py logins.json `
+
+#### VNC
+
+https://github.com/x0rz4/vncpwd VNC密码解密工具
+
+`vncpwd.exe 375ebe8670b3c6f3`
+
+例如得到"Password"=hex:37,5e,be,86,70,b3,c6,f3
+
+
 ## 其它
 
 ### 基站定位查询
 https://v.juhe.cn/cell/Triangulation/index.html?s=inner
+
+### IP反查域名
+
+https://www.ipip.net/ip.html

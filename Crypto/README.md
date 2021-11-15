@@ -76,6 +76,7 @@
         - [四方密码](#四方密码)
         - [Nihilist](#Nihilist)
 - [其它密码](#其它密码)
+    - [Emoji表情编码](#Emoji表情编码)
     - [颜文字加密解密](#颜文字加密解密)
     - [中文电码表](#中文电码表)
     - [五笔编码](#五笔编码)
@@ -181,6 +182,8 @@ https://tool.chinaz.com/tools/urlencode.aspx
 ### UTF-7编码
 
 TF-7 (7-位元 Unicode 转换格式（Unicode Transformation Format，简写成 UTF））是一种可变长度字符编码方式，用以将 Unicode 字符以 ASCII 编码的字符串来呈现，可以应用在电子邮件传输之类的应用。
+
+例子：+AGYAbABhAGcAewBkAGgAYgBfADcAdABoAH0-
 
 http://toolswebtop.com/text/process/decode/utf-7
 ### 摩斯电码
@@ -1716,6 +1719,9 @@ print flag
 ## 其它密码
 
 
+### Emoji表情编码
+
+http://www.atoolbox.net/Tool.php?Id=937
 ### 颜文字加密解密
 
 ```
