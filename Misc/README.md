@@ -120,6 +120,8 @@
         - [登录取证](#登录取证)
             - [Mozilla](#Mozilla)
             - [VNC](#VNC)
+        - [密码爆破](#密码爆破)
+            - [John](#John)
     - [其它](#其它)
         - [基站定位查询](#基站定位查询)
         - [IP反查域名](#IP反查域名)
@@ -234,6 +236,10 @@ Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
 HelpAssistant:1000:687255e91a0f559b6d75553dbd51f785:b6125736bdd2d5f154fdce59f52e39f1:::
 SUPPORT_388945a0:1002:aad3b435b51404eeaad3b435b51404ee:fb41f8d1334fba131974c39bfab09512:::
 ```
+
+另存为hash.txt文件
+
+`john --wordlist=/usr/share/wordlists/rockyou.txt --rule --format=NT hash.txt `
 
 ```bash
 # 查看下cmd.exe的使用情况
@@ -401,14 +407,123 @@ C7 88 67 36：FILE_CRC，4字节，文件的CRC值
 一般是隐写题目，从图片中找出密码
 #### CRC32爆破
 
-一般用于压缩包里文件内容较短时
-
-CRC32校验爆破原理说明：
-
 CRC32:CRC本身是“冗余校验码”的意思，CRC32则表示会产生一个32bit（8位十六进制数）的校验值。
 
+每个文件都有唯一的CRC32值，即便数据发生很微小的变化，都会导致CRC32的值变化。假设知道段数据的长度和CRC32值，那么便可穷举数据，与其CRC32的值比较匹配，这样就可以达到暴力破解的目的。但是这么做缺点也很明显，就是`只适用于数据内容较小的文件`
 
-在产生CRC32时，源数据块的每一位都参与了运算，因此即使数据块中只有一位发生改变也会得到不同的CRC32值，利用这个原理我们可以直接爆破出加密文件的内容。
+注意：一般数据内容`小于5Bytes(<=4Bytes)`即可尝试通过爆破CRC32穷举数据内容
+
+https://mochu.blog.csdn.net/article/details/110206427
+
+
+内容为1Byte的CRC爆破
+```py
+import binascii
+import string
+
+def crack_crc():
+    print('-------------Start Crack CRC-------------')
+    crc_list = [0xda6fd2a0, 0xf6a70, 0x70659eff, 0x862575d]#文件的CRC32值列表，注意顺序
+    comment = ''
+    chars = string.printable
+    for crc_value in crc_list:
+        for char1 in chars:
+            char_crc = binascii.crc32(char1.encode())#获取遍历字符的CRC32值
+            calc_crc = char_crc & 0xffffffff#将获取到的字符的CRC32值与0xffffffff进行与运算
+            if calc_crc == crc_value:#将每个字符的CRC32值与每个文件的CRC32值进行匹配
+                print('[+] {}: {}'.format(hex(crc_value),char1))
+                comment += char1
+    print('-----------CRC Crack Completed-----------')
+    print('Result: {}'.format(comment))
+
+if __name__ == '__main__':
+    crack_crc()
+```
+
+内容为2Byte的CRC爆破
+```py
+import binascii
+import string
+
+def crack_crc():
+    print('-------------Start Crack CRC-------------')
+    crc_list = [0xef347b51, 0xa8f1b31e, 0x3c053787, 0xbbe0a1b]#文件的CRC32值列表，注意顺序
+    comment = ''
+    chars = string.printable
+    for crc_value in crc_list:
+        for char1 in chars:
+            for char2 in chars:
+                res_char = char1 + char2#获取遍历的任意2Byte字符
+                char_crc = binascii.crc32(res_char.encode())#获取遍历字符的CRC32值
+                calc_crc = char_crc & 0xffffffff#将获取到的字符的CRC32值与0xffffffff进行与运算
+                if calc_crc == crc_value:#将获取字符的CRC32值与每个文件的CRC32值进行匹配
+                    print('[+] {}: {}'.format(hex(crc_value),res_char))
+                    comment += res_char
+    print('-----------CRC Crack Completed-----------')
+    print('Result: {}'.format(comment))
+
+if __name__ == '__main__':
+    crack_crc()
+```
+
+内容为3Byte的CRC爆破
+```py
+import binascii
+import string
+
+def crack_crc():
+    print('-------------Start Crack CRC-------------')
+    crc_list = [0x2b17958, 0xafa8f8df, 0xcc09984b, 0x242026cf]#文件的CRC32值列表，注意顺序
+    comment = ''
+    chars = string.printable
+    for crc_value in crc_list:
+        for char1 in chars:
+            for char2 in chars:
+                for char3 in chars:
+                    res_char = char1 + char2 + char3#获取遍历的任意3Byte字符
+                    char_crc = binascii.crc32(res_char.encode())#获取遍历字符的CRC32值
+                    calc_crc = char_crc & 0xffffffff#将遍历的字符的CRC32值与0xffffffff进行与运算
+                    if calc_crc == crc_value:#将获取字符的CRC32值与每个文件的CRC32值进行匹配
+                        print('[+] {}: {}'.format(hex(crc_value),res_char))
+                        comment += res_char
+    print('-----------CRC Crack Completed-----------')
+    print('Result: {}'.format(comment))
+
+if __name__ == '__main__':
+    crack_crc()
+```
+
+内容为4Byte的CRC爆破
+```py
+import binascii
+import string
+
+def crack_crc():
+    print('-------------Start Crack CRC-------------')
+    crc_list = [0xc0a3a573, 0x3cb6ab1c, 0x85bb0ad4, 0xf4fde00b]#文件的CRC32值列表，注意顺序
+    comment = ''
+    chars = string.printable
+    for crc_value in crc_list:
+        for char1 in chars:
+            for char2 in chars:
+                for char3 in chars:
+                    for char4 in chars:
+                        res_char = char1 + char2 + char3 + char4#获取遍历的任意4Byte字符
+                        char_crc = binascii.crc32(res_char.encode())#获取遍历字符的CRC32值
+                        calc_crc = char_crc & 0xffffffff#将遍历的字符的CRC32值与0xffffffff进行与运算
+                        if calc_crc == crc_value:#将获取字符的CRC32值与每个文件的CRC32值进行匹配
+                            print('[+] {}: {}'.format(hex(crc_value),res_char))
+                            comment += res_char
+    print('-----------CRC Crack Completed-----------')
+    print('Result: {}'.format(comment))
+
+if __name__ == '__main__':
+    crack_crc()
+```
+
+内容为4-6byte的文件
+
+https://github.com/theonlypwner/crc32
 
 #### 明文攻击
 
@@ -860,7 +975,7 @@ Adobe Acrobat (pdf)，               文件头：255044462D312E
 Quicken (qdf)，                         文件头：AC9EBD8F
 Windows Password (pwl)，         文件头：E3828596
 
-RAR Archive (rar)，                    文件头：526172211A0700 文件尾：0700
+RAR Archive (rar)，                    文件头：52 61 72 21 1A 07 00 文件尾：0700
 Wave (wav)，                            文件头：57415645
 AVI (avi)，                                 文件头：41564920
 Real Audio (ram)，                     文件头：2E7261FD
@@ -1214,6 +1329,23 @@ https://github.com/x0rz4/vncpwd VNC密码解密工具
 
 例如得到"Password"=hex:37,5e,be,86,70,b3,c6,f3
 
+
+### 密码爆破
+
+#### John
+
+hashdump出来的NTLM Hash
+
+另存为hash.txt
+```
+Administrator:500:0182bd0bd4444bf867cd839bf040d93b:c22b315c040ae6e0efee3518d830362b:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+HelpAssistant:1000:132893a93031a4d2c70b0ba3fd87654a:fe572c566816ef495f84fdca382fd8bb:::
+```
+
+```bash
+john --wordlist=/usr/share/john/password.lst --rule --format=NT hash.txt
+```
 
 ## 其它
 

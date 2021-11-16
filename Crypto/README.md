@@ -8,6 +8,7 @@
     - [字母表编码](#字母表编码)
     - [ASCII编码](#ASCII编码)
     - [URL编码](#URL编码)
+    - [Unicode编码](#Unicode编码)
     - [UTF-7编码](#UTF-7编码)
     - [摩斯电码](#摩斯电码)
     - [Base](#Base)
@@ -83,6 +84,7 @@
     - [时间戳](#时间戳)
     - [手机键盘密码](#手机键盘密码)
     - [26键盘密码](#26键盘密码)
+    - [希尔密码](#希尔密码)
     - [Rabbit解密](Rabbit解密)
     - [Quoted-printable编码](#Quoted-printable编码)
     - [UUencode](#UUencode)
@@ -179,6 +181,10 @@ ASCII编码对应十进制:
 ### URL编码
 
 https://tool.chinaz.com/tools/urlencode.aspx
+
+### Unicode编码
+
+http://tool.chinaz.com/Tools/unicode.aspx
 ### UTF-7编码
 
 TF-7 (7-位元 Unicode 转换格式（Unicode Transformation Format，简写成 UTF））是一种可变长度字符编码方式，用以将 Unicode 字符以 ASCII 编码的字符串来呈现，可以应用在电子邮件传输之类的应用。
@@ -214,6 +220,14 @@ base64、base32、base16 可以分别编码转化8位字节为6位、5位、4位
 对应 ascii 码 : 21 6 33 37
 查表 : V G h l
 ```
+
+工具：basecrack-4.0
+
+```bash
+python basecrack.py -b xxxx
+```
+
+https://github.com/mufeedvh/basecrack
 
 https://www.wishingstarmoye.com/tools/base64
 #### Base16
@@ -1763,10 +1777,17 @@ https://tool.chinaz.com/tools/unixtime.aspx
 
 第一行键盘数字对应字母，再转为手机键盘密码
 
+### 希尔密码
+
+http://www.atoolbox.net/Tool.php?Id=914
+
+密钥为网址 如：www.atoolbox.net
 ### Rabbit解密
 
 在线网站
 https://www.sojson.com/encrypt_rabbit.html
+
+需要密钥
 ### Quoted-printable编码
 
 > 有多个等号
