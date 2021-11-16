@@ -133,6 +133,10 @@
 https://tool.chinaz.com/tools/unixtime.aspx
 ## 内存取证
 
+一般是raw、img、iso文件
+
+raw文件是内存取证工具Dumpit提取内存生成的内存转储文件，可以使用类似Volatility等内存取证分析工具进行取证分析。
+
 ### ISO
 
 用foremost分离
@@ -140,6 +144,8 @@ https://tool.chinaz.com/tools/unixtime.aspx
 ### Volatility
 
 Volatility是一款开源内存取证框架，能够对导出的内存镜像进行分析，通过获取内核数据结构，使用插件获取内存的详细情况以及系统的运行状态。
+
+[Volatility支持的插件列表](https://www.cnblogs.com/p20050001/p/11892766.html)
 
 ```bash
 git clone https://github.com/volatilityfoundation/volatility.git
@@ -183,6 +189,67 @@ python2 -m pip install construct
 cp mimikatz.py /volatility/plugins/
 python2 vol.py  -f tmp.vmem --profile=Win7SP1x64 mimikatz
 ```
+
+**raw文件**
+
+```bash
+# 分析镜像
+python2 vol.py -f L-12A6C33F43D74-20161114-125252.raw imageinfo
+```
+
+![image](./img/raw1.png)
+
+```bash
+# 查看进程
+python2 vol.py -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86 pslist
+```
+
+![image](./img/raw2.png)
+
+列出可疑进程
+
+```
+explorer.exe 1416
+notepad.exe 280
+cmd.exe 1568
+nc.exe 120
+DumpIt.exe 392
+```
+
+```bash
+# 用notepad插件列出记事本的内容
+python2 vol.py notepad -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86
+```
+
+```bash
+# 要获取用户的账户密码的话，用hashdump插件把hash值提取出来
+python2 vol.py hashdump -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86
+```
+![image](./img/raw3.png)
+
+得到结果如下：
+```
+Administrator:500:1e27e87bd14ec8af43714428b303e3e4:1e581aafa474dfadfdf83fc31e4fd4ea:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+HelpAssistant:1000:687255e91a0f559b6d75553dbd51f785:b6125736bdd2d5f154fdce59f52e39f1:::
+SUPPORT_388945a0:1002:aad3b435b51404eeaad3b435b51404ee:fb41f8d1334fba131974c39bfab09512:::
+```
+
+```bash
+# 查看下cmd.exe的使用情况
+python2 vol.py -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86 cmdscan
+```
+
+![image](./img/raw4.png)
+
+```bash
+# 提取压缩包
+python2 vol.py -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86 filescan | grep "P@ssW0rd_is_y0ur_bir7hd4y.zip"
+
+python2 vol.py -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86 dumpfiles -Q 0x0000000002c61318 --dump-dir=./
+```
+
+![image](./img/raw5.png)
 
 ### fat
 
@@ -775,8 +842,7 @@ https://vxhly.github.io/views/windows/file-header-and-tail.html#%E4%BB%8E-ultrae
 ```
 JPEG (jpg)，                        　　文件头：FFD8FF E0　　　　　　　　　　　　　　　　　　　　 文件尾：FF D9　　　　　　　　　　　　　　　
 PNG (png)，                       　　 文件头：89504E47　　　　　　　　　　　　　　　　　　　　　　文件尾：AE 42 60 82
-GIF89 (gif)，                           　　文件头：4749463839　　　　　　　　　　　　　　　　　　　　　　文件尾：00 3B                                                                 ZIP Archive (zip)，                     文件头：504B0304　　　　　　　　　　　　　　　　　　　　　　文件尾：50 4B
-
+GIF89 (gif)，                           　　文件头：4749463839　　　　　　　　　　　　　　　　　　　　　　文件尾：00 3B                     ZIP Archive (zip)，                     文件头：504B0304　　　　　　　　　　　　　　　　　　　　　　文件尾：50 4B
 TIFF (tif)，                           　  文件头：49492A00　　　　　　　　　　　　　　　　　　　　　　文件尾：
 Windows Bitmap (bmp)，      　  文件头：424D　　　　　　　　　　　　　　　　　　　　　　　　 文件尾：
 CAD (dwg)，                        　  文件头：41433130　　　　　　　　　　　　　　　　　　　　　　文件尾：

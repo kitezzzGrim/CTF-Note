@@ -24,6 +24,8 @@
     - [小明的演讲](#小明的演讲)
     - [Traffic_Light](#Traffic_Light)
     - [SDNISC2020_过去和现在](#SDNISC2020_过去和现在)
+    - [2018-QCTF-X-man-A-face](#2018-QCTF-X-man-A-face)
+    - [内存取证三项](#内存取证三项)
 
 
 ## 真正的CTFer
@@ -358,3 +360,59 @@ print(flag)
 flag{Pl34s3_p4y_4tt3nt10n_t0_tr4ff1c_s4f3ty_wh3n_y0u_4r3_0uts1d3}
 
 ## SDNISC2020_过去和现在
+
+binwalk -e分离 在21154发现flag
+
+flag{fc25cbb7b85959fe03738241a96bf23d}
+
+## 2018-QCTF-X-man-A-face
+
+ps补全二维码 但qr扫不出来，微信扫可以
+
+KFBVIRT3KBZGK5DUPFPVG2LTORSXEX2XNBXV6QTVPFZV6TLFL5GG6YTTORSXE7I=
+
+base32解码
+
+QCTF{Pretty_Sister_Who_Buys_Me_Lobster}
+
+## 内存取证三项
+
+一天下午小白出去吃饭，临走之前还不忘锁了电脑，这时同寝室的小黑想搞点事情，懂点黑客和社工知识的小黑经过多次尝试获得了密码成功进入电脑，于是便悄悄在电脑上动起手脚了，便在桌面上写着什么，想给小白一个惊喜，同时还传送着小白的机密文件，正巧这时小白刚好回来，两人都吓了一跳，小黑也不管自己在电脑上留下的操作急忙离开电脑，故作淡定的说：“我就是随便看看”。
+1.小黑写的啥，据说是flag？
+2.那么问题来了，小白的密码是啥？
+3.小黑发送的机密文件里面到底是什么
+
+1.根据提示小黑在使用记事本编写文本
+
+可疑进程
+```
+explorer.exe 1416
+notepad.exe 280
+cmd.exe 1568
+nc.exe 120
+DumpIt.exe 392
+```
+
+```
+python2 vol.py -f L-12A6C33F43D74-20161114-125252.raw imageinfo
+
+python2 vol.py -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86 pslist
+
+python2 vol.py notepad -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86
+```
+
+得到hex值，解码为flag{W3lec0me_7o_For3n5ics}
+
+2.第二个提示需要提取密码
+
+这个需要破解ntlm hash 后面再补
+
+3.第三个查看cmd.exe
+
+```
+python2 vol.py -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86 cmdscan
+
+python2 vol.py -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86 dumpfiles -Q 0x0000000002c61318 --dump-dir=./
+```
+
+得到zip压缩包，ziperello爆破8位纯数字，提示是生日
