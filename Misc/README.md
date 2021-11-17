@@ -23,6 +23,7 @@
             - [汉信码](#汉信码)
             - [修补二维码](#修补二维码)
             - [批量二维码](#批量二维码)
+            - [字节转二维码](#字节转二维码)
         - [压缩包](#压缩包)
             - [压缩包分析文件头](#压缩包分析文件头)
                 - [RAR](#RAR)
@@ -360,6 +361,25 @@ https://merricx.github.io/qrazybox/
 https://pc.wwei.cn/
 
 
+### 字节转二维码
+
+一个文本只有1和0 而且有40000个字符 那就是200*200的正方形
+
+```py
+from PIL import Image
+with open ("1.txt",'r') as d:
+	flag = Image.new('L',(200,200))
+	plain = d.read()
+	i = 0
+	for x in range(200):
+		for y in range(200):
+			if (plain[i] == '0'):
+				flag.putpixel([x,y],0)
+			else:
+				flag.putpixel([x,y],255)
+			i += 1
+	flag.show()
+```
 ### 压缩包分析文件头
 
 https://blog.csdn.net/Claming_D/article/details/105899397
@@ -390,6 +410,12 @@ C7 88 67 36：FILE_CRC，4字节，文件的CRC值
 ```
 ### 加密的压缩包zip
 
+ARCHPR打不开的原因：(这个档案文件是用xxx版本创建的。目前ARCHPR不支持)
+
+1.版本号不正确,改为0即可
+
+![image](./img/indenity-zip.png)
+
 
 #### 伪加密
 
@@ -399,6 +425,11 @@ C7 88 67 36：FILE_CRC，4字节，文件的CRC值
 
 `java -jar ZipCenOp.jar r 111.zip` 解密
 
+### 注释
+
+压缩包注释一般会提示解压密码思路
+
+![image](./img/zhushi.png)
 #### 弱密码
 
 题目中会有提示或者给出字典，直接爆破

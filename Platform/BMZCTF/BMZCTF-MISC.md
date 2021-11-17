@@ -33,6 +33,10 @@
     - [山东省大学生网络技术大赛-pic](#山东省大学生网络技术大赛-pic)
     - [2020首届祥云杯-进制反转](#2020首届祥云杯-进制反转)
     - [泰湖杯-MISC](#泰湖杯-MISC)
+    - [pcap](#pcap)
+    - [2018-SUCTF-single-dog](#2018-SUCTF-single-dog)
+    - [技协杯-我的密码呢](#技协杯-我的密码呢)
+    - [SDNISC2020_CTF的起源](#SDNISC2020_CTF的起源)
 
 
 ## 真正的CTFer
@@ -564,3 +568,99 @@ Live beautifully, dream passionately, love completely.
 flag{m1sc_1s_funny2333}
 
 ## pcap
+
+请分析附件中的dnp3协议 。注意，得到的flag请使用BMZCTF{}格式提交
+
+![image](./img/dnp3-1.png)
+
+flag{d989e2b92ea671f5d30efb8956eab1427625c}
+
+BMZCTF{d989e2b92ea671f5d30efb8956eab1427625c}
+
+## 2018-SUCTF-single-dog
+
+foremost分离出压缩包
+
+颜文字解密
+
+SUCTF{happy double eleven}
+
+## 技协杯-我的密码呢
+
+图片显示
+
+![image](./img/jixiebei-wodemima-1.png)
+
+C3m67uup
+
+还有个带密码的压缩包，可以猜测archpr爆破 后面涂掉的部分大概2-4位
+
+archpr无法打开压缩包，说是不支持版本，010打开，修改版本号819为0即可
+
+掩码爆破，得到密码：C3m67uup8Qs
+
+![image](./img/jixiebei-wodemima-2.png)
+
+flag{t0y_h4sh3d_aNd_hav3_fun_f0r_1t!}
+
+## SDNISC2020_CTF的起源
+
+考点：base64隐写
+
+flag{944776b2c95a350bb27d7038d42b273a}
+
+## MISC_Snake
+
+压缩包注释发现ook密码，解密得到
+
+https://www.splitbrain.org/services/ook
+
+password: doyoulikesnake?
+
+解压后可以发现process是明文的异或，根据逆推出解密
+
+```py
+with open ('snake.jpg','wb') as flag:
+    with open('data.jpg','rb') as f:
+        for i in f.read():
+            if (i % 2 == 0):
+                i = (i+1) ^ 128
+            else:
+                i = (i-1) ^128
+            i = bytes([i])
+            flag.write(i)
+```
+
+得到一张🐍的图片，先拿到stegsolve发现hint
+
+![image](./img/snake1.png)
+
+serpent密码，但需要密钥，密钥应该从图片中找
+
+steghide隐写，不需要密码，得到key.txt
+
+key: VivaLaVida
+
+拿去serpent解密data文件，得到内容只有w和b的文件
+
+能想到w是white，b是black，批量替换，w为1，b为0，而且有40000个字符，那就是200*200的正方形，编写脚本绘制图片
+
+```py
+from PIL import Image
+with open ("1.txt",'r') as d:
+	flag = Image.new('L',(200,200))
+	plain = d.read()
+	i = 0
+	for x in range(200):
+		for y in range(200):
+			if (plain[i] == '0'):
+				flag.putpixel([x,y],0)
+			else:
+				flag.putpixel([x,y],255)
+			i += 1
+	flag.show()
+```
+
+![image](./img/erweima1.png)
+
+flag{67bd09fc-e252-4c21-858f-2a7d698d555f}

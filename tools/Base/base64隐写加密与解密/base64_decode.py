@@ -5,12 +5,12 @@ b64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 with open('1.txt', 'rb') as f:
     bin_str = ''
     for line in f.readlines():
-        stegb64 = ''.join(line.split()) # ¶ÁÈ¡ÎÄ±¾Ã¿Ò»ĞĞ
-        rowb64 =  ''.join(stegb64.decode('base64').encode('base64').split()) # °ÑÄÚÈİ±àÂë³ÉÔ­Éúbase64
+        stegb64 = ''.join(line.split()) # è¯»å–æ–‡æœ¬æ¯ä¸€è¡Œ
+        rowb64 =  ''.join(stegb64.decode('base64').encode('base64').split()) # æŠŠå†…å®¹ç¼–ç æˆåŸç”Ÿbase64
 
-        offset = abs(b64chars.index(stegb64.replace('=','')[-1])-b64chars.index(rowb64.replace('=','')[-1])) # ÎÄ±¾µÄbase64 - Ô­Éúbase64
+        offset = abs(b64chars.index(stegb64.replace('=','')[-1])-b64chars.index(rowb64.replace('=','')[-1])) # æ–‡æœ¬çš„base64 - åŸç”Ÿbase64
         equalnum = stegb64.count('=') #no equalnum no offset
         if equalnum:
             bin_str += bin(offset)[2:].zfill(equalnum * 2)
 
-        print ''.join([chr(int(bin_str[i:i + 8], 2)) for i in xrange(0, len(bin_str), 8)]) #8 Î»Ò»×é
+        print ''.join([chr(int(bin_str[i:i + 8], 2)) for i in xrange(0, len(bin_str), 8)]) #8 ä½ä¸€ç»„
