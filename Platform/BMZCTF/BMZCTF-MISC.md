@@ -37,7 +37,11 @@
     - [2018-SUCTF-single-dog](#2018-SUCTF-single-dog)
     - [技协杯-我的密码呢](#技协杯-我的密码呢)
     - [SDNISC2020_CTF的起源](#SDNISC2020_CTF的起源)
-
+    - [MISC_tiga](#MISC_tiga)
+    - [headache](#headache)
+    - [2018-HEBTUCTF-ZIP安全](#2018-HEBTUCTF-ZIP安全)
+    - [可乐加冰](#可乐加冰)
+    - [SDNISC2020_简单js](#SDNISC2020_简单js)
 
 ## 真正的CTFer
 
@@ -664,3 +668,170 @@ with open ("1.txt",'r') as d:
 ![image](./img/erweima1.png)
 
 flag{67bd09fc-e252-4c21-858f-2a7d698d555f}
+
+## MISC_tiga
+
+考点：零宽字节隐写
+
+https://yuanfux.github.io/zero-width-web/
+
+![image](./img/tiga1.png)
+
+Password: GiveTiGaGuang!
+
+解压后，发现有7个password.txt 大小均为3.txt crc32爆破
+
+T&hg%WL0^rm@c!VK$xEt~ 解压得到youcanalso.zip
+
+接下来分析图片，010打开发现结尾有youcanalso.zip password isten numbers
+
+提示压缩包是10位数字，爆破即可
+
+2001701725
+
+考点：明文攻击
+
+得到密码：1amT1G@，得到flag.txt 发现是504B开头的 粘贴到010转为十六进制，更改为doc文件，点击显示隐藏文字
+
+考点：base64全家桶
+
+basecrack一把梭即可
+
+flag{8fa3e8c4-0121-4f2a-a7f0-0a60032e3763}
+
+## headache
+
+暴力破解密码为123456
+
+
+flag{uh, I feel not good... I can't remember the flag. Maybe you can help me..
+Here is my prescription: JFIF
+
+修改文件头为FF D8即可
+
+flag{C13H18O2}
+
+## 2018-HEBTUCTF-ZIP安全
+
+ziperello暴力破解:20181028
+
+解压得到PartFlag&hint.zip 和Flag.zip两个压缩文件
+
+
+前者伪加密，得到zip的文件尾
+
+将flag.zip的开头hint.txt复制出来，补上文件尾
+
+接下来就是明文攻击了
+
+得到密码 ZipC00l!
+HEBTUCTF{Z1p_so_Comp1ex}
+
+## 可乐加冰
+
+有快乐肥宅水的比赛，才是真正的快乐。 注意，得到的flag请使用BMZCTF{}格式提交
+
+binwalk -e 分离信息，010打开2AE96
+
+![image](./img/kelejiabing1.png)
+
+可以看到十六进制区全是十进制的值，可以猜测十进制转字符得到
+
+```
+S.$$$_+S.$__$+S.___+S.__$+S.$$$$+S.$$$_+S.$__$+S.__$+"-"+S.$_$$+S.$_$_+S.$$_$+S.$$_+"-"+S.$__+S.$_$_+S.$$$$+S.$$$+"-"+S.$__$+S.$__$+S.$$_+S._$$+"-"+S.$$_$+S.$_$_+S.$$_$+S.$___+S.__$+S._$_+S.$$$$+S.$_$+S.$$_+S._$_+S.$__+S.$$_$
+```
+
+将 S替换成$，补上jjencode开头结尾
+jjencode解密
+
+```
+$=~[];$={___:++$,$$$$:(![]+"")[$],__$:++$,$_$_:(![]+"")[$],_$_:++$,$_$$:({}+"")[$],$$_$:($[$]+"")[$],_$$:++$,$$$_:(!""+"")[$],$__:++$,$_$:++$,$$__:({}+"")[$],$$_:++$,$$$:++$,$___:++$,$__$:++$};$.$_=($.$_=$+"")[$.$_$]+($._$=$.$_[$.__$])+($.$$=($.$+"")[$.__$])+((!$)+"")[$._$$]+($.__=$.$_[$.$$_])+($.$=(!""+"")[$.__$])+($._=(!""+"")[$._$_])+$.$_[$.$_$]+$.__+$._$+$.$;$.$$=$.$+(!""+"")[$._$$]+$.__+$._+$.$+$.$$;$.$=($.___)[$.$_][$.$_];$.$($.$($.$$+"\""+$.$$$_+$.$__$+$.___+$.__$+$.$$$$+$.$$$_+$.$__$+$.__$+"-"+$.$_$$+$.$_$_+$.$$_$+$.$$_+"-"+$.$__+$.$_$_+$.$$$$+$.$$$+"-"+$.$__$+$.$__$+$.$$_+$._$$+"-"+$.$$_$+$.$_$_+$.$$_$+$.$___+$.__$+$._$_+$.$$$$+$.$_$+$.$$_+$._$_+$.$__+$.$$_$+"\"")())();
+```
+
+BMZCTF{e901fe91-bad6-4af7-9963-dad812f5624d}
+
+## SDNISC2020_简单js
+
+下载后是个JS文件
+
+```js
+/**
+ * Pseudo md5 hash function
+ * @param {string} string
+ * @param {string} method The function method, can be 'ENCRYPT' or 'DECRYPT'
+ * @return {string}
+ */
+function pseudoHash(string, method) {
+  // Default method is encryption
+  if (!('ENCRYPT' == method || 'DECRYPT' == method)) {
+    method = 'ENCRYPT';
+  }
+  // Run algorithm with the right method
+  if ('ENCRYPT' == method) {
+    // Variable for output string
+    var output = '';
+    // Algorithm to encrypt
+    for (var x = 0, y = string.length, charCode, hexCode; x < y; ++x) {
+      charCode = string.charCodeAt(x);
+      if (128 > charCode) {
+        charCode += 128;
+      } else if (127 < charCode) {
+        charCode -= 128;
+      }
+      charCode = 255 - charCode;
+      hexCode = charCode.toString(16);
+      if (2 > hexCode.length) {
+        hexCode = '0' + hexCode;
+      }
+      output += hexCode;
+    }
+    // Return output
+    return output;
+  } else if ('DECRYPT' == method) {
+    // DECODE MISS
+    // Return ASCII value of character
+    return string;
+  }
+}
+document.getElementById('password').value = pseudoHash('19131e18041b1d4c47191d19194f1949481a481a1d4c1c461b4d484b191b4e474f1e4b1d4c02', 'DECRYPT');
+```
+
+编写对应的解码代码
+
+```py
+s = "19131e18041b1d4c47191d19194f1949481a481a1d4c1c461b4d484b191b4e474f1e4b1d4c02"
+
+for i in range(0,(len/2)):
+    tmp = "0x" + s[i*2:i*2+2]
+    tmp = 255 - int(tmp,16)
+        if tmp <128:
+            tmp += 128
+        else:
+            tmp -= 128
+        tmp = chr(tmp)
+    print(tmp,end='')
+```
+
+## 掘地三尺
+
+隐藏文字+全选颜色
+
+![image](./img/juedi1.png)
+
+flag{real_
+
+下面的复制可以发现是十六进制，且为jpg的文件头，全都拿到010editor转换为1.jpg
+
+![image](./img/high1.png)
+
+结尾处提示hide deepth:106 可以猜测修改图片高度，利用010editor插件修改即可
+
+![image](./img/high2.png)
+
+
+flag{real_deep_
+
+接着是steghide爆破 上脚本即可 password
+
+
+flag{real_deep_doc}

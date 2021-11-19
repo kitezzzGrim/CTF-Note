@@ -104,6 +104,7 @@
         - [dtmf2num](#dtmf2num)
         - [音频LSB隐写](#音频LSB隐写)
         - [Steghide](#Steghide)
+            - [steghide爆破](#steghide爆破)
         - [频谱图](#频谱图)
         - [qsstv](#qsstv)
         - [DeepSound](#DeepSound)
@@ -326,6 +327,8 @@ Frame Browser:帧浏览器   主要是对GIF之类的动图进行分解，把动
 6是宽 7是高
 
 也可以用脚本爆破对应正常的宽高
+
+![image](./img/kuangao.png)
 
 ### 粘贴复制二进制
 
@@ -562,6 +565,8 @@ https://github.com/theonlypwner/crc32
 
 攻击时要注意txt重新压缩（找对应的压缩软件winrar）
 
+有时候 zip的文件需要bandzip压缩，
+
 用archpr2明文攻击 - 破解类型 纯文本/明文攻击
 
 爆破时间较长 点击确定保存为zip文件，解压出现flag
@@ -775,9 +780,12 @@ IP报文在路由间穿梭的时候每经过一个路由，TTL就会减1，当TT
 
 #### 零宽度字节隐写
 
+vim打开可以发现有很多<200b>
+
 http://330k.github.io/misc_tools/unicode_steganography.html
 
-vim打开可以发现有很多<200b>
+https://yuanfux.github.io/zero-width-web/
+
 
 ![image](./img/zero1.png)
 
@@ -891,6 +899,10 @@ binwalk xxx
 binwalk -e xxx
 ```
 
+binwalk分离出的zlib文件往往隐藏信息
+
+如：2AE96和2AE96.zlib 2AE96.zlib是压缩的zlib块，2AE96是解压后的zlib块。
+
 ```
 XML document, version: "1.0"
 
@@ -988,7 +1000,8 @@ https://vxhly.github.io/views/windows/file-header-and-tail.html#%E4%BB%8E-ultrae
 ```
 JPEG (jpg)，                        　　文件头：FFD8FF E0　　　　　　　　　　　　　　　　　　　　 文件尾：FF D9　　　　　　　　　　　　　　　
 PNG (png)，                       　　 文件头：89504E47　　　　　　　　　　　　　　　　　　　　　　文件尾：AE 42 60 82
-GIF89 (gif)，                           　　文件头：4749463839　　　　　　　　　　　　　　　　　　　　　　文件尾：00 3B                     ZIP Archive (zip)，                     文件头：504B0304　　　　　　　　　　　　　　　　　　　　　　文件尾：50 4B
+GIF89 (gif)，                           　　文件头：4749463839　　　　　　　　　　　　　　　　　　　　　　文件尾：00 3B
+ZIP Archive (zip)，                     文件头：504B0304　　　　　　　　　　　　　　　　　　　　　　文件尾：50 4B
 TIFF (tif)，                           　  文件头：49492A00　　　　　　　　　　　　　　　　　　　　　　文件尾：
 Windows Bitmap (bmp)，      　  文件头：424D　　　　　　　　　　　　　　　　　　　　　　　　 文件尾：
 CAD (dwg)，                        　  文件头：41433130　　　　　　　　　　　　　　　　　　　　　　文件尾：
@@ -1199,6 +1212,40 @@ steghide info 1.jpg
 steghide extract -sf 1.jpg
 ```
 
+#### steghide爆破
+
+kali下运行，文件为flag.jpg
+```py
+#python3运行
+from subprocess import *
+
+def foo():
+    stegoFile='flag.jpg'#隐写的图片
+    extractFile='result.txt'#爆破的密码
+    passFile='english.dic'#字典
+
+    errors=['could not extract','steghide --help','Syntax error']
+    cmdFormat='steghide extract -sf "%s" -xf "%s" -p "%s"'
+    f=open(passFile,'r')
+
+    for line in f.readlines():
+        cmd=cmdFormat %(stegoFile,extractFile,line.strip())
+        p=Popen(cmd,shell=True,stdout=PIPE,stderr=STDOUT)
+        content=str(p.stdout.read(),'gbk')
+        for err in errors:
+            if err in content:
+                break
+        else:
+            print (content),
+            print ('the passphrase is %s' %(line.strip()))
+            f.close()
+            return
+
+if __name__ == '__main__':
+    foo()
+    print ('ok')
+    pass
+```
 ### 频谱图
 
 https://www.sonicvisualiser.org/download.html
@@ -1386,3 +1433,4 @@ https://v.juhe.cn/cell/Triangulation/index.html?s=inner
 ### IP反查域名
 
 https://www.ipip.net/ip.html
+
