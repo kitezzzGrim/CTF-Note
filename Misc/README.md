@@ -124,6 +124,9 @@
             - [VNC](#VNC)
         - [密码爆破](#密码爆破)
             - [John](#John)
+            - [opharack](#opharack)
+        - [待分类解密](#待分类解密)
+            - [CnCrypt](#CnCrypt)
     - [其它](#其它)
         - [基站定位查询](#基站定位查询)
         - [IP反查域名](#IP反查域名)
@@ -137,7 +140,7 @@
 https://tool.chinaz.com/tools/unixtime.aspx
 ## 内存取证
 
-一般是raw、img、iso文件
+一般是raw、img、iso、dump文件
 
 raw文件是内存取证工具Dumpit提取内存生成的内存转储文件，可以使用类似Volatility等内存取证分析工具进行取证分析。
 
@@ -1425,6 +1428,24 @@ HelpAssistant:1000:132893a93031a4d2c70b0ba3fd87654a:fe572c566816ef495f84fdca382f
 john --wordlist=/usr/share/john/password.lst --rule --format=NT hash.txt
 ```
 
+#### opharack
+
+基于彩虹表的爆破
+
+ophcrack: https://sourceforge.net/projects/ophcrack/
+ophcrack-tables: https://ophcrack.sourceforge.io/tables.php
+
+### 待分类解密
+
+#### CnCrypt
+
+https://72k.us/file/20044976-439996462
+
+目前用到解密ccx
+
+在虚拟机打开 需要密码
+
+![image](./img/cncrypt.png)
 ## 其它
 
 ### 基站定位查询

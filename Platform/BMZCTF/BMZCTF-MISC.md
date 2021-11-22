@@ -42,6 +42,11 @@
     - [2018-HEBTUCTF-ZIP安全](#2018-HEBTUCTF-ZIP安全)
     - [可乐加冰](#可乐加冰)
     - [SDNISC2020_简单js](#SDNISC2020_简单js)
+    - [BJDCTF-2020-Misc-你猜我是个啥](#BJDCTF-2020-Misc-你猜我是个啥)
+    - [penpig](#penpig)
+    - [Administrator's_secret](#Administrator's_secret)
+    - [技协杯-S&M](#技协杯-S&M)
+    - [2020第三届安洵杯-BeCare4](#2020第三届安洵杯-BeCare4)
 
 ## 真正的CTFer
 
@@ -835,3 +840,51 @@ flag{real_deep_
 
 
 flag{real_deep_doc}
+
+## BJDCTF-2020-Misc-你猜我是个啥
+
+010打开发现是png头 修改后缀打开发现二维码 扫描后提示flag不在这
+
+010在结尾发现flag
+flag{i_am_fl@g}
+
+## penpig
+
+传统猪圈密码
+
+FLAG{YYYYY_YWWW@}
+
+## Administrator's_secret
+
+```bash
+python2 vol.py -f mem.dump imageinfo
+python2 vol.py -f mem.dump --profile=Win7SP1x64 pslist
+python2 vol.py -f mem.dump --profile=Win7SP1x64 cmdscan
+
+# 导出压缩包
+python2 vol.py -f mem.dump --profile=Win7SP1x64 filescan | grep "flag.ccx"
+python2 vol.py -f mem.dump --profile=Win7SP1x64 dumpfiles -Q 0x000000003e435890 --dump-dir=./
+
+# 接下来把管理员的密码hash导出来进行破解
+python2 vol.py hashdump -f mem.dump --profile=Win7SP1x64
+
+ophcrack破解即可：ABCabc123
+```
+
+用CnCrypt打开flag.ccx，输入上面密码即可
+
+flag{now_you_see_my_secret}
+
+## 技协杯-S&M
+
+s7comm 长度为91的发现flag
+
+flag{QKwTZDSBELNPYqzv}
+
+## 技协杯-S&M
+
+flag{8c16c91be3f3287ff5a10167e922b33b}
+
+共模攻击
+
+## 2020第三届安洵杯-BeCare4
