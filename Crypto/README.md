@@ -70,6 +70,7 @@
         - [古埃及象形文字](#古埃及象形文字)
         - [圣堂武士密码](#圣堂武士密码)
         - [标准银河字母](#标准银河字母)
+        - [精灵语](#精灵语)
         - [福尔摩斯-跳舞的小人](#福尔摩斯-跳舞的小人)
         - [音符密码](#音符密码)
         - [敲击码](#敲击码)
@@ -304,7 +305,7 @@ https://www.sojson.com/encrypt_triple_des.html
 
 DES密文开头都是`U2FsdGVkX1`,解密需要密钥
 
-### ARS
+### AES
 
 http://www.jsons.cn/aesencrypt/
 http://tool.chacuo.net/cryptaes
@@ -1650,6 +1651,9 @@ http://www.hiencode.com/pigpen.html
 ![image](./img/biaozhunyinhe.png)
 
 
+#### 精灵语
+
+![image](./img/jinglingyu.png)
 #### 福尔摩斯-跳舞的小人
 
 ![image](./img/tiaowuxiaoren.png)

@@ -47,6 +47,11 @@
     - [Administrator's_secret](#Administrator's_secret)
     - [技协杯-S&M](#技协杯-S&M)
     - [2020第三届安洵杯-BeCare4](#2020第三届安洵杯-BeCare4)
+    - [2020第三届安洵杯-套娃](#2020第三届安洵杯-套娃)
+    - [BJDCTF-2020-Misc-藏藏](#BJDCTF-2020-Misc-藏藏)
+    - [bmp](#bmp)
+    - [2020首届祥云杯-带音乐家](#2020首届祥云杯-带音乐家)
+    - [2020第三届安洵杯-王牌特工](#2020第三届安洵杯-王牌特工)
 
 ## 真正的CTFer
 
@@ -888,3 +893,75 @@ flag{8c16c91be3f3287ff5a10167e922b33b}
 共模攻击
 
 ## 2020第三届安洵杯-BeCare4
+
+打开后是加密的flag.7z和npmtxt，vim查看发现存在零宽字节
+
+零宽度字节隐写：oh,you found the pass:RealV1siBle
+
+解压后得到一张图片，题目提示eye，可以猜想SilentEye
+
+silenteye隐写，直接默认密码
+
+D0g3{1nV1sible_flag_Can_You_find?!}
+
+BMZCTF{1nV1sible_flag_Can_You_find?!}
+
+## 2020第三届安洵杯-套娃
+
+crc32-2字节爆破得到密码，解压
+
+得到easyzip.zip,7z能解压出redeme.txt，因为是伪加密
+
+接着winrar打开把其它文件删掉，只保留redeme-副本.txt,进行明文爆破，得到密码%3#c$v!@
+
+解压得到flag.txt
+
+basecrack一把梭得到fgic__notl{prwc__}az&ceadi@
+
+栅栏密码 3
+
+flag{zip&crc_we_can_do_it}
+
+BMZCTF{zip&crc_we_can_do_it}
+
+## BJDCTF-2020-Misc-藏藏
+
+foremost分离压缩包 二维码扫描
+
+flag{you are the best!}
+
+## BMP
+
+## 2020首届祥云杯-带音乐家
+
+一个加密的压缩包Doc1.rar和decode_it文本，010打开文本发现MDhd，是MIDI文件
+
+用工具velato解密
+
+```cmd
+Vlt.exe decode_it
+decode_it.exe
+```
+得到Hello, World! 拿去解压得到Doc1.docx
+
+精灵语：FLAGIS
+
+打开压缩包发现注释有摩斯，放到sublime全选可见
+
+.- . ... -.- . -.-- ----. ..--- .---- ----. ..--- ...-- ..--- ...-- ..--- ..---
+
+摩斯解码AESKEY9219232322 可以看见提示aes
+
+![image](./img/aes1.png)
+
+flag{mU51c_And_ch@ract0rs~}
+
+BMZCTF{mU51c_And_ch@ract0rs~}
+
+## 2020第三届安洵杯-王牌特工
+
+Recently,Agent CyzCC has got one secret file from Trump's disk and cracked it successfully without Wushu morality.Can u do the same thing?。注意，得到的flag请使用BMZCTF{}格式提交。
+
+```bash
+mount findme /mnt
+```
