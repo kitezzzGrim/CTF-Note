@@ -6,9 +6,20 @@
     - [内存取证](#内存取证)
         - [iso](#iso)
         - [Volatility](#Volatility)
+            - [常见的几个进程](#常见的几个进程)
+                - [notepad.exe](#notepad.exe)
+                - [TrueCrypt.exe](#TrueCrypt.exe)
+                - [DumpIt.exe](#DumpIt.exe)
+                - [mspaint.exe](#mspaint.exe)
+                - [cmd.exe](#cmd.exe)
         - [fat](#fat)
         - [挂载修复](#挂载修复)
         - [vmdk](#vmdk)
+    - [磁盘取证](#磁盘取证)
+        - [磁盘分析](#磁盘分析)
+            - [DiskGenius](#DiskGenius)
+        - [磁盘加密解密](#磁盘加密解密)
+            - [VeraCrypt](#VeraCrypt)
     - [文件取证](#文件取证)
         - [stegsolve](#stegsolve)
         - [Notepad++](#Notepad++)
@@ -96,6 +107,7 @@
         - [wireshark](#wireshark)
             - [分组字节流搜索](#分组字节流搜索)
             - [追踪流](#追踪流)
+            - [导出HTTP对象](#导出HTTP对象)
             - [tshark](#tshark)
             - [lsass.dmp](#lsass.dmp)
             - [USB流量](#USB流量)
@@ -170,6 +182,8 @@ git clone https://github.com/volatilityfoundation/volatility.git
 支持python3：https://github.com/volatilityfoundation/volatility3
 ```
 
+https://mengsec.com/2018/10/20/CTF-Volatility/
+
 用法：
 ```bash
 # 先通过 imageinfo 获取系统信息
@@ -182,11 +196,6 @@ python2 vol.py -f ../memory.img --profile=Win2003SP1x86 pslist
 # 查看cmd命令使用记录
 python2 vol.py -f ../memory.img --profile=Win2003SP1x86 cmdscan
 
-# 将DumpIT.exe进程dump下来 -p为进程号
-python2 vol.py -f ../memory.img --profile=Win2003SP1x86 memdump -p 3512 --dump-dir=../
-
-# 分离dmp
-foremost 1992.dmp
 # 使用hashdump命令获取用户名
 python2 vol.py -f Target.vmem --profile=Win7SP1x64 hashdump
 
@@ -227,10 +236,6 @@ nc.exe 120
 DumpIt.exe 392
 ```
 
-```bash
-# 用notepad插件列出记事本的内容
-python2 vol.py notepad -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86
-```
 
 ```bash
 # 要获取用户的账户密码的话，用hashdump插件把hash值提取出来
@@ -250,10 +255,7 @@ SUPPORT_388945a0:1002:aad3b435b51404eeaad3b435b51404ee:fb41f8d1334fba131974c39bf
 
 `john --wordlist=/usr/share/wordlists/rockyou.txt --rule --format=NT hash.txt `
 
-```bash
-# 查看下cmd.exe的使用情况
-python2 vol.py -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86 cmdscan
-```
+
 
 ![image](./img/raw4.png)
 
@@ -266,6 +268,59 @@ python2 vol.py -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86 dump
 
 ![image](./img/raw5.png)
 
+#### 常见的几个进程
+
+##### notepad.exe
+
+notepad.exe是记事本，一般记事本中会有内容hint或者在内存中(还未保存)
+
+```bash
+# 用notepad插件列出记事本的内容
+python2 vol.py notepad -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86
+```
+
+##### TrueCrypt.exe
+
+推测题目所给的另一个文件是使用TrueCrypt进行加密了的。进程没有退出，那么加密的密钥有可能就在进程中，将该进程作为文件导出。
+
+使用Elcomsoft Forensic Disk Decryptor进行解密
+
+![image](./img/elcomsoft1.png)
+
+![image](./img/elcomsoft2.png)
+
+![image](./img/elcomsoft3.png)
+
+下一步另存为即可，点击mount挂载
+
+工具:ForensicDiskDecryptor
+
+https://www.anxz.com/down/69216.html
+
+序列号激活码：AEFSDRP-LWJQT-52698-FMNVW-84362
+
+winmm.dll放到程序目录下
+##### DumpIt.exe
+
+DumpIt是一款绿色免安装的 windows 内存镜像取证工具。利用它我们可以轻松地将一个系统的完整内存镜像下来，并用于后续的调查取证工作。
+
+```bash
+# 将DumpIT.exe进程dump下来 -p为进程号
+python2 vol.py -f ../memory.img --profile=Win2003SP1x86 memdump -p 3512 --dump-dir=../
+
+# 分离dmp
+foremost 1992.dmp
+```
+##### mspaint.exe
+
+mspaint.exe是一个画图软件
+
+##### cmd.exe
+
+```bash
+# 查看下cmd.exe的使用情况
+python2 vol.py -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86 cmdscan
+```
 ### fat
 
 VeraCrypt 进行挂载
@@ -292,6 +347,7 @@ cd /mnt
 修复：
 ```bash
 extundelete attachment.img --restore-all
+# 会在当前生成文件夹，如果没看到东西，尝试ls -al
 ```
 
 取消挂载
@@ -310,6 +366,23 @@ linux下7z解压vmdk更完整，windows下7z有问题
 7z x flag.vmdk
 ```
 
+### 磁盘取证
+
+#### 磁盘分析
+
+##### DiskGenius
+
+一般用于对后缀名为VHD文件挂载,VHD是微软虚拟磁盘文件
+
+DiskGenius->磁盘->打开虚拟磁盘文件
+DiskGenius->Disk->Open virtual Disk File
+#### 磁盘加密解密
+
+##### VeraCrypt
+
+磁盘取证，也可用于挂载，需要密码，且每次不一样的密码都有不一样的结果
+
+![image](./img/verycrypt1.png)
 
 ## 文件取证
 
@@ -1108,7 +1181,7 @@ https://www.cnblogs.com/robin-oneway/p/13932982.html
 ![image](./img/bmp.png)
 ## 流量取证
 ### Wireshark
-### 过滤器
+#### 过滤器
 
 过滤POST包
 
@@ -1132,7 +1205,7 @@ tcp流
 tcp.stream eq 0
 ```
 
-### 分组字节流搜索
+#### 分组字节流搜索
 
 Ctrl+F 可打开如下
 
@@ -1142,9 +1215,19 @@ Ctrl+F 可打开如下
 
 如：password flag {} 对应比赛需求关键字等
 
-### 追踪流
+#### 追踪流
 
 例子：TCP追踪流 点击TCP右键追踪流往往有flag以及关键字
+
+
+#### 导出HTTP对象
+
+文件->导出对象->save all->选择一个文件夹
+
+内容较多的时候可以拖到linux跑 ctf flag啥的
+
+`grep -r 'CTF' ./new/`
+
 #### tshark
 
 ```

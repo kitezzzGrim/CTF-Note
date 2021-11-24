@@ -52,6 +52,14 @@
     - [bmp](#bmp)
     - [2020首届祥云杯-带音乐家](#2020首届祥云杯-带音乐家)
     - [2020第三届安洵杯-王牌特工](#2020第三届安洵杯-王牌特工)
+    - [2018-QCTF-X-man-Keyword](#2018-QCTF-X-man-Keyword)
+    - [小明的演讲t](#小明的演讲t)
+    - [2018-SUCTF-follow-me](#2018-SUCTF-follow-me)
+    - [misc_bbmpp](#misc_bbmpp)
+    - [suspicion](#suspicion)
+    - [山东省大学生网络技术大赛-morse](#山东省大学生网络技术大赛-morse)
+    - [2020首届祥云杯-xixixi](#2020首届祥云杯-xixixi)
+    - [crymisc](#crymisc)
 
 ## 真正的CTFer
 
@@ -963,5 +971,291 @@ BMZCTF{mU51c_And_ch@ract0rs~}
 Recently,Agent CyzCC has got one secret file from Trump's disk and cracked it successfully without Wushu morality.Can u do the same thing?。注意，得到的flag请使用BMZCTF{}格式提交。
 
 ```bash
+file findme
+# findme: Linux rev 1.0 ext3 filesystem data, UUID=f2b1e8fa-29a6-454b-b6df-6182044790bc (large files)
 mount findme /mnt
+cd /mnt
+ls
+# flagbox key.txt
+cat key.txt
+# key:a_cool_key
+# use Veracrypt
 ```
+
+提示用veracrypt挂载
+
+![image](./img/flagbox.png)
+
+提示flag是假的，尝试别的思路，修复磁盘
+
+```bash
+extundelete findme --restore-all
+cd RECOVERED_FILES
+ls -al
+file .coolboy.swp
+cat .coolboy.swp
+# 55qE5a+G56CBOnRoaXNfaXNfYV90cnVlX2tleQ==
+```
+
+this_is_a_true_key 再拿去挂载
+
+flag{you_are_a_cool_boy}
+
+BMZCTF{you_are_a_cool_boy}
+
+## 2018-QCTF-X-man-Keyword
+
+stegsolve查看头部好像有东西，拿去lsb隐写
+
+```py
+python2 lsb.py extract X-man-Keyword.png 1.txt lovekfc
+```
+
+得到
+PVSF{vVckHejqBOVX9C1c13GFfkHJrjIQeMwf}
+
+看起来是替换密码，题目提示一种把关键词提前的置换
+
+可以想到是Nihilist 密码
+
+得到QCTF{cCgeLdnrIBCX9G1g13KFfeLNsnMRdOwf}
+
+## 小明的演讲t
+
+下载后是ppt文件，改为zip即可，在里面发现zip和两段文本
+
+2053250813784316 中文电码-> 我是密码
+
+010改为FF FE即可 我也是密码
+
+我是密码我也是密码
+
+解压即可解码
+
+## 2018-SUCTF-follow-me
+
+导出为http对象，拿到linux搜索
+
+```bash
+grep -r 'CTF' ./follow-me
+```
+
+SUCTF{password_is_not_weak}
+
+## misc_bbmpp
+
+题目提示10w也就是100000 六位
+
+可以猜想压缩包爆破6位纯数字，爆破得到333520
+
+010打开发现前面缺少了头，且文件大小对不上，猜想是去掉了文件头类型(2字节)和文件大小(4字节)，插入6字节
+
+![image](./img/bmp2.png)
+
+修改后缀名bmp得到flag
+
+flag{G0od_j0b}
+
+## suspicion
+
+```bash
+python2 vol.py -f mem.vmem imageinfo
+python2 vol.py -f mem.vmem --profile=WinXPSP2x86 pslist
+python2 vol.py -f mem.vmem --profile=WinXPSP2x86 memdump -p 2012 -D ./
+```
+
+推测题目所给的另一个文件是使用TrueCrypt进行加密了的。进程没有退出，那么加密的密钥有可能就在进程中，将该进程作为文件导出。
+
+然后使用Elcomsoft Forensic Disk Decryptor进行解密，首先在导出的内存镜像中搜索key.
+
+
+PCTF{T2reCrypt_15_N07_S3cu2e}
+
+https://blog.csdn.net/mochu7777777/article/details/113007749
+
+## 山东省大学生网络技术大赛-morse
+
+stego100.wav
+
+audacity打开放大可以发现摩斯电码
+
+
+解码得到5BC925649CB0188F52E617D70929191C
+
+flag{5BC925649CB0188F52E617D70929191C}
+
+## 2020首届祥云杯-xixixi
+
+打开是new.vhd文件，vhd是微软虚拟磁盘文件，用diskgenius挂载
+
+![image](./img/diskgenius1.png)
+
+得到一张图片和两个py
+
+```py
+import struct
+
+class FAT32Parser(object):
+	def __init__(self, vhdFileName):
+		with open(vhdFileName, 'rb') as f:
+			self.diskData = f.read()
+		self.DBR_off = self.GetDBRoff()
+		self.newData = ''.join(self.diskData)
+
+	def GetDBRoff(self):
+		DPT_off = 0x1BE
+		target = self.diskData[DPT_off+8:DPT_off+12]
+		DBR_sector_off, = struct.unpack("<I", target)
+		return DBR_sector_off * 512
+
+	def GetFAT1off(self):
+		target = self.diskData[self.DBR_off+0xE:self.DBR_off+0x10]
+		FAT1_sector_off, = struct.unpack("<H", target)
+		return self.DBR_off + FAT1_sector_off * 512
+
+	def GetFATlength(self):
+		target = self.diskData[self.DBR_off+0x24:self.DBR_off+0x28]
+		FAT_sectors, = struct.unpack("<I", target)
+		return FAT_sectors * 512
+
+	def GetRootoff(self):
+		FAT_length = self.GetFATlength()
+		FAT2_off = self.GetFAT1off() + FAT_length
+		return FAT2_off + FAT_length
+
+	def Cluster2FAToff(self, cluster):
+		FAT1_off = self.GetFAT1off()
+		return FAT1_off + cluster * 4
+
+	def Cluster2DataOff(self, cluster):
+		rootDir_off = self.GetRootoff()
+		return rootDir_off + (cluster - 2) * 512
+```
+
+```py
+import struct
+from xixi import FAT32Parser
+from xixixi import Padding, picDepartList
+
+def EncodePieces():
+	global clusterList
+	res = []
+	Range = len(picDepartList)    # 58
+	# GetRandomClusterList(n) - Generate a random cluster list with length n
+	clusterList = GetRandomClusterList(Range)
+
+	for i in range(Range):
+		if i != Range - 1:
+			newCRC = struct.pack("<I", clusterList[i+1])
+			plainData = picDepartList[i][:-4] + newCRC
+		else:
+			plainData = picDepartList[i]
+
+		# Show the first piece to him, hhh
+		if i == 0:
+			newPiece = plainData
+		else:
+			newPiece = ''
+			key = clusterList[i] & 0xFE
+			for j in plainData:
+				newPiece += chr(ord(j) ^ key)
+		# Padding() -- Fill to an integral multiple of 512 with \xFF
+		res.append(Padding(newPiece))
+	return res
+```
+
+参考上面给出的脚本进行还原，还原脚本参考的是Timeline Sec团队的脚本
+
+```py
+# -*- coding: utf-8 -*-
+# @Project: Hello Python!
+# @File   : exp
+# @Author : Tr0jAn <Tr0jAn@birkenwald.cn>
+# @Date   : 2020-11-22
+import struct
+import binascii
+
+class FAT32Parser(object):
+  def __init__(self, vhdFileName):
+    with open(vhdFileName, 'rb') as f:
+      self.diskData = f.read()
+    self.DBR_off = self.GetDBRoff()
+    self.newData = ''.join(str(self.diskData))
+
+
+  def GetDBRoff(self):
+    DPT_off = 0x1BE
+    target = self.diskData[DPT_off+8:DPT_off+12]
+    DBR_sector_off, = struct.unpack("<I", target)
+    return DBR_sector_off * 512
+
+
+  def GetFAT1off(self):
+    target = self.diskData[self.DBR_off+0xE:self.DBR_off+0x10]
+    FAT1_sector_off, = struct.unpack("<H", target)
+    return self.DBR_off + FAT1_sector_off * 512
+
+
+  def GetFATlength(self):
+    target = self.diskData[self.DBR_off+0x24:self.DBR_off+0x28]
+    FAT_sectors, = struct.unpack("<I", target)
+    return FAT_sectors * 512
+
+
+  def GetRootoff(self):
+    FAT_length = self.GetFATlength()
+    FAT2_off = self.GetFAT1off() + FAT_length
+    return FAT2_off + FAT_length
+
+
+  def Cluster2FAToff(self, cluster):
+    FAT1_off = self.GetFAT1off()
+    return FAT1_off + cluster * 4
+
+
+  def Cluster2DataOff(self, cluster):
+    rootDir_off = self.GetRootoff()
+    return rootDir_off + (cluster - 2) * 512
+
+    
+def read(n):
+    global key
+    binary = b''
+    for i in vhd.read(n):
+        binary += (i ^ (key & 0xFE)).to_bytes(length=1, byteorder='big', signed=False)
+    return binary
+
+
+FAT = FAT32Parser("new.vhd")
+vhd = open("new.vhd", "rb")
+vhd.seek(0x27bae00)  # 定位磁盘中图片位置
+flag = open("flag.png", "wb")
+flag.write(vhd.read(8))  # 写入png头
+key = 0
+while True:
+    d = read(8)
+    length, cType = struct.unpack(">I4s", d)
+    print(length, cType)  # length为数据长度，cType为数据块类型
+    data = read(length)
+    CRC = struct.unpack(">I", read(4))[0]
+    print(CRC)
+    rCRC = binascii.crc32(cType + data) & 0xffffffff
+    print(rCRC)
+    rDATA = struct.pack(">I", length) + cType + data + struct.pack(">I", rCRC)
+    flag.write(rDATA)
+    if CRC != rCRC:  # CRC错误的IDAT数据块
+        b_endian = struct.pack(">I", CRC)
+        clusterList = struct.unpack("<I", b_endian)[0]
+        print(clusterList)
+        vhd.seek(FAT.Cluster2DataOff(clusterList))
+        key = clusterList & 0xFE
+    if cType == b"IEND":
+        break
+```
+
+flag{0cfdd1ad80807da6c0413de606bb0ae4}
+
+BMZCTF{0cfdd1ad80807da6c0413de606bb0ae4}
+
+
+## crymisc
