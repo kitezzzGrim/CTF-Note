@@ -1750,6 +1750,12 @@ print flag
 
 http://www.atoolbox.net/Tool.php?Id=937
 
+网上的有时候解不出来，可以用离线工具
+
+https://github.com/pavelvodrazka/ctf-writeups/tree/master/hackyeaster2018/challenges/egg17/files/cracker
+
+本地工具：emoji
+
 ### jjencode
 
 jjencode代码，就是将正常的js代码转换成复杂的只有符号的字符串编码,进行加密

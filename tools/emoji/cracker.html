@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0'/>
+
+    <title>Codemoji Cracker</title>
+
+    <script type="text/javascript" src="js/lodash.min.js"></script>
+    <script type="text/javascript" src="js/punycode.js"></script>
+
+    <script type="text/javascript" src="js/crypto-lib/char-list.js"></script>
+    <script type="text/javascript" src="js/crypto-lib/emoji-list.js"></script>
+    <script type="text/javascript" src="js/crypto-lib/caesar-shifter.js"></script>
+    <script type="text/javascript" src="js/crypto-lib/emojifier.js"></script>
+    <script type="text/javascript" src="js/crypto-lib.js"></script>
+
+    <script type="text/javascript">
+        function decrypt(ciphertext) {
+            let solutions = document.getElementById('solutions');
+            while (solutions.firstChild) {
+                solutions.removeChild(solutions.firstChild);
+            }
+
+            for (code of EmojiList) {
+                let key = punycode.ucs2.encode([code]);
+
+                CryptoLib.generateEmojiSubsetFrom(key);
+                let plaintext = CryptoLib.decrypt(ciphertext, key);
+
+                // check for ASCII-only strings
+                if (/^[\x00-\x7F]*$/.test(plaintext)) {
+                    let elem = document.createElement('div');
+                    elem.appendChild(document.createTextNode(key + ' -> ' + plaintext));
+                    solutions.appendChild(elem);
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="form" style="padding: 10px">
+        <input id="ciphertext" name="ciphertext" type="text" size="40">
+        <button onclick="decrypt(document.getElementById('ciphertext').value)">Decrypt</button>
+    </div>
+    <div id="solutions" style="padding: 10px"></div>
+</body>
+</html>

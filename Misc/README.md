@@ -40,6 +40,8 @@
                 - [RAR](#RAR)
             - [加密的压缩包zip](#加密的压缩包zip)
                 - [伪加密](#伪加密)
+                    - [zip伪加密](#zip伪加密)
+                    - [rar伪加密](#rar伪加密)
                 - [弱密码](#弱密码)
                 - [zip-图片](#zip图片)
                 - [CRC32爆破](#CRC32爆破)
@@ -56,8 +58,11 @@
                 - [pyc隐写](#pyc隐写)
                 - [pyc反编译](#pyc反编译)
             - [水印隐写](#水印隐写)
+                - [java盲水印](#java盲水印)
                 - [盲水印](#盲水印)
                 - [频域盲水印](#频域盲水印)
+            - [png隐写](#png隐写)
+                - [pngcheck](#pngcheck)
             - [F5隐写](F5隐写)
             - [outguess隐写](#outguess隐写)
             - [LSB隐写](#LSB隐写)
@@ -306,7 +311,9 @@ DumpIt是一款绿色免安装的 windows 内存镜像取证工具。利用它�
 
 ```bash
 # 将DumpIT.exe进程dump下来 -p为进程号
-python2 vol.py -f ../memory.img --profile=Win2003SP1x86 memdump -p 3512 --dump-dir=../
+python2 vol.py -f memory.img --profile=Win2003SP1x86 memdump -p 1992 --dump-dir=./
+
+注意，这里1992是explorer.exe的进程
 
 # 分离dmp
 foremost 1992.dmp
@@ -506,11 +513,20 @@ ARCHPR打不开的原因：(这个档案文件是用xxx版本创建的。目前A
 
 用winhex查看全局加密标志和局部加密标志
 
+
+### zip伪加密
 工具：ZipCenOp.jar
 
 `java -jar ZipCenOp.jar r 111.zip` 解密
 
+### rar伪加密
+
+![image](./img/rar-weijiami.png)
+
+第24个字节，该字节尾数为4表示加密，0表示无加密，将尾数改为0即可解开伪加密
+
 ### 注释
+
 
 压缩包注释一般会提示解压密码思路
 
@@ -718,6 +734,14 @@ https://tool.lu/pyc/
 
 #### 水印隐写
 
+
+##### java盲水印
+
+https://github.com/ww23/BlindWatermark
+
+只需一张图片
+
+`java -jar BlindWatermark.jar decode -c bingbing.jpg decode.jpg`
 ##### 盲水印
 
 https://github.com/chishaxie/BlindWaterMark
@@ -800,6 +824,16 @@ pip install opencv-python==4.2.0.32 -i http://mirrors.aliyun.com/pypi/simple --t
 python2 pinyubwm.py --original huyao.png --image stillhuyao.png --result out.png
 
 ```
+
+#### png隐写
+
+#### pngcheck
+
+```bash
+pngcheck -v hint.png
+```
+
+一般检查png是否缺块
 
 #### F5隐写
 
@@ -1147,6 +1181,7 @@ MPEG (mpg)，                           文件头：000001B3
 Quicktime (mov)，                     文件头：6D6F6F76
 Windows Media (asf)，               文件头：3026B2758E66CF11
 MIDI (mid)，                              文件头：4D546864
+gzip 文件头：1F 8B
 ```
 
 #### 其它文件
@@ -1262,10 +1297,19 @@ usb取证 wireshark里全是USB协议流量数据包
 
 https://github.com/WangYihang/UsbKeyboardDataHacker
 
-虚拟机下运行
+虚拟机下运行(建议在ubuntu下跑,kali下跑有点问题，主要是tshark问题)
 
-`python3 UsbKeyboardHacker.py data.pcap`
+`python UsbKeyboardDataHacker.py bingbing.pcapng`
 
+删掉`2<del>`
+
+
+
+**tshark提取USB流量**
+
+```bash
+tshark -r bingbing.pcapng -T fields -e usb.capdata > usbdata.txt
+```
 ### 私钥解密
 
 在流量包发现私钥后另存为本地1.key

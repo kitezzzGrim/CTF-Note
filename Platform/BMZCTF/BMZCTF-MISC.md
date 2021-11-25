@@ -60,7 +60,10 @@
     - [山东省大学生网络技术大赛-morse](#山东省大学生网络技术大赛-morse)
     - [2020首届祥云杯-xixixi](#2020首届祥云杯-xixixi)
     - [crymisc](#crymisc)
-
+    - [BJDCTF-2020-Misc-一叶障目](#BJDCTF-2020-Misc-一叶障目)
+    - [2018-hackergame-游园会的集章卡片](#2018-hackergame-游园会的集章卡片)
+    - [2021-MAR-DASCTF-简单的png隐写](#2021-MAR-DASCTF-简单的png隐写)
+    - [2021-红明谷-我的心是冰冰的](#2021-红明谷-我的心是冰冰的)
 ## 真正的CTFer
 
 文件取证->图片分析->修改宽高
@@ -1259,3 +1262,190 @@ BMZCTF{0cfdd1ad80807da6c0413de606bb0ae4}
 
 
 ## crymisc
+
+改为后缀zip,伪加密得到图片
+
+010打开，在ZIP文件尾处发现base64
+
+SSB3YXMgcmVqZWN0ZWQuLi4uLi5USElTIElTIFRIRSBQQVNTV09SRDpJIFdhbm5hIENyeXl5ISEh
+
+I was rejected......THIS IS THE PASSWORD:I Wanna Cryyy!!!
+
+接下来提取压缩包
+
+![image](./img/zip1.png)
+
+添加50 4B 即可，输入密码解压
+
+emoj解密
+
+GACTF{H4ppy_Mi5c_H4ppy_L1fe}
+
+## BJDCTF-2020-Misc-一叶障目
+
+010打开后CRC匹配错误，一般是宽高问题，修改为FF FF即可得到flag
+
+xaflag{66666}
+
+## 2018 hackergame 游园会的集章卡片
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>card</title>
+  <style>
+    div {
+      height: 125px;
+    }
+  </style>
+</head>
+<body>
+<div>
+  <img src="fragments/o71CmLXGTOMwC.png" alt="11"><!--
+  --><img src="fragments/bQ94Fx1mjP79C.png" alt="12"><!--
+  --><img src="fragments/gAf5weYdrA6UT.png" alt="13"><!--
+  --><img src="fragments/F6Hv0FJzoeScU.png" alt="14"><!--
+  --><img src="fragments/iBW71GAIUZWtN.png" alt="15">
+</div>
+<div>
+  <img src="fragments/v2zMgTUijziLb.png" alt="21"><!--
+  --><img src="fragments/IGFavhnGQCxcN.png" alt="22"><!--
+  --><img src="fragments/qKqe06UDsBolc.png" alt="23"><!--
+  --><img src="fragments/FbyDcnN2nY7FV.png" alt="24"><!--
+  --><img src="fragments/06qjXv4T4ebcp.png" alt="25">
+</div>
+<div>
+  <img src="fragments/ZFaDt5hcIq5PL.png" alt="31"><!--
+  --><img src="fragments/WAzaH5Tph7dsg.png" alt="32"><!--
+  --><img src="fragments/D9gPE3nJvpEXF.png" alt="33"><!--
+  --><img src="fragments/DZ1ujfw3qFAbk.png" alt="34"><!--
+  --><img src="fragments/tHclhSFyyORg4.png" alt="35">
+</div>
+<div>
+  <img src="fragments/VfwN00osf0wTa.png" alt="41"><!--
+  --><img src="fragments/ZZWbAdGNDspdr.png" alt="42"><!--
+  --><img src="fragments/T0Kang6OWFdYC.png" alt="43"><!--
+  --><img src="fragments/Gd8zpdNfjxJZK.png" alt="44"><!--
+  --><img src="fragments/uPgc8rK5RlZ2s.png" alt="45">
+</div>
+<div>
+  <img src="fragments/sOaGS0J08Mg0f.png" alt="51"><!--
+  --><img src="fragments/tU2Plsy7JetUr.png" alt="52"><!--
+  --><img src="fragments/9ooh29IcoQ4CC.png" alt="53"><!--
+  --><img src="fragments/d5NNCCjyDVU8X.png" alt="54"><!--
+  --><img src="fragments/pHO62EQBMSyeQ.png" alt="55">
+</div>
+</body>
+```
+
+![image](./img/pintu1.png)
+
+flag{H4PPY_1M4GE_PR0CE551NG}
+
+## 2021-MAR-DASCTF-简单的png隐写
+
+伪加密,pngchek检查hint.png可以发现缺块
+
+![image](./img/pngcheck1.png)
+
+分为两张图片，将后面的也就是910H后面复制，加上png头和IHDR可新建为图片
+
+![image](./img/png隐写.png)
+
+可以看到提示outguess，密码为 89504E
+
+outguess -k "89504E" -r flag.jpg hidden.txt
+
+得到base64
+
+```
+MUY4QjA4MDg5MTgwNzg1RTAwMDM2NjZDNjE2NzJFNzQ3ODc0MDA0QkNCNDk0Q0FGMzZCMDMwMzQ0RDM1NDlCNjRDMzMzNTMzMzRCMTQ4MzVCNzQ4NEEzNTMzNDg0OTMyMzU0QjRFMzUzMTQ5MzFCNUFDRTVFMjAyMDA0NjhCMjIzRjI4MDAwMDAw
+```
+
+```
+1F8B08089180785E0003666C61672E747874004BCB494CAF36B030344D3549B64C33353334B14835B7484A3533484932354B4E35314931B5ACE5E20200468B223F28000000
+```
+
+可以看出是gzip文件头
+
+另存为gzip即可
+
+flag{0815e4c9f56148e78be60db56ce44d59}
+
+## 2021-红明谷-我的心是冰冰的
+
+rar伪加密，第二十四个字节改为80即可
+
+java盲水印
+
+```java
+java -jar BlindWatermark.jar decode -c bingbing.jpg decode.jpg
+```
+
+gnibgnib，解压得到usb流量，提取
+
+```bash
+python UsbKeyboardDataHacker.py bingbing.pcapng
+```
+
+删掉`2<DEL>`
+
+666c61677b38663965643266393333656631346138643035323364303334396531323939637d
+
+flag{8f9ed2f933ef14a8d0523d0349e1299c}
+
+## 你能发现蛛丝马迹吗
+
+```bash
+python2 vol.py -f memory.img imageinfo
+python2 vol.py -f memory.img --profile=Win2003SP1x86 pslist
+python2 vol.py -f memory.img --profile=Win2003SP1x86 memdump -p 3660 --dump-dir=./
+# 得到二维码png和key iv
+```
+
+jfXvUoypb8p3zvmPks8kJ5Kt0vmEw0xUZyRGOicraY4=
+
+aes解密
+
+flag{F0uNd_s0m3th1ng_1n_M3mory}
+
+## base_python
+
+提示：你真的了解base的原理吗？
+
+下载后是很大的base文件，里面都是混合起来的base，需要匹配解码
+
+python中只有base16 32 64 和85才可以解码
+
+```py
+import re
+import base64
+with open('base_python.txt','r') as f:
+    decode = f.read()
+    try:
+        for i in range(30):
+         s = re.compile(r'[a-z]|[=]').findall(decode)
+         s1 = re.compile(r'[0189]').findall(decode)
+         s2 = re.compile(r'[,%;>|){:”’*?@<.(]').findall(decode)
+         if 'flag' in decode:
+             print(decode)
+             print(i)
+             break
+         elif (bool(s1) == False) and  (bool(s2) ==False) :
+             decode = base64.b32decode(decode)
+         elif bool(s) == True and bool(s2) == False :
+             decode = base64.b64decode(decode)
+         elif bool(s2) == True:
+             decode = base64.b85decode(decode)
+         else :
+             decode = base64.b16decode(decode)
+         decode = str(decode, encoding='utf-8')
+    except:
+        print(decode)
+f.close()
+print(decode)
+```
+
+flag{94ae929146bb4ac5fa433935f91c8869}
