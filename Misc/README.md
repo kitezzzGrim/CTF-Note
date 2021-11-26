@@ -47,7 +47,7 @@
                 - [CRC32爆破](#CRC32爆破)
                 - [明文攻击](#明文攻击)
                 - [7z](#7z)
-            - [爆破压缩包](#爆破压缩包)
+            - [压缩包爆破](#压缩包爆破)
                 - [掩码爆破](#掩码爆破)
                 - [生日爆破](#生日爆破)
                 - [循环解压](#循环解压)
@@ -122,6 +122,7 @@
             - [大流量统计](#大流量统计)
     - [音频取证](#音频取证)
         - [Audacity](#Audacity)
+            - [导入原始数据](#导入原始数据)
         - [dtmf2num](#dtmf2num)
         - [音频LSB隐写](#音频LSB隐写)
         - [Steghide](#Steghide)
@@ -411,6 +412,7 @@ Frame Browser:帧浏览器   主要是对GIF之类的动图进行分解，把动
 
 ### 修改长宽
 
+**png**
 一般在第二行 6 7列
 
 6是宽 7是高
@@ -418,6 +420,8 @@ Frame Browser:帧浏览器   主要是对GIF之类的动图进行分解，把动
 也可以用脚本爆破对应正常的宽高
 
 ![image](./img/kuangao.png)
+
+**jpg**
 
 ### 粘贴复制二进制
 
@@ -676,10 +680,10 @@ https://github.com/theonlypwner/crc32
 #### 7z
 
 7z能直接解压伪加密的文件
-### 爆破压缩包
+### 压缩包爆破
 
 archpr2 可爆破rar
-{vI0_l3t_Ev3rg@RdeN}
+
 #### 掩码爆破
 
 archpr工具可掩码爆破
@@ -1276,6 +1280,28 @@ tshark -r sqltest.pcapng -Y "http.request" -T fields -e http.request.full_uri > 
 
 http.request.uri http请求的uri部分
 
+
+　-w: -w <outfile|-> 设置raw数据的输出文件。这个参数不设置，tshark将会把解码结果输出到stdout,“-w -”表示把raw输出到stdout。如果要把解码结果输出到文件，使用重定向“>”而不要-w参数。
+　　-F: -F <output file type>,设置输出的文件格式，默认是.pcapng,使用tshark -F可列出所有支持的输出文件类型。
+　　-V: 增加细节输出;
+　　-O: -O <protocols>,只显示此选项指定的协议的详细信息。
+　　-P: 即使将解码结果写入文件中，也打印包的概要信息；
+　　-S: -S <separator> 行分割符
+　　-x: 设置在解码输出结果中，每个packet后面以HEX dump的方式显示具体数据。
+　　-T: -T pdml|ps|text|fields|psml,设置解码结果输出的格式，包括text,ps,psml和pdml，默认为text
+　　-e: 如果-T fields选项指定，-e用来指定输出哪些字段;
+　　-E: -E <fieldsoption>=<value>如果-T fields选项指定，使用-E来设置一些属性，比如
+　　　　header=y|n
+　　　　separator=/t|/s|<char>
+　　　　occurrence=f|l|a
+　　　　aggregator=,|/s|<char>
+　　-t: -t a|ad|d|dd|e|r|u|ud 设置解码结果的时间格式。“ad”表示带日期的绝对时间，“a”表示不带日期的绝对时间，“r”表示从第一个包到现在的相对时间，“d”表示两个相邻包之间的增量时间（delta）。
+　　-u: s|hms 格式化输出秒；
+　　-l: 在输出每个包之后flush标准输出
+　　-q: 结合-z选项进行使用，来进行统计分析；
+　　-X: <key>:<value> 扩展项，lua_script、read_format，具体参见 man pages；
+　　-z：统计选项，具体的参考文档;tshark -z help,可以列出，-z选项支持的统计方式。
+
 #### lsass.dmp
 
 lsass是windows系统的一个进程，用于本地安全和登陆策略。mimikatz可以从 lsass.exe 里获取windows处于active状态账号明文密码。本题的lsass.dmp就是内存运行的镜像，也可以提取到账户密码
@@ -1357,6 +1383,9 @@ morse2ascii good.wav
 
 将`t`替换为`-`，e替换为`.`
 
+#### 导入原始数据
+
+s8后缀
 
 ### dtmf2num
 

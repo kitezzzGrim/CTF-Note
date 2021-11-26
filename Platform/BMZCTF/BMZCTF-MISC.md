@@ -64,6 +64,17 @@
     - [2018-hackergame-游园会的集章卡片](#2018-hackergame-游园会的集章卡片)
     - [2021-MAR-DASCTF-简单的png隐写](#2021-MAR-DASCTF-简单的png隐写)
     - [2021-红明谷-我的心是冰冰的](#2021-红明谷-我的心是冰冰的)
+    - [RoarCTF2020-Hi_433MHz](#RoarCTF2020-Hi_433MHz)
+    - [你能发现蛛丝马迹吗](#你能发现蛛丝马迹吗)
+    - [base_python](#base_python)
+    - [RoarCTF2020-Hi_433MHz](#RoarCTF2020-Hi_433MHz)
+    - [BJDCTF-2020-Misc-just-a-rar](#BJDCTF-2020-Misc-just-a-rar)
+    - [2018-redhat-NotOnlyWireshark](#2018-redhat-NotOnlyWireshark)
+    - [TallShanBen](#TallShanBen)
+    - [one-by-one](#one-by-one)
+    - [凯撒也喜欢二进制](#凯撒也喜欢二进制)
+    - [2021年祥云杯-鸣雏恋](#2021年祥云杯-鸣雏恋)
+    - [2018-QCTF-picture](#2018-QCTF-picture)
 ## 真正的CTFer
 
 文件取证->图片分析->修改宽高
@@ -1449,3 +1460,461 @@ print(decode)
 ```
 
 flag{94ae929146bb4ac5fa433935f91c8869}
+
+## RoarCTF2020-Hi_433MHz
+
+打开后是rf.s8，用audacity 导入原始数据即可，放大查看
+
+![image](./img/importraw1.png)
+
+猜想第一个字符是f，f的二进制是01100110 ，可以猜出编码方式：连续的信号代表1、连续的无信号代表0，短的信号脉冲用于每位间的分割，每组信号编码一个字符的8位ASCII码。这里借用网图：
+
+![image](./img/importraw2.png)
+
+flag{25c21b0d-6a11-4312-971b-428d01cdc534}
+
+BMZCTF{25c21b0d-6a11-4312-971b-428d01cdc534}
+
+## BJDCTF-2020-Misc-just-a-rar
+
+archpr2爆破得到密码2016
+
+010打开发现flag
+
+flag{Wadf_123}
+
+## 2018-redhat-NotOnlyWireshark
+
+![image](./img/2018redhatwireshark1.png)
+
+提取zip
+
+```
+tshark -r NotOnlyWireshark.pcapng -e http.request.uri -T fields -Y 'http.request.uri' | grep -P 'name=[A-F0-9]{3}' | awk -F '=' '{printf $2}'
+```
+
+得到
+```
+123404B03040A0001080000739C8C4B7B36E495200000001400000004000000666C616781CD460EB62015168D9E64B06FC1712365FDE5F987916DD8A52416E83FDE98FB504B01023F000A0001080000739C8C4B7B36E4952000000014000000040024000000000000002000000000000000666C61670A00200000000000010018000DB39B543D73D301A1ED91543D73D301F99066543D73D301504B0506000000000100010056000000420000000000
+```
+
+将1234改为5，可以发现是zip数据流
+```
+504B03040A0001080000739C8C4B7B36E495200000001400000004000000666C616781CD460EB62015168D9E64B06FC1712365FDE5F987916DD8A52416E83FDE98FB504B01023F000A0001080000739C8C4B7B36E4952000000014000000040024000000000000002000000000000000666C61670A00200000000000010018000DB39B543D73D301A1ED91543D73D301F99066543D73D301504B0506000000000100010056000000420000000000
+```
+
+压缩包有密码，回到流量包搜索关键字key
+
+密码是?id=1128%23
+
+flag{1m_s0_ang4y_1s}
+
+## TallShanBen
+
+![image](./img/jpg-kuangao1.png)
+
+flag{Sh4n_B3n}
+
+## one-by-one
+
+0.png提示crc错误，修改宽高得到密码
+
+KEEPQUIET
+
+silenteye解密
+
+flag{that's_all???}
+
+## 凯撒也喜欢二进制
+
+notepad打开发现少了一位，在前面加0
+
+每8位一组hex解码
+
+```py
+with open("./cipher.txt","r") as f:
+    data = f.read()
+    for i in range(0,len(data),8):
+        # print(data[i:i+8])
+        print(chr(int(data[i:i+8],2)),end="")
+```
+
+```py
+MM2WMMBZMNSTKZLGHFRWCZDCGNRDGYRRME4DSY3EMRSWCZJQHFRWGOLFMVQWCOLDMM3GIZDFMVTDEZJVMVTDSY3DHBSWEZLFMVSWMNJZMNSTKZLGHFRWMMDFMVSGIZRSMUYWKODFGVSWCZJTHFRWMMDFMI4WGYZQMVRGMMTFGFSWKOLDMYYGKYRZMNSTSZJRMUYWMMBZMNRTQZRRMRTGKNLFGE4WGYZZMRSGKYLFGFTDAZRQMUYWCYJZMNRTIZJRHFRWMMDFGFSTQZJYMVTDSY3FGRSTCZLFHFRWMMDFGRSGIZRQHFRWKZTFGRSTCOLDMU2WKZRZMNSWCZLCMYYDSY3EMRSWCOLDMVRGKZLFMNSTIZDEMVQTSY3EMRSWMOLDMVTGKNDFGE4WGZJUMRSGKMBZMNSGKZJRMUYWKYJZMNTDAZLCMU4GKMBZMNSTEZLFMVRGKOJZMNSGIOLDMY2WKYTGGFSWCZJTHFRWIZDFGNSTCYLBHFRWKMTFHBSGIZJTMY3WEMTFGFRDCZJQMIZGKMLBMZRDKZDFMIYWCZLFGBRDKZJRMIZWKMLBMNSGMYRSMIZWCZDCGFQWMZDEMIZGCY3EMZSGKYRRMRTGCZTEMZTDSOLDMM2GKMJZMNSWCZLCMYZTSY3FMZSGIZRVMVTDSY3GGBSTIZDEMYYDSY3FGRSTCOLDMYZWKNLFHBSTQOLDMYYGKZLEMRTDEZJRMU4DSY3GGNSTKZRQMU2DSY3FGRSTCZLFHFRWMMDFMI4WGY3DMRSGKZLFGVSWMOLDMYYGKYRZMNSTSZJRMUYWMMBZMNSTIZJRMVSTSY3FGJSGIZRQMU2GKMLFMVQTQOLDMYZWKNDFMI4WGZJUMRSGKZRZMNSWKZJRMRTGKMLFMFTDAZJYMY2TSY3EMVSTCZJRMVQTSY3FMVSTCZJYMUYWIZDFMZSTCZJQHFRWKMTFMVSWEZJZHFRWMMDFGRSTCOLDMJSWIZDFMZTDAZJVMU4GKODFGFQWC===
+```
+
+base32解码得到
+
+```
+c5f09ce5ef9cadb3b3b1a89cddeae09cc9eeaa9cc6ddeef2e5ef9cc8ebeeeef59ce5ef9cf0eeddf2e1e8e5eae39cf0eb9cc0ebf2e1ee9cf0eb9ce9e1e1f09cc8f1dfe5e19cc9ddeae1f0f0e1aa9cc4e19cf0e1e8e8ef9ce4e1ee9cf0e4ddf09cefe4e19ce5ef9ceaebf09cddea9cebeeece4ddea9cddef9cefe4e19ce4dde09cdee1e1ea9cf0ebe8e09ce2eeebe99cdd9cf5ebf1eae39cdde3e1aa9ce2e8dde3f7b2e1b1e0b2e1afb5deb1aee0b5e1b3e1acdfb2b3adb1afddb2acdfdeb1dfafdff99cc4e19ceaebf39cefddf5ef9cf0e4ddf09ce4e19cf3e5e8e89cf0eeddf2e1e89cf3e5f0e49ce4e1ee9cf0eb9cccddeee5ef9cf0eb9ce9e1e1f09ce4e1ee9ce2ddf0e4e1eea89cf3e4eb9ce4ddef9ceee1dfe1eaf0e8f59cdee1e1ea9ceee1e8e1ddefe1e09ce2eeebe99cf0e4e19cbeddeff0e5e8e8e1aa
+```
+
+可以发现普遍hex偏大，可以尝试减少
+
+```py
+s = "c5f09ce5ef9cadb3b3b1a89cddeae09cc9eeaa9cc6ddeef2e5ef9cc8ebeeeef59ce5ef9cf0eeddf2e1e8e5eae39cf0eb9cc0ebf2e1ee9cf0eb9ce9e1e1f09cc8f1dfe5e19cc9ddeae1f0f0e1aa9cc4e19cf0e1e8e8ef9ce4e1ee9cf0e4ddf09cefe4e19ce5ef9ceaebf09cddea9cebeeece4ddea9cddef9cefe4e19ce4dde09cdee1e1ea9cf0ebe8e09ce2eeebe99cdd9cf5ebf1eae39cdde3e1aa9ce2e8dde3f7b2e1b1e0b2e1afb5deb1aee0b5e1b3e1acdfb2b3adb1afddb2acdfdeb1dfafdff99cc4e19ceaebf39cefddf5ef9cf0e4ddf09ce4e19cf3e5e8e89cf0eeddf2e1e89cf3e5f0e49ce4e1ee9cf0eb9cccddeee5ef9cf0eb9ce9e1e1f09ce4e1ee9ce2ddf0e4e1eea89cf3e4eb9ce4ddef9ceee1dfe1eaf0e8f59cdee1e1ea9ceee1e8e1ddefe1e09ce2eeebe99cf0e4e19cbeddeff0e5e8e8e1aa"
+
+flag = ''
+for j in range(200):
+    flag =''
+    for i in range(0,len(s),2):
+       flag +=  chr(int(s[i:i+2],16)-j)
+    if 'flag{' in flag:
+        print(flag)
+    else:
+        pass
+```
+
+flag{6e5d6e39b52d9e7e0c67153a60cb5c3c}
+
+## 2021年祥云杯-鸣雏恋
+
+word改为zip发现key.txt和加密的压缩包
+
+key.txt:零宽字节隐写
+Because I like naruto best
+
+解压后是一堆129488张图片，但类型只有两种鸣人和雏田照片
+
+这里是读取压缩包图片，根据图片大小来判断1和0
+```py
+import zipfile
+lis = []
+result = ""
+data = ""
+size = 1
+with zipfile.ZipFile('love.zip', 'r') as zipobj: #读取压缩包
+    for file_name in zipobj.namelist(): #遍历名称
+        info = zipobj.getinfo(file_name)
+        file_name = file_name.encode('cp437').decode('gbk')
+        lis.append([file_name,info.file_size])
+# print(lis)
+del lis[0]
+for i in range(len(lis)): #处理文件名和数据
+    lis[i][0] = lis[i][0].replace("out/","")
+    lis[i][0] = lis[i][0].replace(".png", "")
+    lis[i][0] = int(lis[i][0])
+    if lis[i][1]==262: # 判断文件大小
+        lis[i][1]='0'
+    else:
+        lis[i][1]='1'
+# print(lis)
+lis = sorted(lis)
+# print(lis)
+for i in range(len(lis)):
+    data += lis[i][1] #数据大小
+    if len(data)%8==0: #集齐八位二进制时
+        result+=chr(int(data,2))
+        data=""
+with open("2.txt","w") as fp:
+    fp.write(result)
+```
+
+base64转图片得到flag
+
+## 2018-QCTF-picture
+
+Just misc it
+hint：注意文件名（非hash部分）
+原文件名：bd4408a3-9835-4962-a9af-6acf6cc56b26.wwjkwywq-2a7c8b1b70e00a010c92cab0394c6f93
+
+lsb隐写:
+```bash
+python2 lsb.py extract 1.png 1.txt wwjkwywq
+```
+
+得到
+
+```
+#_*_ coding:utf-8 _*_
+import re
+import sys
+
+ip=  (58, 50, 42, 34, 26, 18, 10, 2,
+      60, 52, 44, 36, 28, 20, 12, 4,
+      62, 54, 46, 38, 30, 22, 14, 6,
+      64, 56, 48, 40, 32, 24, 16, 8,
+      57, 49, 41, 33, 25, 17, 9 , 1,
+      59, 51, 43, 35, 27, 19, 11, 3,
+      61, 53, 45, 37, 29, 21, 13, 5,
+      63, 55, 47, 39, 31, 23, 15, 7)
+
+ip_1=(40, 8, 48, 16, 56, 24, 64, 32,
+      39, 7, 47, 15, 55, 23, 63, 31,
+      38, 6, 46, 14, 54, 22, 62, 30,
+      37, 5, 45, 13, 53, 21, 61, 29,
+      36, 4, 44, 12, 52, 20, 60, 28,
+      35, 3, 43, 11, 51, 19, 59, 27,
+      34, 2, 42, 10, 50, 18, 58, 26,
+      33, 1, 41,  9, 49, 17, 57, 25)
+
+e  =(32, 1,  2,  3,  4,  5,  4,  5, 
+       6, 7,  8,  9,  8,  9, 10, 11, 
+      12,13, 12, 13, 14, 15, 16, 17,
+      16,17, 18, 19, 20, 21, 20, 21,
+      22, 23, 24, 25,24, 25, 26, 27,
+      28, 29,28, 29, 30, 31, 32,  1)
+ 
+p=(16,  7, 20, 21, 29, 12, 28, 17,
+     1, 15, 23, 26,  5, 18, 31, 10, 
+     2,  8, 24, 14, 32, 27,  3,  9,
+     19, 13, 30, 6, 22, 11,  4,  25)
+
+s=[ [[14, 4, 13,  1,  2, 15, 11,  8,  3, 10,  6, 12,  5,  9,  0,  7],
+     [0, 15,  7,  4, 14,  2, 13,  1, 10,  6, 12, 11,  9,  5,  3,  8],
+     [4,  1, 14,  8, 13,  6,  2, 11, 15, 12,  9,  7,  3, 10,  5,  0],    
+     [15, 12,  8,  2,  4,  9,  1,  7,  5, 11,  3, 14, 10,  0,  6, 13]],
+
+     [[15,  1,  8, 14,  6, 11,  3,  4,  9,  7,  2, 13, 12,  0,  5, 10],     
+     [3, 13,  4,  7, 15,  2,  8, 14, 12,  0,  1, 10,  6,  9, 11,  5],     
+     [0, 14,  7, 11, 10,  4, 13,  1,  5,  8, 12,  6,  9,  3,  2, 15],     
+     [13,  8, 10,  1,  3, 15,  4,  2, 11,  6,  7, 12,  0,  5, 14,  9]],
+
+     [[10,  0,  9, 14,  6,  3, 15,  5,  1, 13, 12,  7, 11,  4,  2,  8],     
+     [13,  7,  0,  9,  3,  4,  6, 10,  2,  8,  5, 14, 12, 11, 15,  1],   
+     [13,  6,  4,  9,  8, 15,  3,  0, 11,  1,  2, 12,  5, 10, 14,  7],     
+     [1, 10, 13,  0,  6,  9,  8,  7,  4, 15, 14,  3, 11,  5,  2, 12]],
+
+    [[7, 13, 14,  3,  0,  6,  9, 10,  1,  2,  8,  5, 11,  12,  4, 15],     
+     [13,  8, 11,  5,  6, 15,  0,  3,  4,  7,  2, 12,  1, 10, 14,9],     
+     [10,  6,  9,  0, 12, 11,  7, 13, 15,  1,  3, 14,  5,  2,  8,  4],     
+     [3, 15,  0,  6, 10,  1, 13,  8,  9,  4,  5, 11, 12,  7,  2, 14]],
+
+
+    [[2, 12,  4,  1,  7, 10, 11,  6,  8,  5,  3, 15, 13,  0, 14,  9],     
+     [14, 11,  2, 12,  4,  7, 13,  1,  5,  0, 15, 10,  3,  9,  8,  6],     
+     [4,  2,  1, 11, 10, 13,  7,  8, 15,  9, 12,  5,  6,  3,  0, 14],     
+     [11,  8, 12,  7,  1, 14,  2, 13,  6, 15,  0,  9, 10,  4,  5,  3]],
+
+    [[12,  1, 10, 15,  9,  2,  6,  8,  0, 13,  3,  4, 14,  7,  5, 11],
+     [10, 15,  4,  2,  7, 12,  9,  5,  6,  1, 13, 14,  0, 11,  3,  8],     
+     [9, 14, 15,  5,  2,  8, 12,  3,  7,  0,  4, 10,  1, 13, 11,  6],     
+     [4,  3,  2, 12,  9,  5, 15, 10, 11, 14,  1,  7,  6,  0,  8, 13]],
+
+    [[4, 11,  2, 14, 15,  0,  8, 13,  3, 12,  9,  7,  5, 10,  6,  1],     
+     [13,  0, 11,  7,  4,  9,  1, 10, 14,  3,  5, 12,  2, 15,  8,  6],     
+     [1,  4, 11, 13, 12,  3,  7, 14, 10, 15,  6,  8,  0,  5,  9,  2],     
+     [6, 11, 13,  8,  1,  4, 10,  7,  9,  5,  0, 15, 14,  2,  3, 12]],
+
+   [[13,  2,  8,  4,  6, 15, 11,  1, 10,  9,  3, 14,  5,  0, 12,  7],     
+     [1, 15, 13,  8, 10,  3,  7,  4, 12,  5,  6, 11,  0, 14,  9,  2],     
+     [7, 11,  4,  1,  9, 12, 14,  2,  0,  6, 10, 13, 15,  3,  5,  8],     
+     [2,  1, 14,  7,  4, 10,  8, 13, 15, 12,  9,  0,  3,  5,  6, 11]]]
+     
+pc1=(57, 49, 41, 33, 25, 17,  9,
+       1, 58, 50, 42, 34, 26, 18,
+      10,  2, 59, 51, 43, 35, 27,
+      19, 11,  3, 60, 52, 44, 36,
+      63, 55, 47, 39, 31, 23, 15,
+       7, 62, 54, 46, 38, 30, 22,
+      14,  6, 61, 53, 45, 37, 29,
+      21, 13,  5, 28, 20, 12, 4);
+
+pc2= (14, 17, 11, 24,  1,  5,  3, 28,
+      15,  6, 21, 10, 23, 19, 12,  4, 
+      26,  8, 16,  7, 27, 20, 13,  2, 
+      41, 52, 31, 37, 47, 55, 30, 40, 
+      51, 45, 33, 48, 44, 49, 39, 56, 
+      34, 53, 46, 42, 50, 36, 29, 32)
+
+d = (  1,  1,  2,  2,  2,  2,  2,  2, 1, 2, 2, 2, 2, 2, 2, 1)
+
+__all__=['desencode']
+class DES():
+
+	def __init__(self):
+		pass
+
+	def code(self,from_code,key,code_len,key_len):
+		output=""
+		trun_len=0
+
+		code_string=self._functionCharToA(from_code,code_len)
+		code_key=self._functionCharToA(key,key_len)
+
+		if code_len%16!=0:
+			real_len=(code_len/16)*16+16
+		else:
+			real_len=code_len
+
+		if key_len%16!=0:
+			key_len=(key_len/16)*16+16
+		key_len*=4
+
+
+		trun_len=4*real_len
+
+		for i in range(0,trun_len,64):
+			run_code=code_string[i:i+64]
+			l=i%key_len
+			run_key=code_key[l:l+64]
+
+
+			run_code= self._codefirstchange(run_code)
+			run_key= self._keyfirstchange(run_key)
+
+			for j in range(16):
+
+				code_r=run_code[32:64]
+				code_l=run_code[0:32]
+
+				run_code=code_r
+
+				code_r= self._functionE(code_r)
+
+				key_l=run_key[0:28]
+				key_r=run_key[28:56]
+				key_l=key_l[d[j]:28]+key_l[0:d[j]]
+				key_r=key_r[d[j]:28]+key_r[0:d[j]]
+				run_key=key_l+key_r
+				key_y= self._functionKeySecondChange(run_key)
+
+
+				code_r= self._codeyihuo(code_r,key_y)
+
+				code_r= self._functionS(code_r)
+
+				code_r= self._functionP(code_r)
+
+				code_r= self._codeyihuo(code_l,code_r)
+				run_code+=code_r
+
+			code_r=run_code[32:64]
+			code_l=run_code[0:32]
+			run_code=code_r+code_l
+
+			output+=self._functionCodeChange(run_code)
+		return output
+
+	def _codeyihuo(self,code,key):
+		code_len=len(key)
+		return_list=''
+		for i in range(code_len):
+			if code[i]==key[i]:
+				return_list+='0'
+			else:
+				return_list+='1'
+		return return_list
+
+	def _codefirstchange(self,code):
+		changed_code=''
+		for i in range(64):
+			changed_code+=code[ip[i]-1]
+		return changed_code
+
+
+	def _keyfirstchange (self,key):
+		changed_key=''
+		for i in range(56):
+			changed_key+=key[pc1[i]-1]
+		return changed_key
+
+
+	def _functionCodeChange(self, code):
+		lens=len(code)/4
+		return_list=''
+		for i in range(lens):
+			list=''
+			for j in range(4):
+				list+=code[ip_1[i*4+j]-1]
+			return_list+="%x" %int(list,2)
+		return return_list
+
+
+	def _functionE(self,code):
+		return_list=''
+		for i in range(48):
+			return_list+=code[e[i]-1]
+		return return_list
+
+
+	def _functionP(self,code):
+		return_list=''
+		for i in range(32):
+			return_list+=code[p[i]-1]
+		return return_list
+
+
+	def _functionS(self, key):
+		return_list=''
+		for i in range(8):
+			row=int( str(key[i*6])+str(key[i*6+5]),2)
+			raw=int(str( key[i*6+1])+str(key[i*6+2])+str(key[i*6+3])+str(key[i*6+4]),2)
+			return_list+=self._functionTos(s[i][row][raw],4)
+
+		return return_list
+
+
+	def _functionKeySecondChange(self,key):
+		return_list=''
+		for i in range(48):
+			return_list+=key[pc2[i]-1]
+		return return_list
+
+
+	def _functionCharToA(self,code,lens):
+		return_code=''
+		lens=lens%16
+		for key in code:
+			code_ord=int(key,16)
+			return_code+=self._functionTos(code_ord,4)
+		if lens!=0:
+			return_code+='0'*(16-lens)*4
+		return return_code
+
+
+	def _functionTos(self,o,lens):
+		return_code=''
+		for i in range(lens):
+			return_code=str(o>>i &1)+return_code
+		return return_code
+
+
+def tohex(string):
+	return_string=''
+	for i in string:
+		return_string+="%02x"%ord(i)
+	return return_string
+
+def tounicode(string):
+	return_string=''
+	string_len=len(string)
+	for i in range(0,string_len,2):
+		return_string+=chr(int(string[i:i+2],16))
+	return return_string
+
+
+def desencode(from_code,key):
+
+	from_code=tohex(from_code)
+	key=tohex(key)
+
+	des=DES()
+	key_len=len(key)
+	string_len=len(from_code)
+
+	if string_len<1 or key_len<1:
+		print 'error input'
+		return False
+	key_code= des.code(from_code,key,string_len,key_len)
+	return key_code
+
+
+if __name__  == '__main__':
+	if(desencode(sys.argv[1],'mtqVwD4JNRjw3bkT9sQ0RYcZaKShU4sf')=='e3fab29a43a70ca72162a132df6ab532535278834e11e6706c61a1a7cefc402c8ecaf601d00eee72'):
+		print 'correct.'
+	else:
+		print 'try again.'
+```
+
+https://github.com/liupengs/DES_Python
+
+python des_1.py
+
+e3fab29a43a70ca72162a132df6ab532535278834e11e6706c61a1a7cefc402c8ecaf601d00eee72
+
+mtqVwD4JNRjw3bkT9sQ0RYcZaKShU4sf
+
+QCTF{eCy0AALMDH9rLoBnWnTigXpYPkgU0sU4}
+
+https://blog.ihomura.cn/2018/07/25/WriteUp-QCTF-keyword-picture/
