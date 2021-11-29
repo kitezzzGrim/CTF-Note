@@ -199,6 +199,15 @@ python2 vol.py -f ../memory.img imageinfo
 # 查看进程
 python2 vol.py -f ../memory.img --profile=Win2003SP1x86 pslist
 
+# dump内存
+python2 vol.py -f easy_dump.img --profile=Win7SP1x64 memdump -p 2952 --dump-dir=./
+
+# 文件扫描内存中的jpg文件
+python2 vol.py -f easy_dump.img --profile=Win7SP1x64 filescan | grep -ia .jpg
+
+# dump文件
+python2 vol.py -f easy_dump.img --profile=Win7SP1x64 dumpfiles -Q 0x00000000235c8770 --dump-dir=./
+
 # 查看cmd命令使用记录
 python2 vol.py -f ../memory.img --profile=Win2003SP1x86 cmdscan
 
@@ -283,7 +292,17 @@ notepad.exe是记事本，一般记事本中会有内容hint或者在内存中(�
 ```bash
 # 用notepad插件列出记事本的内容
 python2 vol.py notepad -f L-12A6C33F43D74-20161114-125252.raw --profile=WinXPSP2x86
+
+# 若出现This command does not support the profile Win7SP1x64 则直接通过PID dump notepad.exe的内存
+python2 vol.py -f easy_dump.img --profile=Win7SP1x64 memdump --dump-dir=./ -p 2952
+
+# 可以用strings查看dmp 这里由于记事本以16位little-endian存储文本，所以需要使用参数
+strings -e l 2952.dmp | grep "flag{" 
 ```
+
+
+
+
 
 ##### TrueCrypt.exe
 

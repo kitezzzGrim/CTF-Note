@@ -75,6 +75,7 @@
     - [凯撒也喜欢二进制](#凯撒也喜欢二进制)
     - [2021年祥云杯-鸣雏恋](#2021年祥云杯-鸣雏恋)
     - [2018-QCTF-picture](#2018-QCTF-picture)
+    - [2018-护网杯-easy_dump](#2018-护网杯-easy_dump)
 ## 真正的CTFer
 
 文件取证->图片分析->修改宽高
@@ -1918,3 +1919,30 @@ mtqVwD4JNRjw3bkT9sQ0RYcZaKShU4sf
 QCTF{eCy0AALMDH9rLoBnWnTigXpYPkgU0sU4}
 
 https://blog.ihomura.cn/2018/07/25/WriteUp-QCTF-keyword-picture/
+
+## 2018-护网杯-easy_dump
+
+the flag format:flag{}
+
+```bash
+python2 vol.py -f easy_dump.img imageinfo
+python2 vol.py -f easy_dump.img --profile=Win7SP1x64 pslist
+python2 vol.py notepad -f easy_dump.img --profile=Win7SP1x64
+# 提示profile不支持此插件，直接dump下来看看
+
+python2 vol.py -f easy_dump.img --profile=Win7SP1x64 memdump --dump-dir=./ -p 2952
+
+strings -e l 2952.dmp | grep "flag{"
+# flag{flag is not here,but I put an strange jpg for you,hope you like it :)}
+
+python2 vol.py -f easy_dump.img --profile=Win7SP1x64 filescan | grep -ia .jpg
+# 搜索jpg图片
+
+python2 vol.py -f easy_dump.img --profile=Win7SP1x64 dumpfiles -Q 0x00000000235c8770 --dump-dir=./
+# dump下jpg文件
+```
+
+binwalk分离出压缩包，解压后是message.img
+
+```
+```
