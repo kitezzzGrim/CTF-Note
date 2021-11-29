@@ -1290,6 +1290,7 @@ Ctrl+F 可打开如下
 
 ```
 tshark -r sqltest.pcapng -Y "http.request" -T fields -e http.request.full_uri > data.txt
+tshark -r misc4.pcapng -Y "tcp && ip.src == 106.75.209.165" -T fields -e data > 1.txt
 ```
 
 -r 读取文件

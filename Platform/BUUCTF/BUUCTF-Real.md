@@ -1,7 +1,12 @@
 # BUUCTF-Real
 
+- [PHP-XXE](#PHP-XXE)
 - [s2-005](#s2-005)
 
+
+## PHP-XXE
+
+https://github.com/vulhub/vulhub/tree/master/php/php_xxe
 ## s2-005
 
 输出id命令
