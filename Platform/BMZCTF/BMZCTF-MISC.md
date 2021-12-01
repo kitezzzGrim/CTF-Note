@@ -76,6 +76,7 @@
     - [2021年祥云杯-鸣雏恋](#2021年祥云杯-鸣雏恋)
     - [2018-QCTF-picture](#2018-QCTF-picture)
     - [2018-护网杯-easy_dump](#2018-护网杯-easy_dump)
+
 ## 真正的CTFer
 
 文件取证->图片分析->修改宽高
@@ -1944,5 +1945,32 @@ python2 vol.py -f easy_dump.img --profile=Win7SP1x64 dumpfiles -Q 0x00000000235c
 
 binwalk分离出压缩包，解压后是message.img
 
+```bash
+file message.img
+# ext文件，需要挂载
+mount message.img /mnt
+cd /mnt
+ls -al /mnt
 ```
+
+![image](./img/zuobiao1.png)
+
+转为二维码
+```bash
+sudo apt-get install gnuplot
+gnuplot
+plot "文件名"
 ```
+
+扫描二维码得到
+
+Here is the vigenere key: aeolus, but i deleted the encrypted message。
+
+vim -r恢复交换文件得到密文
+
+yispn!buwh_qcfd_ebo_mglzs
+
+维吉尼亚解密
+yeeet!just_find_and_solve
+
+flag{yeeet!just_find_and_solve}

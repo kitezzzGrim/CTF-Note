@@ -1473,6 +1473,7 @@ http://rumkin.com/tools/cipher/playfair.php
 
 维吉尼亚密码是在凯撒密码基础上产生的一种加密方法，它将凯撒密码的全部25种位移排序为一张表，与原字母序列共同组成26行及26列的字母表。另外，维吉尼亚密码必须有一个密钥，这个密钥由字母组成，最少一个，最多可与明文字母数量相等。
 
+http://www.atoolbox.net/Tool.php?Id=856
 https://www.guballa.de/vigenere-solver
 https://www.qqxiuzi.cn/bianma/weijiniyamima.php
 
@@ -1933,6 +1934,7 @@ https://www.qqxiuzi.cn/bianma/wenbenjiami.php?s=mangwen
 
 佛曰加密
 
+https://ctf.bugku.com/tool/todousharp
 http://hi.pcmoe.net/buddha.html
 
 

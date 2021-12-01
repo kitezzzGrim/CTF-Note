@@ -75,6 +75,7 @@
             - [logo语言解释器](#logo语言解释器)
             - [G语言解释器](#G语言解释器)
             - [Velato](#Velato)
+            - [lolcode](#lolcode)
         - [其它常用操作](#其它常用操作)
             - [Windows](#Windows)
                 - [右键查看属性](#右键查看属性)
@@ -101,6 +102,8 @@
                 - [图片拼接](#图片拼接)
                 - [zsteg](#zsteg)
                 - [file](#file)
+                - [gnuplot](#gnuplot)
+                - [vim](#vim)
         - [文件格式](#文件格式)
             - [常见文件头](#常见文件头)
             - [其它文件](#其它文件)
@@ -367,8 +370,9 @@ VeraCrypt 进行挂载
 ext类型的文件需要挂载
 
 ```bash
-mount attachment.img /mnt/cdrom
+mount attachment.img /mnt
 cd /mnt
+ls -al /mnt
 ```
 
 修复：
@@ -495,6 +499,7 @@ with open ("1.txt",'r') as d:
 			i += 1
 	flag.show()
 ```
+
 ### 压缩包分析文件头
 
 https://blog.csdn.net/Claming_D/article/details/105899397
@@ -979,6 +984,11 @@ Vlt.exe decode_it
 
 cmd下运行得到结果
 
+#### lolcode
+
+https://www.dcode.fr/lolcode-language
+
+![image](./img/lolcode.png)
 
 ### 其它常用操作
 
@@ -1090,7 +1100,7 @@ kali下用foremost
 
 ##### strings
 
- 打印文件中可打印的字符
+打印文件中可打印的字符
 
 strings 4.png
 
@@ -1166,6 +1176,30 @@ Linux rev 1.0 ext3 filesystem data, UUID=f2b1e8fa-29a6-454b-b6df-6182044790bc (n
 
 可知是ext3文件 需要挂载
 
+##### gnuplot
+
+**坐标数据**
+
+如:坐标转二维码
+```
+10 10
+10 11
+10 13
+....
+```
+
+```bash
+sudo apt-get install gnuplot
+gnuplot
+plot "文件名"
+```
+
+##### vim
+
+```bash
+# 恢复交换文件
+vim -r .swp
+```
 ### 文件格式
 
 #### 常见文件头
