@@ -22,4 +22,4 @@
     - Reverse :[Reverse总结](https://github.com/kitezzzGrim/CTF-Note/tree/master/Summary/Re)
 - Platform : [CTF平台刷题记录](https://github.com/kitezzzGrim/CTF-Note/tree/master/Platform)
 - Tools： [CTF常用脚本工具](https://github.com/kitezzzGrim/CTF-Note/tree/master/tools)
-
+- Daily: [日常赛程以及赛后writeup](https://github.com/kitezzzGrim/CTF-Note/tree/master/Daily)
