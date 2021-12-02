@@ -8,13 +8,18 @@
 - 更新时间：每日不定期
 - 项目地址：[kitezzzGrim/CTF-Note](#)
 
-![](./chart/img/ctf.jpg)
+![](./Summary/chart/img/ctf.jpg)
 
-- CTF平台刷题记录：[CTF-Note-平台刷题记录](https://github.com/kitezzzGrim/CTF-Note/tree/master/task)
-- CTF-Web总结: [CTF-Note-Web](https://github.com/kitezzzGrim/CTF-Note/tree/master/Web)
-- CTF-Misc总结：[CTF-Note-Misc](https://github.com/kitezzzGrim/CTF-Note/tree/master/Misc)
-- CTF-Crypher总结: [CTF-Note-Crypher](https://github.com/kitezzzGrim/CTF-Note/tree/master/Crypher)
-- CTF-Reverse总结: [CTF-Note-Reverse](https://github.com/kitezzzGrim/CTF-Note/tree/master/Re)
-- CTF-Pwn总结 : [CTF-Note-Pwn](https://github.com/kitezzzGrim/CTF-Note/tree/master/pwn)
-- CTF-图表 : [CTF-Note-chart](https://github.com/kitezzzGrim/CTF-Note/tree/master/chart)
-- CTF-Issue : [CTF-Note-issue](https://github.com/kitezzzGrim/CTF-Note/tree/master/issue)
+`目录索引`
+
+- Summary ：[CTF总结](https://github.com/kitezzzGrim/CTF-Note/summary)
+    - Web : [Web总结](https://github.com/kitezzzGrim/CTF-Note/summary/tree/master/Web)
+    - Misc : [Misc总结](https://github.com/kitezzzGrim/CTF-Note/summary/tree/master/Misc)
+    - Crypto : [Crypto总结](https://github.com/kitezzzGrim/CTF-Note/summary/tree/master/Crypto)
+    - Real : [Real总结](https://github.com/kitezzzGrim/CTF-Note/summary/tree/master/Real)
+    - Pwn : [Pwn总结](https://github.com/kitezzzGrim/CTF-Note/summary/tree/master/Pwn)
+    - Reverse :[Reverse总结](https://github.com/kitezzzGrim/CTF-Note/summary/tree/master/Re)
+
+- Platform : [CTF平台刷题记录](https://github.com/kitezzzGrim/CTF-Note/tree/master/Platform)
+- Tools： [CTF常用脚本工具](https://github.com/kitezzzGrim/CTF-Note/tree/master/Platform)
+

