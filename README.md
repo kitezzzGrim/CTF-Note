@@ -10,16 +10,16 @@
     <img src="./Summary/Chart/img/ctf.jpg">
 </p>
 
+---
 ## 文件树
 
-- Summary ：[CTF总结](https://github.com/kitezzzGrim/CTF-Note/summary)
-    - Web : [Web总结](https://github.com/kitezzzGrim/CTF-Note/summary/tree/master/Web)
-    - Misc : [Misc总结](https://github.com/kitezzzGrim/CTF-Note/summary/tree/master/Misc)
+- Summary ：[CTF总结](https://github.com/kitezzzGrim/CTF-Note/tree/master/Summary)
+    - Web : [Web总结](https://github.com/kitezzzGrim/CTF-Note/tree/master/Summary/Web)
+    - Misc : [Misc总结](https://github.com/kitezzzGrim/CTF-Note/tree/master/Summary/Misc)
     - Crypto : [Crypto总结](https://github.com/kitezzzGrim/CTF-Note/summary/tree/master/Crypto)
-    - Real : [Real总结](https://github.com/kitezzzGrim/CTF-Note/summary/tree/master/Real)
-    - Pwn : [Pwn总结](https://github.com/kitezzzGrim/CTF-Note/summary/tree/master/Pwn)
-    - Reverse :[Reverse总结](https://github.com/kitezzzGrim/CTF-Note/summary/tree/master/Re)
-
+    - Real : [Real总结](https://github.com/kitezzzGrim/CTF-Note/tree/master/Summary/Real)
+    - Pwn : [Pwn总结](https://github.com/kitezzzGrim/CTF-Note/tree/master/Summary/Pwn)
+    - Reverse :[Reverse总结](https://github.com/kitezzzGrim/CTF-Note/tree/master/Summary/Re)
 - Platform : [CTF平台刷题记录](https://github.com/kitezzzGrim/CTF-Note/tree/master/Platform)
-- Tools： [CTF常用脚本工具](https://github.com/kitezzzGrim/CTF-Note/tree/master/Platform)
+- Tools： [CTF常用脚本工具](https://github.com/kitezzzGrim/CTF-Note/tree/master/tools)
 

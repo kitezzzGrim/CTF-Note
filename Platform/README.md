@@ -1,27 +1,17 @@
 # CTF刷题记录
 
 目前的记录如下：
-- [BUUCTF](#BUUCCTF)
+- [BUUCTF](https://github.com/kitezzzGrim/CTF-Note/tree/master/Platform/BUUCTF)
     - https://buuoj.cn/challenges
-- [CTFHUB](#)
+- [CTFHUB](https://github.com/kitezzzGrim/CTF-Note/tree/master/Platform/CTFHUB)
     - https://www.ctfhub.com/#/index
-- [BMZCTF](#)
+- [BMZCTF](https://github.com/kitezzzGrim/CTF-Note/blob/master/Platform/BMZCTF/BMZCTF-MISC.md)
     - http://www.bmzclub.cn/
-- [南邮CTF](#)
-- [陇剑杯](#)
+- [UNCTF](https://github.com/kitezzzGrim/CTF-Note/tree/master/Platform/UNCTF2021)
+    - https://ctf.unctf.com/#/
+- [南邮CTF](https://github.com/kitezzzGrim/CTF-Note/tree/master/Platform/%E5%8D%97%E9%82%AECTF)
 - [CTFSHOW](#)
     - https://ctf.show/
+- [陇剑杯](https://github.com/kitezzzGrim/CTF-Note/tree/master/Platform/%E9%99%87%E5%89%91%E6%9D%AFCTF)
 
-
-
-类型分类：具体待构思
-
-流量分析
-
-文件取证
-
-内存取证
-
-密码取证
-
-音频取证
+---

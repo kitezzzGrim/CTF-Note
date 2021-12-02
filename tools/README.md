@@ -56,8 +56,12 @@
 
 ## 常用搜索一句话
 
+```
 find / -name flag*
-
+find / -name * | grep "flag{"
+echo $PATH | grep "flag{"
+env | grep "flag"
+```
 
 # Python
 
