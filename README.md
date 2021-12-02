@@ -16,7 +16,7 @@
 - Summary ：[CTF总结](https://github.com/kitezzzGrim/CTF-Note/tree/master/Summary)
     - Web : [Web总结](https://github.com/kitezzzGrim/CTF-Note/tree/master/Summary/Web)
     - Misc : [Misc总结](https://github.com/kitezzzGrim/CTF-Note/tree/master/Summary/Misc)
-    - Crypto : [Crypto总结](https://github.com/kitezzzGrim/CTF-Note/summary/tree/master/Crypto)
+    - Crypto : [Crypto总结](https://github.com/kitezzzGrim/CTF-Note/tree/master/Summary/Crypto)
     - Real : [Real总结](https://github.com/kitezzzGrim/CTF-Note/tree/master/Summary/Real)
     - Pwn : [Pwn总结](https://github.com/kitezzzGrim/CTF-Note/tree/master/Summary/Pwn)
     - Reverse :[Reverse总结](https://github.com/kitezzzGrim/CTF-Note/tree/master/Summary/Re)
