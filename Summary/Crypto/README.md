@@ -76,6 +76,7 @@
         - [敲击码](#敲击码)
         - [四方密码](#四方密码)
         - [Nihilist](#Nihilist)
+        - [WingDing编码](#WingDing编码)
 - [其它密码](#其它密码)
 
     - [Emoji表情编码](#Emoji表情编码)
@@ -260,6 +261,8 @@ http://tomeko.net/online_tools/base32.php
 
 #### base58
 
+http://www.metools.info/code/c74.html
+
 #### base62
 #### Base64
 
@@ -271,6 +274,8 @@ http://www.atoolbox.net/Tool.php?Id=934
 #### base91
 
 #### base92
+
+http://www.hiencode.com/base92.html
 
 #### base100
 
@@ -1743,6 +1748,16 @@ print flag
 ```
 
 `python nihilist.py`
+
+#### WingDing编码
+
+```
+🕈︎❒︎♓︎⧫︎♏︎ ⧫︎♏︎⌧︎⧫︎ ♒︎♏︎❒︎♏︎📬︎ 🕆︎⬧︎♏︎ ✌︎☹︎☹︎ 👍︎✌︎🏱︎💧︎ ♐︎□︎❒︎ 🕈︎👎︎ ☝︎♋︎⬧︎⧫︎♏︎❒︎ ⧫︎❒︎♋︎■︎⬧︎●︎♋︎⧫︎♓︎□︎■︎ 🖳︎✆︎
+```
+
+在线网站：https://lingojam.com/WingDing
+
+![image](./img/wingding.png)
 
 ## 其它密码
 

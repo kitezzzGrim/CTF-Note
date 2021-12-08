@@ -90,6 +90,7 @@
                     - [颜色十六进制号](#颜色十六进制号)
                 - [dnspy](#dnspy)
                 - [PowerRename](#PowerRename)
+                - [PyInstaller-提取器](#PyInstaller-提取器)
             - [Linux](#Linux)
                 - [ELF](#ELF)
                 - [字符串反转](#字符串反转)
@@ -102,7 +103,6 @@
                 - [图片拼接](#图片拼接)
                 - [zsteg](#zsteg)
                 - [file](#file)
-                - [gnuplot](#gnuplot)
                 - [vim](#vim)
         - [文件格式](#文件格式)
             - [常见文件头](#常见文件头)
@@ -155,6 +155,7 @@
     - [其它](#其它)
         - [基站定位查询](#基站定位查询)
         - [IP反查域名](#IP反查域名)
+        - [坐标取证](#坐标取证)
 - [文章](#文章)
     - https://ctf-wiki.org/misc/introduction/
 
@@ -1045,6 +1046,13 @@ dnspy反编译工具
 Windows微软的一款批量命名工具软件
 
 ![image](./img/powername.png)
+
+#### PyInstaller-提取器
+
+https://github.com/extremecoders-re/pyinstxtractor
+
+PyInstaller Extractor 是一个 Python 脚本，用于提取 PyInstaller 生成的 Windows 可执行文件的内容。可执行文件中的 pyz 文件（通常是 pyc 文件）的内容也被提取出来。
+
 #### Linux
 
 ##### ELF
@@ -1176,23 +1184,6 @@ Linux rev 1.0 ext3 filesystem data, UUID=f2b1e8fa-29a6-454b-b6df-6182044790bc (n
 
 可知是ext3文件 需要挂载
 
-##### gnuplot
-
-**坐标数据**
-
-如:坐标转二维码
-```
-10 10
-10 11
-10 13
-....
-```
-
-```bash
-sudo apt-get install gnuplot
-gnuplot
-plot "文件名"
-```
 
 ##### vim
 
@@ -1714,3 +1705,48 @@ https://v.juhe.cn/cell/Triangulation/index.html?s=inner
 
 https://www.ipip.net/ip.html
 
+### 坐标取证
+
+**情况1**
+如:坐标转二维码
+```
+10 10
+10 11
+10 13
+....
+```
+
+```bash
+sudo apt-get install gnuplot
+gnuplot
+plot "文件名"
+```
+
+**情况2**
+
+```
+(376, 38462.085), (485, 49579.895)
+```
+
+```py
+import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib as mpl
+
+
+mpl.rcParams['font.family'] = 'sans-serif'
+mpl.rcParams['font.sans-serif'] = 'NSimSun,Times New Roman'
+
+with open('dataset.txt', 'r') as f:
+	lines = f.readlines()
+	for line in lines:
+		line = eval(line)
+		for tup in line:
+			x, y = tup[0], tup[1]
+			plt.plot(x, y, '.', color='black')
+			plt.xlabel('x')
+			plt.ylabel('y')
+plt.title('Data')
+plt.legend()
+plt.show()
+```
