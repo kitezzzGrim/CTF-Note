@@ -77,8 +77,8 @@
         - [四方密码](#四方密码)
         - [Nihilist](#Nihilist)
         - [WingDing编码](#WingDing编码)
-- [其它密码](#其它密码)
 
+- [其它密码](#其它密码)
     - [Emoji表情编码](#Emoji表情编码)
     - [jjencode](#jjencode)
     - [aaencode](#aaencode)

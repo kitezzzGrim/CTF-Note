@@ -1,4 +1,4 @@
-c = "qi]m^roVibdVbXUU`h"
+c = "joch{NBR/HN`)EJJkA6X!<BPc:.B_d7{galf"
 
 for move in range(0,50):
     flag = ""
