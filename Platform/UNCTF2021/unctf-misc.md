@@ -39,4 +39,8 @@ with open("key.txt",'r') as f:
         f1.write(s2)
 ```
 
+或者：
+
+`open('flag.jpg','wb').write(open('key.txt','rb').read()[::-1])`
+
 手动添加jpg文件头，里面有base64，解码是与佛论禅，这里得找到对应网站才能解密

