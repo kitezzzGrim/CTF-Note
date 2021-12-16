@@ -9,6 +9,7 @@
 - [SQL注入思路](#SQL注入思路)
 - [SQL手工注入语句](#SQL手工注入语句)
 - [SQL绕过思路](#SQL绕过思路)
+- [XSS-bypass](#XSS-bypass)
 - [Ping常用命令](#Ping常用命令)
 - [burpsuite-请求头](#burpsuite-请求头)
 - [序列化与反序列化](#序列化与反序列化)
@@ -105,6 +106,12 @@ right()
 **单引号绕过**
 - 十六进制替代
     - 0xxxxx
+
+## XSS-bypass
+
+```
+\&#34;+confirm(1)+&#34;
+```
 ## Ping常用命令
 
 127.0.0.1;ls /

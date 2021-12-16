@@ -29,3 +29,9 @@ cat /proc/$PID/environ
 python -m SimpleHTTPServer 8080
 
 ```
+
+- 图片马制作
+
+```bash
+copy 1.jpg/b+2.php 3.jpg
+```
