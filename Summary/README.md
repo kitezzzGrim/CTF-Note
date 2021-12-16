@@ -23,3 +23,9 @@ env
 cat /proc/1/environ
 cat /proc/$PID/environ
 ```
+
+- VPS
+```
+python -m SimpleHTTPServer 8080
+
+```

