@@ -76,6 +76,7 @@
             - [G语言解释器](#G语言解释器)
             - [Velato](#Velato)
             - [lolcode](#lolcode)
+            - [emojicode语言](#emojicode语言)
         - [其它常用操作](#其它常用操作)
             - [Windows](#Windows)
                 - [右键查看属性](#右键查看属性)
@@ -991,28 +992,31 @@ https://www.dcode.fr/lolcode-language
 
 ![image](./img/lolcode.png)
 
+
+#### emojicode语言
+
+https://www.emojicode.org/
+
+kali
+`emojicodec math.emojic`
+
+- 参考文章：https://mp.weixin.qq.com/s/YjX8TBcyfFhD18kMNM3UcA
 ### 其它常用操作
 
 #### Windows
-
 ##### 右键查看属性
 
 右键查看属性-详情信息-备注
 
 #### 文本比较
-
-
 ##### Beyond_compare4
-
 ##### 分帧
 ###### ScreenToGif
 
 gif分帧工具
 
 打开编辑器拖进图片即可
-
 #### 文字识别
-
 ##### QCR
 
 https://www.onlineocr.net/zh_hant/

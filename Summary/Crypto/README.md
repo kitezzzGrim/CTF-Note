@@ -98,6 +98,7 @@
     - [核心价值观编码](#核心价值观编码)
     - [盲文加密解密](#盲文加密解密)
     - [新约佛论禅](#新约佛论禅)
+    - [DotCode点码](#DotCode点码)
     - [校验码](#校验码)
         - [奇偶校验码](#奇偶校验码)
         - [循环冗余码](#循环冗余码)
@@ -1953,6 +1954,10 @@ https://ctf.bugku.com/tool/todousharp
 http://hi.pcmoe.net/buddha.html
 
 
+### DotCode点码
+
+https://products.aspose.app/barcode/zh-hans/recognize/dotcode
+https://demo.dynamsoft.com/barcode-reader/
 ### 校验码
 
 #### 奇偶校验码
