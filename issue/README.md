@@ -28,3 +28,11 @@ pip install pipreqs
 pipreqs ./ --encoding=utf-8
 ```
 
+
+## kali下java版本切换
+
+`update-alternatives  --config  java`
+
+**安装其它版本**
+
+https://blog.csdn.net/JakeLinfly/article/details/106853964

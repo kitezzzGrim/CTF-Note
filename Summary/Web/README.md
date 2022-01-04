@@ -1,7 +1,8 @@
 ## CTF常用语句
 - [思路](#思路)
 - [CTF工具在线网站](#CTF工具在线网站)
-    - [PHP在线运行环境](PHP在线运行环境)
+    - [PHP在线运行环境](#PHP在线运行环境)
+- [伪造IP](#伪造IP)
 - [file://](#file://)
 - [php://](#php://)
     - [php://filter读取源码](#php://filter读取源码)
@@ -33,6 +34,23 @@
 ## CTF工具在线网站
 ## PHP在线运行环境
 https://c.runoob.com/compile/1
+
+
+## 伪造IP
+
+```
+x-forwarded-for: 127.0.0.1
+
+x-remote-IP: 127.0.0.1
+
+x-remote-ip: 127.0.0.1
+
+x-client-ip: 127.0.0.1
+
+x-client-IP: 127.0.0.1
+
+X-Real-IP: 127.0.0.1
+```
 
 ## file://
 

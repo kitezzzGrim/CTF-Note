@@ -1,4 +1,4 @@
-c = "joch{NBR/HN`)EJJkA6X!<BPc:.B_d7{galf"
+c = "joch{NBR/HN`)EJJkA6X!<BPc:.B_d"
 
 for move in range(0,50):
     flag = ""
