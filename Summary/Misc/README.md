@@ -221,6 +221,9 @@ python2 vol.py -f Target.vmem --profile=Win7SP1x64 hashdump
 
 # lsadump命令获取最后登录的用户
 python2 vol.py -f Target.vmem --profile=Win7SP1x64 lsadump
+
+# 环境变量
+volatility -f FILESERV-20211222-032924.raw --profile=Win2003SP2x86 envars
 ```
 
 用mimikatz插件获取
