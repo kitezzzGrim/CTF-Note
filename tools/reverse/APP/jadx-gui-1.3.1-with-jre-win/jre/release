@@ -1,0 +1,2 @@
+JAVA_VERSION="17.0.1"
+MODULES="java.base java.datatransfer java.xml java.prefs java.desktop java.logging java.security.sasl java.naming java.transaction.xa java.sql"

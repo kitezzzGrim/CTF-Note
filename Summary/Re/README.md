@@ -11,6 +11,9 @@
         - [安卓](#安卓)
             - [AndroidKiller](#AndroidKiller)
 
+- [总结文章](#总结文章)
+    - [APP反篡改](#APP反篡改)
+        - [工具](#工具)
 
 ## 工具
 
@@ -53,3 +56,14 @@ linux命令
 Android Killer是一款可以对APK进行反编译的工具，它能够对反编译后的Smali文件进行修改，并将修改后的文件进行打包。
 
 文件名称需要修改，不能超过30个字符
+
+## 总结文章
+
+### #APP反篡改
+
+- 某APP逆向分析与通讯解密：https://blog.thekingofduck.com/post/Android-Program-Reverse-Analysis/
+- Android https过反抓包的一些总结：https://www.anquanke.com/post/id/201219
+- 部分APP无法代理抓包的原因及解决方法：https://www.cnblogs.com/lulianqi/p/11380794.html#_label1
+
+#### 工具
+    - jadx：https://github.com/skylot/jadx
