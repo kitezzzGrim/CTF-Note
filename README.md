@@ -3,7 +3,7 @@
 
 - 简介: 2021年9月13日风筝成立CTF-Note | CTF笔记。
 - 定位：个人维护的CTF知识框架
-- 更新时间：每日不定期
+- 更新时间：不更新了，希望一点笔记能帮到CTF玩家吧
 - 项目地址：[kitezzzGrim/CTF-Note](#)
 
 <p align="center">

@@ -7,9 +7,12 @@
 临时代理 windows10
 
 ```
-set HTTPS_PROXY=http://127.0.0.1:4780
+set HTTPS_PROXY=http://127.0.0.1:7890
 set ALL_PROXY=socks5://127.0.0.1:4781
 ```
+
+永久代理 windows10
+https://www.yixuju.cn/other/talking-about-proxy/
 
 ## 关于Windows下安装gmpy2
 
@@ -36,3 +39,7 @@ pipreqs ./ --encoding=utf-8
 **安装其它版本**
 
 https://blog.csdn.net/JakeLinfly/article/details/106853964
+
+## python3.6更新到3.7
+
+https://dev.to/serhatteker/how-to-upgrade-to-python-3-7-on-ubuntu-18-04-18-10-5hab
